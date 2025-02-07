@@ -33,9 +33,6 @@ public class Movie {
         this.rating = rating;
     }
 
-    public Movie() {
-    }
-
     public Movie(String title, int releaseYear, String director, String genre, Double rating, String imageUrl) {
         this.title = title;
         this.releaseYear = releaseYear;

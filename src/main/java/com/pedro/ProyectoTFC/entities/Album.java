@@ -37,9 +37,6 @@ public class Album {
         this.rating = rating;
     }
 
-    public Album() {
-    }
-
     public Album(String title, int releaseYear, String artist, String genre, int trackCount, int duration, Double rating, String imageUrl) {
         this.title = title;
         this.releaseYear = releaseYear;
