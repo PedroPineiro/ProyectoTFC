@@ -1,4 +1,9 @@
 package com.pedro.ProyectoTFC.repositories;
 
-public class AlbumRepository {
+import com.pedro.ProyectoTFC.entities.Album;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AlbumRepository extends JpaRepository<Album, Long> {
 }
