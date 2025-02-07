@@ -1,5 +1,6 @@
 package com.pedro.ProyectoTFC.services;
 
+import com.pedro.ProyectoTFC.clients.TMDBClient;
 import com.pedro.ProyectoTFC.entities.Movie;
 import com.pedro.ProyectoTFC.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,11 @@ import java.util.Optional;
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
+    private final TMDBClient tmdbClient;
 
-    public MovieService(MovieRepository movieRepository) {
+    public MovieService(MovieRepository movieRepository, TMDBClient tmdbClient) {
         this.movieRepository = movieRepository;
+        this.tmdbClient = tmdbClient;
     }
 
     // Obtener todas las películas
@@ -50,5 +53,10 @@ public class MovieService {
         } else {
             throw new RuntimeException("Movie not found with ID: " + id);
         }
+    }
+
+    // Buscar película en TMDB
+    public String searchMovieInTMDB(String query) {
+        return tmdbClient.searchMovie(query);
     }
 }

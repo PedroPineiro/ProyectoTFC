@@ -1,5 +1,6 @@
 package com.pedro.ProyectoTFC.services;
 
+import com.pedro.ProyectoTFC.clients.LastFMClient;
 import com.pedro.ProyectoTFC.entities.Album;
 import com.pedro.ProyectoTFC.repositories.AlbumRepository;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,11 @@ import java.util.Optional;
 @Service
 public class AlbumService {
     private final AlbumRepository albumRepository;
+    private final LastFMClient lastFMClient;
 
-    public AlbumService(AlbumRepository albumRepository) {
+    public AlbumService(AlbumRepository albumRepository, LastFMClient lastFMClient) {
         this.albumRepository = albumRepository;
+        this.lastFMClient = lastFMClient;
     }
 
     // Obtener todos los álbumes
@@ -20,17 +23,17 @@ public class AlbumService {
         return albumRepository.findAll();
     }
 
-    // Obtener un álbum por ID
+    // Obtener álbum por ID
     public Album getAlbumById(Long id) {
         return albumRepository.findById(id).orElse(null);
     }
 
-    // Guardar un nuevo álbum
+    // Guardar un nuevo álbum o actualizar uno existente
     public Album saveAlbum(Album album) {
         return albumRepository.save(album);
     }
 
-    // Eliminar un álbum por ID
+    // Eliminar álbum por ID
     public void deleteAlbum(Long id) {
         albumRepository.deleteById(id);
     }
@@ -44,13 +47,16 @@ public class AlbumService {
             album.setReleaseYear(updatedAlbum.getReleaseYear());
             album.setArtist(updatedAlbum.getArtist());
             album.setGenre(updatedAlbum.getGenre());
-            album.setTrackCount(updatedAlbum.getTrackCount());
-            album.setDuration(updatedAlbum.getDuration());
             album.setRating(updatedAlbum.getRating());
             album.setImageUrl(updatedAlbum.getImageUrl());
             return albumRepository.save(album);
         } else {
             throw new RuntimeException("Album not found with ID: " + id);
         }
+    }
+
+    // Buscar álbum en LastFM
+    public String searchAlbumInLastFM(String artist, String album) {
+        return lastFMClient.searchAlbum(artist, album);
     }
 }
