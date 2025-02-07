@@ -44,4 +44,9 @@ public class MovieController {
     public void deleteMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);
     }
+
+    @GetMapping("/search")
+    public String searchMovie(@RequestParam String query) {
+        return movieService.searchMovieInTMDB(query);
+    }
 }

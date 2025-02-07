@@ -44,4 +44,9 @@ public class GameController {
     public void deleteGame(@PathVariable Long id) {
         gameService.deleteGame(id);
     }
+
+    @GetMapping("/search")
+    public String searchGame(@RequestParam String query) {
+        return gameService.searchGameInRAWG(query);
+    }
 }

@@ -44,4 +44,9 @@ public class AlbumController {
     public void deleteAlbum(@PathVariable Long id) {
         albumService.deleteAlbum(id);
     }
+
+    @GetMapping("/search")
+    public String searchAlbum(@RequestParam String artist, @RequestParam String album) {
+        return albumService.searchAlbumInLastFM(artist, album);
+    }
 }
