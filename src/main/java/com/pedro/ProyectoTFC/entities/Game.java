@@ -33,6 +33,9 @@ public class Game {
         this.rating = rating;
     }
 
+    public Game() {
+    }
+
     public Game(String title, int releaseYear, String developer, String genre, Double rating, String imageUrl) {
         this.title = title;
         this.releaseYear = releaseYear;
