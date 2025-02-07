@@ -23,7 +23,11 @@ public class Movie {
 
     private String genre;
 
-    private double rating;
+    @Column(nullable = true) // Puede ser null si aún no ha sido calificada
+    private Double rating;
+
+    @Column(nullable = true) // Opcional por si no tiene imagen
+    private String imageUrl;
 
     // Validación en el setter para asegurarnos de que solo se usen valores permitidos
     public void setRating(double rating) {
@@ -33,6 +37,4 @@ public class Movie {
         }
         this.rating = rating;
     }
-
-    private String imageUrl;
 }
