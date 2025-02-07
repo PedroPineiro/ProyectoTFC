@@ -1,15 +1,10 @@
 package com.pedro.ProyectoTFC.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.List;
 
 @Entity
 @Table(name = "movie")
-@Getter
-@Setter
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +31,65 @@ public class Movie {
             throw new IllegalArgumentException("El rating debe ser 0, 0.5, 1, 1.5, ..., 5.0");
         }
         this.rating = rating;
+    }
+
+    public Movie() {
+    }
+
+    public Movie(String title, int releaseYear, String director, String genre, Double rating, String imageUrl) {
+        this.title = title;
+        this.releaseYear = releaseYear;
+        this.director = director;
+        this.genre = genre;
+        this.rating = rating;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
