@@ -7,10 +7,10 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "movie")
+@Table(name = "game")
 @Getter
 @Setter
-public class Movie {
+public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +19,7 @@ public class Movie {
 
     private int releaseYear;
 
-    private String director;
+    private String developer;
 
     private String genre;
 

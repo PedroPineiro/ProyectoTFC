@@ -7,10 +7,10 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "movie")
+@Table(name = "album")
 @Getter
 @Setter
-public class Movie {
+public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,9 +19,13 @@ public class Movie {
 
     private int releaseYear;
 
-    private String director;
+    private String artist;
 
     private String genre;
+
+    private int trackCount;
+
+    private int duration; // Duración en minutos
 
     private double rating;
 
