@@ -93,7 +93,6 @@ public class User {
 
     //Getter, Setter y Constructor
 
-
     public User() {
     }
 
