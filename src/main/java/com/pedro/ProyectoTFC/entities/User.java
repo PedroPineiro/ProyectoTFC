@@ -25,94 +25,35 @@ public class User {
     private String password;
 
     private String profilePicture; // URL de la foto de perfil
+
     private String bio; // Biografía del usuario
 
-    @ManyToMany
-    @JoinTable(name = "user_watched_movies")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Movie> watchedMovies = new ArrayList<>();
+    private List<Movie> movies = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "user_wishlist_movies")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Movie> wishlistMovies = new ArrayList<>();
+    private List<Game> games = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "user_favorite_movies")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Movie> favoriteMovies = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "user_played_games")
-    @JsonIgnore
-    private List<Game> playedGames = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "user_wishlist_games")
-    @JsonIgnore
-    private List<Game> wishlistGames = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "user_favorite_games")
-    @JsonIgnore
-    private List<Game> favoriteGames = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "user_listened_albums")
-    @JsonIgnore
-    private List<Album> listenedAlbums = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "user_wishlist_albums")
-    @JsonIgnore
-    private List<Album> wishlistAlbums = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "user_favorite_albums")
-    @JsonIgnore
-    private List<Album> favoriteAlbums = new ArrayList<>();
-
-    // Relaciones de seguidores/seguidos
-    @ManyToMany
-    @JoinTable(
-            name = "user_followers",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "follower_id")
-    )
-    @JsonIgnore
-    private List<User> followers = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_following",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "following_id")
-    )
-    @JsonIgnore
-    private List<User> following = new ArrayList<>();
+    private List<Album> albums = new ArrayList<>();
 
     //Getter, Setter y Constructor
 
     public User() {
     }
 
-    public User(String username, String email, String password, String profilePicture, String bio, List<Movie> watchedMovies, List<Movie> wishlistMovies, List<Movie> favoriteMovies, List<Game> playedGames, List<Game> wishlistGames, List<Game> favoriteGames, List<Album> listenedAlbums, List<Album> wishlistAlbums, List<Album> favoriteAlbums, List<User> followers, List<User> following) {
+    public User(String username, String email, String password, String profilePicture, String bio, List<Movie> movies, List<Game> games, List<Album> albums) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.profilePicture = profilePicture;
         this.bio = bio;
-        this.watchedMovies = watchedMovies;
-        this.wishlistMovies = wishlistMovies;
-        this.favoriteMovies = favoriteMovies;
-        this.playedGames = playedGames;
-        this.wishlistGames = wishlistGames;
-        this.favoriteGames = favoriteGames;
-        this.listenedAlbums = listenedAlbums;
-        this.wishlistAlbums = wishlistAlbums;
-        this.favoriteAlbums = favoriteAlbums;
-        this.followers = followers;
-        this.following = following;
+        this.movies = movies;
+        this.games = games;
+        this.albums = albums;
     }
 
     public String getUsername() {
@@ -155,91 +96,27 @@ public class User {
         this.bio = bio;
     }
 
-    public List<Movie> getWatchedMovies() {
-        return watchedMovies;
+    public List<Movie> getMovies() {
+        return movies;
     }
 
-    public void setWatchedMovies(List<Movie> watchedMovies) {
-        this.watchedMovies = watchedMovies;
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 
-    public List<Movie> getWishlistMovies() {
-        return wishlistMovies;
+    public List<Game> getGames() {
+        return games;
     }
 
-    public void setWishlistMovies(List<Movie> wishlistMovies) {
-        this.wishlistMovies = wishlistMovies;
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 
-    public List<Movie> getFavoriteMovies() {
-        return favoriteMovies;
+    public List<Album> getAlbums() {
+        return albums;
     }
 
-    public void setFavoriteMovies(List<Movie> favoriteMovies) {
-        this.favoriteMovies = favoriteMovies;
-    }
-
-    public List<Game> getPlayedGames() {
-        return playedGames;
-    }
-
-    public void setPlayedGames(List<Game> playedGames) {
-        this.playedGames = playedGames;
-    }
-
-    public List<Game> getWishlistGames() {
-        return wishlistGames;
-    }
-
-    public void setWishlistGames(List<Game> wishlistGames) {
-        this.wishlistGames = wishlistGames;
-    }
-
-    public List<Game> getFavoriteGames() {
-        return favoriteGames;
-    }
-
-    public void setFavoriteGames(List<Game> favoriteGames) {
-        this.favoriteGames = favoriteGames;
-    }
-
-    public List<Album> getListenedAlbums() {
-        return listenedAlbums;
-    }
-
-    public void setListenedAlbums(List<Album> listenedAlbums) {
-        this.listenedAlbums = listenedAlbums;
-    }
-
-    public List<Album> getWishlistAlbums() {
-        return wishlistAlbums;
-    }
-
-    public void setWishlistAlbums(List<Album> wishlistAlbums) {
-        this.wishlistAlbums = wishlistAlbums;
-    }
-
-    public List<Album> getFavoriteAlbums() {
-        return favoriteAlbums;
-    }
-
-    public void setFavoriteAlbums(List<Album> favoriteAlbums) {
-        this.favoriteAlbums = favoriteAlbums;
-    }
-
-    public List<User> getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(List<User> followers) {
-        this.followers = followers;
-    }
-
-    public List<User> getFollowing() {
-        return following;
-    }
-
-    public void setFollowing(List<User> following) {
-        this.following = following;
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
 }
