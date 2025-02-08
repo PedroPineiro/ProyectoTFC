@@ -1,62 +1,42 @@
 package com.pedro.ProyectoTFC.services;
 
-import com.pedro.ProyectoTFC.clients.TMDBClient;
 import com.pedro.ProyectoTFC.entities.Movie;
+import com.pedro.ProyectoTFC.entities.User;
+import com.pedro.ProyectoTFC.entities.enums.Status;
 import com.pedro.ProyectoTFC.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
-    private final TMDBClient tmdbClient;
 
-    public MovieService(MovieRepository movieRepository, TMDBClient tmdbClient) {
+    public MovieService(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
-        this.tmdbClient = tmdbClient;
     }
 
-    // Obtener todas las películas
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public List<Movie> getAllMoviesByUser(User user) {
+        return movieRepository.findByUser(user);
     }
 
-    // Obtener película por ID
-    public Movie getMovieById(Long id) {
-        return movieRepository.findById(id).orElse(null);
+    public List<Movie> getMoviesByUserAndStatus(User user, Status status) {
+        return movieRepository.findByUserAndStatus(user, status);
     }
 
-    // Guardar una nueva película o actualizar una existente
+    public List<Movie> getFavoriteMoviesByUser(User user) {
+        return movieRepository.findByUserAndIsFavoriteTrue(user);
+    }
+
+    public Optional<Movie> getMovieById(Long id) {
+        return movieRepository.findById(id);
+    }
+
     public Movie saveMovie(Movie movie) {
         return movieRepository.save(movie);
     }
 
-    // Eliminar película por ID
     public void deleteMovie(Long id) {
         movieRepository.deleteById(id);
-    }
-
-    // Actualizar una película existente
-    public Movie updateMovie(Long id, Movie updatedMovie) {
-        Optional<Movie> movieOptional = movieRepository.findById(id);
-        if (movieOptional.isPresent()) {
-            Movie movie = movieOptional.get();
-            movie.setTitle(updatedMovie.getTitle());
-            movie.setReleaseYear(updatedMovie.getReleaseYear());
-            movie.setDirector(updatedMovie.getDirector());
-            movie.setGenre(updatedMovie.getGenre());
-            movie.setRating(updatedMovie.getRating());
-            movie.setImageUrl(updatedMovie.getImageUrl());
-            return movieRepository.save(movie);
-        } else {
-            throw new RuntimeException("Movie not found with ID: " + id);
-        }
-    }
-
-    // Buscar película en TMDB
-    public String searchMovieInTMDB(String query) {
-        return tmdbClient.searchMovie(query);
     }
 }
