@@ -1,123 +1,93 @@
 package com.pedro.ProyectoTFC.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import java.util.HashSet;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String username;
+
+    @Email
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
-    private String profilePicture; // Foto de perfil
-    private String bio; // Biografía
+
+    private String profilePicture; // URL de la foto de perfil
+    private String bio; // Biografía del usuario
+
+    @ManyToMany
+    @JoinTable(name = "user_watched_movies")
+    @JsonIgnore
+    private List<Movie> watchedMovies = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_wishlist_movies")
+    @JsonIgnore
+    private List<Movie> wishlistMovies = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_favorite_movies")
+    @JsonIgnore
+    private List<Movie> favoriteMovies = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_played_games")
+    @JsonIgnore
+    private List<Game> playedGames = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_wishlist_games")
+    @JsonIgnore
+    private List<Game> wishlistGames = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_favorite_games")
+    @JsonIgnore
+    private List<Game> favoriteGames = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_listened_albums")
+    @JsonIgnore
+    private List<Album> listenedAlbums = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_wishlist_albums")
+    @JsonIgnore
+    private List<Album> wishlistAlbums = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_favorite_albums")
+    @JsonIgnore
+    private List<Album> favoriteAlbums = new ArrayList<>();
+
+    // Relaciones de seguidores/seguidos
+    @ManyToMany
+    @JoinTable(
+            name = "user_followers",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id")
+    )
+    @JsonIgnore
+    private List<User> followers = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
-            name = "user_movies",
+            name = "user_following",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id")
+            inverseJoinColumns = @JoinColumn(name = "following_id")
     )
-    private List<Movie> movies;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_games",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "game_id")
-    )
-    private List<Game> games;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_albums",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "album_id")
-    )
-    private List<Album> albums;
-
-
-
-    public User() {
-    }
-
-    public User(String username, String email, String password, String profilePicture, String bio, List<Movie> movies, List<Game> games, List<Album> albums) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.profilePicture = profilePicture;
-        this.bio = bio;
-        this.movies = movies;
-        this.games = games;
-        this.albums = albums;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public List<Movie> getMovies() {
-        return movies;
-    }
-
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
-    }
-
-    public List<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(List<Game> games) {
-        this.games = games;
-    }
-
-    public List<Album> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
-    }
+    @JsonIgnore
+    private List<User> following = new ArrayList<>();
 }
