@@ -1,19 +1,32 @@
 package com.pedro.ProyectoTFC.services;
 
+import com.pedro.ProyectoTFC.clients.TMDBClient;
 import com.pedro.ProyectoTFC.entities.Movie;
 import com.pedro.ProyectoTFC.entities.User;
 import com.pedro.ProyectoTFC.entities.enums.Status;
 import com.pedro.ProyectoTFC.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
+    private final TMDBClient tmdbClient;
 
-    public MovieService(MovieRepository movieRepository) {
+    public MovieService(MovieRepository movieRepository, TMDBClient tmdbClient) {
         this.movieRepository = movieRepository;
+        this.tmdbClient = tmdbClient;
+    }
+
+    public List<Movie> searchMovies(String query) {
+        // Implementa la lógica de búsqueda de películas en la base de datos
+        return movieRepository.findByTitleContaining(query);
+    }
+
+    public String searchMoviesInTMDB(String query) {
+        // Llama al cliente TMDB para buscar películas
+        return tmdbClient.searchMovie(query);
     }
 
     public List<Movie> getAllMoviesByUser(User user) {
@@ -22,14 +35,6 @@ public class MovieService {
 
     public List<Movie> getMoviesByUserAndStatus(User user, Status status) {
         return movieRepository.findByUserAndStatus(user, status);
-    }
-
-    public List<Movie> getFavoriteMoviesByUser(User user) {
-        return movieRepository.findByUserAndIsFavoriteTrue(user);
-    }
-
-    public Optional<Movie> getMovieById(Long id) {
-        return movieRepository.findById(id);
     }
 
     public Movie saveMovie(Movie movie) {
