@@ -3,28 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas | Seventh Heaven</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+    <title>Buscar Películas</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script defer src="/js/script.js"></script>
 </head>
 <body>
-<header>
-    <h1>Películas</h1>
-    <nav>
-        <ul>
-            <li><a href="../index.html">Inicio</a></li>
-            <li><a href="games.html">Juegos</a></li>
-            <li><a href="albums.html">Discos</a></li>
-            <li><a href="user.html">Mi Perfil</a></li>
-        </ul>
-    </nav>
-</header>
-<main>
-    <form class="search-form" data-type="movies">
-        <input type="text" placeholder="Buscar películas..." required>
-        <button type="submit">Buscar</button>
-    </form>
-    <div id="results"></div>
-</main>
+<h1>Buscar Películas</h1>
+<form id="searchForm">
+    <input type="text" id="searchInput" placeholder="Escribe el nombre de una película..." required>
+    <button type="submit">Buscar</button>
+</form>
+<div id="results"></div>
 </body>
 </html>
