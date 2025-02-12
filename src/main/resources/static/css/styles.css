@@ -10,7 +10,6 @@ body {
 /* Estilo del encabezado */
 header {
     background-color: #3be39a;
-    padding: 10px 20px;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -31,7 +30,7 @@ header {
     color: white;
 }
 
-.navigation a {
+.navLink {
     text-decoration: none;
     color: white;
     margin: 0 15px;
@@ -47,7 +46,7 @@ header {
 /* Hero Section */
 .hero {
     position: relative;
-    background-image: url('../assets/mainImgs/falonso.jpg'); /* Cambia esta URL por la imagen que quieras */
+    background-image: url('../assets/mainImgs/heroPandora.jpg'); /* Cambia esta URL por la imagen que quieras */
     background-size: cover;
     background-position: center;
     height: 70vh; /* Ajusta la altura del hero */
