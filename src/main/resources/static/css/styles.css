@@ -1,7 +1,7 @@
 /* Configuración general */
 body {
     background-color: #141716;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
     color: white;
     margin: 0;
     padding: 0;
@@ -11,10 +11,10 @@ body {
 header {
     background-color: #3be39a;
     padding: 10px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .header-container {
@@ -25,14 +25,12 @@ header {
     margin: 0 auto;
 }
 
-/* Estilo del logo */
 .logo {
     font-size: 24px;
     font-weight: bold;
     color: white;
 }
 
-/* Estilo de la navegación */
 .navigation a {
     text-decoration: none;
     color: white;
@@ -46,10 +44,72 @@ header {
     color: #141716;
 }
 
+/* Hero Section */
+.hero {
+    position: relative;
+    background-image: url('../assets/mainImgs/falonso.jpg'); /* Cambia esta URL por la imagen que quieras */
+    background-size: cover;
+    background-position: center;
+    height: 70vh; /* Ajusta la altura del hero */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.hero-text {
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+    padding: 20px 40px;
+    border-radius: 8px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin: 0;
+    color: #3be39a;
+}
+
+.hero p {
+    font-size: 20px;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+/* About Section */
+.about {
+    position: relative;
+    background-color: #1a1c1a;
+    margin-top: -50px; /* Para solaparse ligeramente con la sección hero */
+    border-radius: 20px 20px 0 0;
+    padding: 40px 20px;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #3be39a;
+}
+
+.about p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #cccccc;
+    margin-bottom: 15px;
+}
+
 /* Footer */
 footer {
     text-align: center;
-    padding: 15px 0;
+    padding: 20px 0;
     background-color: #0f0f0f;
     color: #aaaaaa;
     font-size: 14px;
