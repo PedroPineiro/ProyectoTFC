@@ -2,7 +2,7 @@
 /* Hero Section */
 .hero {
     position: relative;
-    background-image: url('../assets/mainImgs/heroPandora.jpg'); /* Cambia esta URL por la imagen que quieras */
+    background-image: url('../assets/imgs/heroPandora.jpg'); /* Cambia esta URL por la imagen que quieras */
     background-size: cover;
     background-position: center;
     height: 70vh; /* Ajusta la altura del hero */
