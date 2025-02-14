@@ -1,7 +1,7 @@
 /* Configuración general */
 body {
     background-color: #141716;
-    font-family: 'Kanit', 'Montserrat';
+    font-family: 'Kanit', 'Montserrat', sans-serif;
     color: white;
     margin: 0;
     padding: 0;
