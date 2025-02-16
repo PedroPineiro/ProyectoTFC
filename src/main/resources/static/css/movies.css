@@ -13,7 +13,12 @@ h1 {
 }
 
 
-
+#results{
+    text-align: center;
+    font-size: 1.5rem;
+    color: #3be39a;
+    margin-bottom: 20px;
+}
 
 
 
@@ -95,4 +100,44 @@ button:hover {
     font-size: 1.2rem;
     color: #aaaaaa;
     margin: 0;
+}
+
+/* Contenedor de los resultados */
+#results {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las películas bajen de línea si no caben */
+    justify-content: center; /* Centra las películas horizontalmente */
+    gap: 15px; /* Espacio entre las películas */
+    margin: 30px auto;
+    width: 90%;
+    max-width: 1000px;
+}
+
+/* Caja de cada película */
+.movie {
+    background-color: rgba(20, 23, 22, 0.8); /* Negro con un poco de transparencia */
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    width: 200px; /* Ancho fijo para las películas */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.movie:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Imagen de la película */
+.movie img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+/* Título de la película */
+.movie h3 {
+    font-size: 1rem;
+    color: white;
+    margin-top: 8px;
 }
