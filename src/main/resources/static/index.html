@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
-    <script defer src="js/script.js"></script>
+
 </head>
 <body>
     <header>
@@ -26,6 +26,7 @@
                         <a href="html/user-movies.html">User Movies</a>
                         <a href="html/user-games.html">User Games</a>
                         <a href="html/user-albums.html">User Albums</a>
+                        <a href="#" id="logoutButton">Cerrar Sesión</a>
                     </div>
                 </div>
             </nav>
@@ -33,6 +34,33 @@
     </header>
 
     <main>
+        
+        <div id="auth-modal" class="modal">
+            <div class="modal-content">
+                <h2 id="modal-title">Iniciar Sesión</h2>
+        
+                <!-- Formulario de Login -->
+                <form id="login-form">
+                    <input type="text" id="login-username" placeholder="Usuario" required>
+                    <input type="password" id="login-password" placeholder="Contraseña" required>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+        
+                <!-- Formulario de Registro (Oculto por defecto) -->
+                <form id="register-form" style="display: none;">
+                    <input type="text" id="register-username" placeholder="Usuario" required>
+                    <input type="email" id="register-email" placeholder="Correo Electrónico" required>
+                    <input type="password" id="register-password" placeholder="Contraseña" required>
+                    <button type="submit">Registrarse</button>
+                </form>
+        
+                <!-- Botón para cambiar entre login y registro -->
+                <p>¿No tienes cuenta? <a href="#" id="toggle-form">Regístrate aquí</a></p>
+            </div>
+        </div>
+        
+
+
         <!-- Sección de Hero con imagen de fondo -->
         <section class="hero">
             <div class="hero-text">
@@ -60,5 +88,7 @@
     <footer>
         <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
     </footer>
+
+    <script src="js/auth.js"></script>
 </body>
 </html>

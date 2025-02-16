@@ -2,9 +2,12 @@ package com.pedro.ProyectoTFC.controllers;
 
 import com.pedro.ProyectoTFC.entities.User;
 import com.pedro.ProyectoTFC.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -16,25 +19,27 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Registro de usuario
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody Map<String, String> payload) {
         try {
-            User newUser = userService.registerUser(user.getUsername(), user.getEmail(), user.getPassword());
-            return ResponseEntity.ok("Usuario registrado con éxito: " + newUser.getUsername());
-        } catch (Exception e) {
+            User user = userService.registerUser(payload.get("username"), payload.get("email"), payload.get("password"));
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Inicio de sesión
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user) {
-        Optional<User> authenticatedUser = userService.authenticate(user.getUsername(), user.getPassword());
-        if (authenticatedUser.isPresent()) {
-            return ResponseEntity.ok("Inicio de sesión exitoso para: " + authenticatedUser.get().getUsername());
+    public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
+        Optional<User> user = userService.authenticate(payload.get("username"), payload.get("password"));
+        if (user.isPresent()) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Login exitoso");
+            response.put("username", user.get().getUsername());
+            response.put("email", user.get().getEmail());
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(401).body("Usuario o contraseña incorrectos");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
     }
 }
