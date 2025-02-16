@@ -50,6 +50,64 @@ header {
     color: #141716;
 }
 
+/* Contenedor del dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Contenido del dropdown oculto */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #0f0f0f;
+    min-width: 140px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    text-align: left;
+    top: 140%;
+    left: 40%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* Estilo de los enlaces dentro del dropdown */
+.dropdown-content a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #3be39a;
+    color: #141716;
+}
+
+/* Estilo del pico */
+.dropdown::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #0f0f0f transparent transparent transparent;
+    display: none;
+}
+
+/* Mostrar el dropdown y el pico al pasar el mouse */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover::after {
+    display: block;
+}
+
+
 
 /* Footer */
 footer {
