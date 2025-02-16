@@ -22,26 +22,4 @@ public class AlbumController {
         this.userService = userService;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Album>> getAlbumsByUser(@PathVariable Long userId) {
-        Optional<User> user = userService.getUserById(userId);
-        return user.map(value -> ResponseEntity.ok(albumService.getAllAlbumsByUser(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping("/{userId}")
-    public ResponseEntity<Album> addAlbum(@PathVariable Long userId, @RequestBody Album album) {
-        Optional<User> user = userService.getUserById(userId);
-        if (user.isPresent()) {
-            album.setUser(user.get());
-            return ResponseEntity.ok(albumService.saveAlbum(album));
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAlbum(@PathVariable Long id) {
-        albumService.deleteAlbum(id);
-        return ResponseEntity.noContent().build();
-    }
 }

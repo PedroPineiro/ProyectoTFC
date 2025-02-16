@@ -22,26 +22,5 @@ public class GameController {
         this.userService = userService;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Game>> getGamesByUser(@PathVariable Long userId) {
-        Optional<User> user = userService.getUserById(userId);
-        return user.map(value -> ResponseEntity.ok(gameService.getAllGamesByUser(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<Game> addGame(@PathVariable Long userId, @RequestBody Game game) {
-        Optional<User> user = userService.getUserById(userId);
-        if (user.isPresent()) {
-            game.setUser(user.get());
-            return ResponseEntity.ok(gameService.saveGame(game));
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
-        gameService.deleteGame(id);
-        return ResponseEntity.noContent().build();
-    }
 }
