@@ -1,6 +1,6 @@
 /* Configuración general */
 body {
-    background-color: #141716;
+    background-color: #1c1e1d;
     font-family: 'Montserrat', 'Kanit', sans-serif;
     color: white;
     margin: 0;
@@ -33,7 +33,7 @@ header {
 }
 
 #page-title:hover {
-    color: #141716;
+    color: #1c1e1d;
 }
 
 .navLink {

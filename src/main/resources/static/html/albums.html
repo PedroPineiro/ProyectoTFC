@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albums</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/albums.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
+    <script defer src="../js/script.js"></script>
+</head>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a id="page-title" href="../index.html">Pandorasbox</a>
+            </div>
+            <nav class="navigation">
+                <a class="navLink" href="movies.html">Movies</a>
+                <a class="navLink" href="games.html">Games</a>
+                <a class="navLink" href="albums.html">Albums</a>
+                <div class="dropdown">
+                    <a class="navLink profile-link" href="profile.html">Profile ▼</a>
+                    <div class="dropdown-content">
+                        <a href="user-movies.html">User Movies</a>
+                        <a href="user-games.html">User Games</a>
+                        <a href="user-albums.html">User Albums</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+<body>
+<h1>Buscar Albums💿</h1>
+<form id="searchForm">
+    <input type="text" id="searchInput" placeholder="Find an album..." required>
+    <button type="submit">Search</button>
+</form>
+<div id="results"></div>
+</body>
+</html>
