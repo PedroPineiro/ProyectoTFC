@@ -4,20 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil | Seventh Heaven</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <h1>Mi Perfil</h1>
-    <nav>
-        <ul>
-            <li><a href="../index.html">Inicio</a></li>
-            <li><a href="movies.html">Películas</a></li>
-            <li><a href="games.html">Juegos</a></li>
-            <li><a href="music.html">Discos</a></li>
-        </ul>
-    </nav>
-</header>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a id="page-title" href="../index.html">Pandorasbox</a>
+            </div>
+            <nav class="navigation">
+                <a class="navLink" href="movies.html">Movies</a>
+                <a class="navLink" href="games.html">Games</a>
+                <a class="navLink" href="albums.html">Albums</a>
+                <div class="dropdown">
+                    <a class="navLink profile-link" href="profile.html">Profile ▼</a>
+                    <div class="dropdown-content">
+                        <a href="user-movies.html">User Movies</a>
+                        <a href="user-games.html">User Games</a>
+                        <a href="user-albums.html">User Albums</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
 <main>
     <h2>Mis Listas</h2>
     <div>
