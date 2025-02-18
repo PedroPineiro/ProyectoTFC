@@ -28,6 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalDescription = document.createElement('p'); // Descripción de la película
     modalContent.appendChild(modalDescription);
 
+    const modalGenres = document.createElement('p'); // Géneros de la película
+    modalContent.appendChild(modalGenres);
+
+    const modalLink = document.createElement('a'); // Enlace a TMDB
+    modalLink.textContent = 'Ver más en TMDB';
+    modalLink.target = '_blank'; // Abrir en una nueva pestaña
+    modalContent.appendChild(modalLink);
+
     const modalButtons = document.createElement('div'); // Botones de acción
     modalContent.appendChild(modalButtons);
 
@@ -97,18 +105,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mostrar detalles de la película en un modal
-    function showMovieDetails(movie) {
+    async function showMovieDetails(movie) {
         currentMovie = movie;
         modalPoster.src = movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
         modalTitle.textContent = movie.title;
         modalReleaseDate.textContent = `Fecha de estreno: ${movie.release_date}`;
         modalRating.textContent = `Calificación: ${movie.vote_average}`;
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
+        
+        // Obtener y mostrar géneros
+        const genres = await getMovieGenres(movie.genre_ids);
+        modalGenres.textContent = `Géneros: ${genres.join(', ')}`;
+        
+        modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
         modal.style.display = 'flex';
 
         // Mostrar los botones para guardar
         saveForLaterButton.addEventListener('click', () => saveMovie('por_ver'));
         saveWatchedButton.addEventListener('click', () => showRatingModal());
+    }
+
+    // Función para obtener los nombres de los géneros de la película
+    async function getMovieGenres(genreIds) {
+        const apiKey = '998d343674fbacfea441d0e40df4f0ea';
+        const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const genres = data.genres.filter(genre => genreIds.includes(genre.id));
+            return genres.map(genre => genre.name);
+        } catch (error) {
+            console.error('Error al obtener los géneros:', error);
+            return [];
+        }
     }
 
     // Función para guardar la película como "Por ver" o "Vista"
