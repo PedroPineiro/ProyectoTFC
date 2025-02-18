@@ -42,6 +42,10 @@ public class MovieService {
     }
 
     public void deleteMovie(Long id) {
+        if (!movieRepository.existsById(id)) {
+            throw new RuntimeException("La película no existe");
+        }
         movieRepository.deleteById(id);
     }
+
 }
