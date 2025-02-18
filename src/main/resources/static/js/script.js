@@ -37,6 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
     modalLink.target = '_blank';
     modalContent.appendChild(modalLink);
 
+    // Enlace al tráiler
+    const modalTrailerLink = document.createElement('a');
+    modalTrailerLink.textContent = 'Ver tráiler';
+    modalTrailerLink.target = '_blank';
+    modalTrailerLink.style.display = 'none'; // Inicialmente oculto
+    modalContent.appendChild(modalTrailerLink);
+
     const modalButtons = document.createElement('div');
     modalContent.appendChild(modalButtons);
 
@@ -111,6 +118,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
 
+        // Obtener el enlace del tráiler y mostrarlo en el modal
+        const trailerUrl = await getTrailer(movie.id);
+        if (trailerUrl) {
+            modalTrailerLink.href = trailerUrl;
+            modalTrailerLink.style.display = 'inline-block'; // Mostrar el enlace al tráiler
+        } else {
+            modalTrailerLink.style.display = 'none'; // Ocultar el enlace si no hay tráiler
+        }
+
         // Mostrar overlay y ventana modal con efecto smooth
         overlay.classList.add('show');
         modal.classList.add('open');
@@ -131,6 +147,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error al obtener los géneros:', error);
             return [];
+        }
+    }
+
+    async function getTrailer(movieId) {
+        const apiKey = '998d343674fbacfea441d0e40df4f0ea';
+        const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`;
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const trailer = data.results.find(video => video.type === 'Trailer');
+            return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+        } catch (error) {
+            console.error('Error al obtener el tráiler:', error);
+            return null;
         }
     }
 
