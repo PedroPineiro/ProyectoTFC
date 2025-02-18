@@ -1,5 +1,6 @@
 package com.pedro.ProyectoTFC.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pedro.ProyectoTFC.entities.enums.Status;
 import jakarta.persistence.*;
 import java.util.List;
@@ -32,7 +33,9 @@ public class Movie {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference  // Indica que esta es la parte inversa de la relación
     private User user;
+
 
     public Movie() {
     }

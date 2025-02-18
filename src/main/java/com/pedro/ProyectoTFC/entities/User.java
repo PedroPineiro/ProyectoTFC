@@ -29,16 +29,19 @@ public class User {
     private String bio; // Biografía del usuario
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Movie> movies = new ArrayList<>();
+    @JsonIgnore  // Evita referencias circulares en JSON
+    private List<Movie> movies;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Game> games = new ArrayList<>();
+    @JsonIgnore  // Evita referencias circulares en JSON
+    private List<Game> games;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Album> albums = new ArrayList<>();
+    @JsonIgnore  // Evita referencias circulares en JSON
+    private List<Album> albums;
+
 
     //Getter, Setter y Constructor
 

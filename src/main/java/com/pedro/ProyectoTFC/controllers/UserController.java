@@ -21,6 +21,10 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody Map<String, String> payload) {
+        if (!payload.containsKey("username") || !payload.containsKey("email") || !payload.containsKey("password")) {
+            return ResponseEntity.badRequest().body("Todos los campos son obligatorios");
+        }
+
         try {
             User user = userService.registerUser(payload.get("username"), payload.get("email"), payload.get("password"));
             return ResponseEntity.ok(user);
@@ -28,6 +32,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
@@ -42,4 +47,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
     }
+
 }
