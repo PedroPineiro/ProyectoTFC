@@ -1,120 +1,117 @@
 /* Configuración general */
 body {
-    background-color: #1c1e1d;
-    font-family: 'Montserrat', 'Kanit', sans-serif;
-    color: white;
-    margin: 0;
-    padding: 0;
+  background-color: #1c1e1d;
+  font-family: "Montserrat", "Kanit", sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 /* Estilo del encabezado */
 header {
-    background-color: #3be39a;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  background-color: #3be39a;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
 }
 
-#page-title{
-    text-decoration: none;
-    color: white;
-    font-size: 28px;
-    font-weight: bold;
-    transition: color 0.2s ease;
-    padding-left: 15px;
+#page-title {
+  text-decoration: none;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  transition: color 0.2s ease;
+  padding-left: 15px;
 }
 
 #page-title:hover {
-    color: #1c1e1d;
+  color: #1c1e1d;
 }
 
 .navLink {
-    text-decoration: none;
-    color: white;
-    margin: 0 15px;
-    font-size: 18px;
-    font-weight: bold;
-    padding-left: 5px;
-    transition: color 0.2s ease;
+  text-decoration: none;
+  color: white;
+  margin: 0 15px;
+  font-size: 18px;
+  font-weight: bold;
+  padding-left: 5px;
+  transition: color 0.2s ease;
 }
 
 .navigation a:hover {
-    color: #141716;
+  color: #141716;
 }
 
 /* Contenedor del dropdown */
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 /* Contenido del dropdown oculto */
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #0f0f0f;
-    min-width: 140px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
-    text-align: left;
-    top: 140%;
-    left: 40%;
-    transform: translateX(-50%);
-    z-index: 1000;
+  display: none;
+  position: absolute;
+  background-color: #0f0f0f;
+  min-width: 140px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  text-align: left;
+  top: 140%;
+  left: 40%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 
 /* Estilo de los enlaces dentro del dropdown */
 .dropdown-content a {
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    display: block;
-    transition: background 0.3s ease;
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s ease;
 }
 
 .dropdown-content a:hover {
-    background-color: #3be39a;
-    color: #141716;
+  background-color: #3be39a;
+  color: #141716;
 }
 
 /* Estilo del pico */
 .dropdown::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #0f0f0f transparent transparent transparent;
-    display: none;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0f0f0f transparent transparent transparent;
+  display: none;
 }
 
 /* Mostrar el dropdown y el pico al pasar el mouse */
 .dropdown:hover .dropdown-content {
-    display: block;
+  display: block;
 }
 
 .dropdown:hover::after {
-    display: block;
+  display: block;
 }
-
-
 
 /* Footer */
 footer {
-    text-align: center;
-    padding: 20px 0;
-    background-color: #0f0f0f;
-    color: #aaaaaa;
-    font-size: 14px;
-    margin-top: 20px;
+  text-align: center;
+  padding: 20px 0;
+  background-color: #0f0f0f;
+  color: #aaaaaa;
+  font-size: 14px;
+  margin-top: 20px;
 }

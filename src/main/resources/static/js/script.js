@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
-    
+
     // Elementos de modal y overlay
     const modal = document.createElement('div');
     const overlay = document.createElement('div'); // Fondo oscuro
@@ -105,10 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
         modalReleaseDate.textContent = `Fecha de estreno: ${movie.release_date}`;
         modalRating.textContent = `Calificación: ${movie.vote_average}`;
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
-        
+
         const genres = await getMovieGenres(movie.genre_ids);
         modalGenres.textContent = `Géneros: ${genres.join(', ')}`;
-        
+
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
 
         // Mostrar overlay y ventana modal con efecto smooth
