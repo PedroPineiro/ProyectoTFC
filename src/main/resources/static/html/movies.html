@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/movies.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
-    <script defer src="../js/script.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Movies</title>
+        <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="../css/movies.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
+        <script defer src="../js/script.js"></script>
+    </head>
+    
+<body>
+    <!-- Barra de navegacion -->
     <header>
         <div class="header-container">
             <div class="logo">
@@ -29,12 +32,18 @@
             </nav>
         </div>
     </header>
-<body>
-<h1>Buscar Películas🎬</h1>
-<form id="searchForm">
-    <input type="text" id="searchInput" placeholder="Find a movie..." required>
-    <button type="submit">Buscar</button>
-</form>
-<div id="results"></div>
+
+    <!-- Contenido principal -->
+    <main>
+        <h1>Buscar Películas🎬</h1>
+        <form id="searchForm">
+            <input type="text" id="searchInput" placeholder="Find a movie..." required>
+            <button type="submit">Buscar</button>
+        </form>
+        <div id="results"></div>
+    </main>
+
+    
+
 </body>
 </html>
