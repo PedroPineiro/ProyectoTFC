@@ -9,7 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (query === "") return;
 
         try {
-            const response = await fetch(`http://localhost:8080/api/movies/search?query=${query}`);
+            const response = await fetch(`http://localhost:8080/api/movies/search?query=${query}`, {
+                method: "GET",
+                mode: "cors" //Arregla el error de CORS
+            });
+
             const data = await response.json();
 
             resultsDiv.innerHTML = ""; // Limpiar resultados previos
@@ -18,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 movieElement.classList.add("movie");
 
                 movieElement.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
+                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} ">
                     <h3>${movie.title} (${movie.release_date ? movie.release_date.split("-")[0] : "N/A"})</h3>
                 `;
                 resultsDiv.appendChild(movieElement);

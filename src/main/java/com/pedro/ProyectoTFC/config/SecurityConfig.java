@@ -11,21 +11,26 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    // Encripta las contraseñas de los usuarios
+    /*
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+     */
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Deshabilita CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/**").permitAll() // Permite sin autenticación
-                        .anyRequest().authenticated()  // Requiere autenticación para el resto
+                        .requestMatchers("/api/users/**").permitAll()  // Permite usuarios sin autenticación
+                        .requestMatchers("/api/movies/**").permitAll() // Permite acceso a la API de películas
+                        .anyRequest().authenticated()  // Protege el resto
                 )
                 .httpBasic(httpBasic -> {}); // Usa autenticación básica
 
         return http.build();
     }
+
 }
