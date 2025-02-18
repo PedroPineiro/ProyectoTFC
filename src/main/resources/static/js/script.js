@@ -2,54 +2,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
-    const modal = document.createElement('div'); // Modal de detalles
-    const modalContent = document.createElement('div'); // Contenido del modal
+    
+    // Elementos de modal y overlay
+    const modal = document.createElement('div');
+    const overlay = document.createElement('div'); // Fondo oscuro
+    const modalContent = document.createElement('div');
     modal.appendChild(modalContent);
     modal.classList.add('modal');
     document.body.appendChild(modal);
+    document.body.appendChild(overlay); // Añadir el overlay
 
-    const closeModalButton = document.createElement('button'); // Botón de cierre
+    overlay.classList.add('modal-overlay'); // Aplicar la clase de estilo para el overlay
+
+    const closeModalButton = document.createElement('button');
     closeModalButton.textContent = 'Cerrar';
     closeModalButton.classList.add('close-modal');
     modalContent.appendChild(closeModalButton);
 
-    const modalPoster = document.createElement('img'); // Imagen del poster
+    // Otros elementos del modal (poster, título, descripción, etc.)
+    const modalPoster = document.createElement('img');
     modalContent.appendChild(modalPoster);
-
-    const modalTitle = document.createElement('h2'); // Título de la película
+    const modalTitle = document.createElement('h2');
     modalContent.appendChild(modalTitle);
-
-    const modalReleaseDate = document.createElement('p'); // Fecha de lanzamiento
+    const modalReleaseDate = document.createElement('p');
     modalContent.appendChild(modalReleaseDate);
-
-    const modalRating = document.createElement('p'); // Calificación global
+    const modalRating = document.createElement('p');
     modalContent.appendChild(modalRating);
-
-    const modalDescription = document.createElement('p'); // Descripción de la película
+    const modalDescription = document.createElement('p');
     modalContent.appendChild(modalDescription);
-
-    const modalGenres = document.createElement('p'); // Géneros de la película
+    const modalGenres = document.createElement('p');
     modalContent.appendChild(modalGenres);
-
-    const modalLink = document.createElement('a'); // Enlace a TMDB
+    const modalLink = document.createElement('a');
     modalLink.textContent = 'Ver más en TMDB';
-    modalLink.target = '_blank'; // Abrir en una nueva pestaña
+    modalLink.target = '_blank';
     modalContent.appendChild(modalLink);
 
-    const modalButtons = document.createElement('div'); // Botones de acción
+    const modalButtons = document.createElement('div');
     modalContent.appendChild(modalButtons);
 
     const saveForLaterButton = document.createElement('button');
     saveForLaterButton.textContent = 'Guardar como por ver';
     const saveWatchedButton = document.createElement('button');
     saveWatchedButton.textContent = 'Guardar como vista';
-
     modalButtons.appendChild(saveForLaterButton);
     modalButtons.appendChild(saveWatchedButton);
 
-    let currentMovie = null; // Guardar la película actual seleccionada
+    let currentMovie = null;
 
-    // Manejar el evento de envío del formulario
     searchForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const query = searchInput.value.trim();
@@ -59,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Función para buscar películas a través de la API de TMDB
     async function searchMovies(query) {
         const apiKey = '998d343674fbacfea441d0e40df4f0ea';
         const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
@@ -74,20 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Función para mostrar las películas en la web
     function displayMovies(movies) {
-        resultsDiv.innerHTML = ''; // Limpiar resultados anteriores
+        resultsDiv.innerHTML = '';
 
         if (movies.length === 0) {
             resultsDiv.innerHTML = '<p>No se encontraron películas.</p>';
             return;
         }
 
-        // Crear y mostrar las películas
         movies.forEach(movie => {
             const movieDiv = document.createElement('div');
             movieDiv.classList.add('movie');
-            
             const movieTitle = document.createElement('h3');
             movieTitle.textContent = movie.title + ' (' + movie.release_date.substring(0, 4) + ')';
 
@@ -95,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
             movieImg.src = movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Image';
             movieImg.alt = movie.title;
 
-            // Añadir evento de clic para mostrar detalles
             movieDiv.addEventListener('click', () => showMovieDetails(movie));
 
             movieDiv.appendChild(movieImg);
@@ -104,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Mostrar detalles de la película en un modal
     async function showMovieDetails(movie) {
         currentMovie = movie;
         modalPoster.src = movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
@@ -113,19 +106,19 @@ document.addEventListener('DOMContentLoaded', () => {
         modalRating.textContent = `Calificación: ${movie.vote_average}`;
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
         
-        // Obtener y mostrar géneros
         const genres = await getMovieGenres(movie.genre_ids);
         modalGenres.textContent = `Géneros: ${genres.join(', ')}`;
         
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
-        modal.style.display = 'flex';
 
-        // Mostrar los botones para guardar
+        // Mostrar overlay y ventana modal con efecto smooth
+        overlay.classList.add('show');
+        modal.classList.add('open');
+
         saveForLaterButton.addEventListener('click', () => saveMovie('por_ver'));
         saveWatchedButton.addEventListener('click', () => showRatingModal());
     }
 
-    // Función para obtener los nombres de los géneros de la película
     async function getMovieGenres(genreIds) {
         const apiKey = '998d343674fbacfea441d0e40df4f0ea';
         const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
@@ -141,18 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Función para guardar la película como "Por ver" o "Vista"
     function saveMovie(status) {
-        // Aquí puedes agregar código para guardar la película en la base de datos con el estado correspondiente
         console.log(`Película guardada como ${status}:`, currentMovie.title);
-        modal.style.display = 'none'; // Cerrar modal
+        closeModal();
     }
 
-    // Mostrar el modal de calificación de la película
     function showRatingModal() {
-        modal.style.display = 'none'; // Cerrar el modal principal
-
-        // Crear el modal de calificación
+        modal.style.display = 'none';
         const ratingModal = document.createElement('div');
         ratingModal.classList.add('modal');
         document.body.appendChild(ratingModal);
@@ -186,22 +174,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         submitButton.addEventListener('click', () => saveRating(ratingInput.value, dateInput.value));
         closeRatingButton.addEventListener('click', () => {
-            ratingModal.style.display = 'none'; // Cerrar modal
+            ratingModal.style.display = 'none';
         });
     }
 
-    // Función para guardar la calificación y la fecha de la película
     function saveRating(rating, date) {
         if (rating >= 1 && rating <= 10 && date) {
-            // Aquí puedes agregar código para guardar la calificación y la fecha en la base de datos
             console.log(`Calificación guardada para ${currentMovie.title}:`, rating, date);
         } else {
             alert('Por favor, ingresa una calificación válida y una fecha.');
         }
     }
 
-    // Cerrar el modal de detalles
-    closeModalButton.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    // Cerrar el modal si se hace clic fuera de la ventana
+    overlay.addEventListener('click', closeModal);
+
+    closeModalButton.addEventListener('click', closeModal);
+
+    function closeModal() {
+        modal.classList.remove('open');
+        overlay.classList.remove('show');
+    }
 });
