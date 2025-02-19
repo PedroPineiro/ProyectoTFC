@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Elementos dentro del modal
     const modalPoster = document.createElement('img');
+    const modalDetails = document.createElement('div');
+    modalDetails.classList.add('modal-details');
     const modalTitle = document.createElement('h2');
     const modalReleaseDate = document.createElement('p');
     const modalRating = document.createElement('p');
@@ -33,15 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalLink = document.createElement('a');
     const modalTrailerLink = document.createElement('a');
 
-    modalLink.textContent = 'Ver más en TMDb';
+    modalLink.textContent = 'Ver más en TMDB';
     modalLink.target = '_blank';
 
     modalTrailerLink.textContent = 'Ver tráiler';
     modalTrailerLink.target = '_blank';
     modalTrailerLink.style.display = 'none';
 
-    // Agregar elementos al modal
-    modalContent.append(modalPoster, modalTitle, modalReleaseDate, modalRating, modalDescription, modalGenres, modalDirector, modalActors, modalLink, modalTrailerLink);
+    // Agregar la imagen y detalles al modal
+    modalContent.append(modalPoster, modalDetails);
+    modalDetails.append(modalTitle, modalReleaseDate, modalRating, modalDescription, modalGenres, modalDirector, modalActors, modalLink, modalTrailerLink);
 
     let currentMovie = null;
 
@@ -100,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Calificación con color
         const rating = movie.vote_average;
-        modalRating.innerHTML = `Calificación: <span style="font-weight: bold; color: ${getRatingColor(rating)}">${rating.toFixed(1)}</span>`;
+        modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(rating)}">${rating.toFixed(1)}</span>`;
 
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
 
