@@ -198,6 +198,7 @@ form {
   display: grid;
   grid-template-columns: 1fr 2fr;
   text-align: left;
+  font-size: 18px;
 }
 
 /* Imagen de la película en la ventana modal */
@@ -221,12 +222,14 @@ form {
 
 .modal-details p strong {
   font-weight: bold; /* Hacer en negrita solo los títulos */
+  color: #3be39a;
 }
 
 /* Título de la película en la ventana modal */
 .modal-content h2 {
-  font-size: 2rem;
-  color: #3be39a;
+  font-size: 2.5rem;
+  color: #00ff91;
+  margin-bottom: 25px;
 }
 
 /* Enlaces de la ventana modal */

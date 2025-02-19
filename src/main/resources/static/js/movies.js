@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
             : "../assets/imgs/posterNotFound.jpg";
         modalTitle.textContent = movie.title;
-        modalReleaseDate.textContent = `Fecha de estreno: ${movie.release_date || 'Desconocida'}`;
+        modalReleaseDate.innerHTML = `<strong>Fecha de estreno:</strong> ${movie.release_date || 'Desconocida'}`;
 
         // Calificación con color o mensaje alternativo
         if (movie.vote_average) {
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
 
         const genres = await getMovieGenres(movie.genre_ids);
-        modalGenres.textContent = `Géneros: ${genres.join(', ')}`;
+        modalGenres.innerHTML = `<strong>Géneros:</strong> ${genres.length ? genres.join(', ') : 'No disponible'}`;
 
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
 
