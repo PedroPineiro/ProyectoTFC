@@ -110,30 +110,50 @@ document.addEventListener('DOMContentLoaded', () => {
         modalPoster.src = movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
         modalTitle.textContent = movie.title;
         modalReleaseDate.textContent = `Fecha de estreno: ${movie.release_date}`;
-        modalRating.textContent = `Calificación: ${movie.vote_average}`;
+    
+        // Crear el span para el número de calificación
+        const ratingNumber = document.createElement('span');
+        ratingNumber.textContent = movie.vote_average.toFixed(1);
+        ratingNumber.style.fontWeight = 'bold';
+    
+        // Aplicar color según la calificación
+        const rating = movie.vote_average;
+        if (rating <= 3) {
+            ratingNumber.style.color = 'red';
+        } else if (rating > 3 && rating <= 5) {
+            ratingNumber.style.color = 'orange';
+        } else if (rating > 5 && rating <= 8) {
+            ratingNumber.style.color = 'yellow';
+        } else {
+            ratingNumber.style.color = 'green';
+        }
+    
+        // Limpiar y agregar el contenido con el número en color
+        modalRating.innerHTML = 'Calificación: ';
+        modalRating.appendChild(ratingNumber);
+    
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
-
+    
         const genres = await getMovieGenres(movie.genre_ids);
         modalGenres.textContent = `Géneros: ${genres.join(', ')}`;
-
+    
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
-
-        // Obtener el enlace del tráiler y mostrarlo en el modal
+    
         const trailerUrl = await getTrailer(movie.id);
         if (trailerUrl) {
             modalTrailerLink.href = trailerUrl;
-            modalTrailerLink.style.display = 'inline-block'; // Mostrar el enlace al tráiler
+            modalTrailerLink.style.display = 'inline-block';
         } else {
-            modalTrailerLink.style.display = 'none'; // Ocultar el enlace si no hay tráiler
+            modalTrailerLink.style.display = 'none';
         }
-
-        // Mostrar overlay y ventana modal con efecto smooth
+    
         overlay.classList.add('show');
         modal.classList.add('open');
-
+    
         saveForLaterButton.addEventListener('click', () => saveMovie('por_ver'));
         saveWatchedButton.addEventListener('click', () => showRatingModal());
     }
+    
 
     async function getMovieGenres(genreIds) {
         const apiKey = '998d343674fbacfea441d0e40df4f0ea';
