@@ -216,6 +216,7 @@ form {
 /* Estilos para los títulos de las características en la ventana modal */
 .modal-details p {
   font-weight: normal; /* Establecer normal para el texto por defecto */
+  margin: 20px 0;
 }
 
 .modal-details p strong {
@@ -228,6 +229,14 @@ form {
   color: #3be39a;
 }
 
+/* Enlaces de la ventana modal */
+.modal-content a{
+  color: #3be39a;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 80px;
+  margin-top: 10px;
+}
 
 /* Cuando la ventana modal está visible */
 .modal.open {

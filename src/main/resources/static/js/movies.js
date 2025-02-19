@@ -99,23 +99,27 @@ document.addEventListener('DOMContentLoaded', () => {
         currentMovie = movie;
         modalPoster.src = movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
         modalTitle.textContent = movie.title;
-        modalReleaseDate.textContent = `Fecha de estreno: ${movie.release_date || 'Desconocida'}`;
+        modalReleaseDate.innerHTML = `<strong>Fecha de estreno:</strong> ${movie.release_date || 'Desconocida'}`;
 
         // Calificación con color
         const rating = movie.vote_average;
-        modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(rating)}">${rating.toFixed(1)}</span>`;
-
+        if (rating) {
+            modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(rating)}">${rating.toFixed(1)}</span>`;
+        } else {
+            modalRating.innerHTML = `<strong>Calificación:</strong> No disponible`;
+        }
+        
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
 
         const genres = await getMovieGenres(movie.genre_ids);
-        modalGenres.textContent = `Géneros: ${genres.join(', ')}`;
+        modalGenres.innerHTML = `<strong>Géneros:</strong> ${genres.join(', ')}`;
 
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
 
         // Obtener detalles de la película (incluye director y actores)
         const { director, actors } = await getMovieCredits(movie.id);
-        modalDirector.textContent = `Director: ${director || 'Desconocido'}`;
-        modalActors.textContent = `Actores principales: ${actors.length ? actors.join(', ') : 'No disponible'}`;
+        modalDirector.innerHTML = `<strong>Director:</strong> ${director || 'Desconocido'}`;
+        modalActors.innerHTML = `<strong>Actores principales:</strong> ${actors.length ? actors.join(', ') : 'No disponible'}`;
 
         // Obtener tráiler
         const trailerUrl = await getTrailer(movie.id);
