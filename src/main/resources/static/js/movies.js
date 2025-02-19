@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
 
-    // Crear elementos del modal y agregarlos al DOM
+    // Elementos del modal
     const modal = document.createElement('div');
     modal.classList.add('modal');
     const overlay = document.createElement('div');
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalTrailerLink.target = '_blank';
     modalTrailerLink.style.display = 'none';
 
-    // Agregar la imagen y detalles al modal
+    // Agregar imagen y detalles al modal
     modalContent.append(modalPoster, modalDetails);
     modalDetails.append(modalTitle, modalReleaseDate, modalRating, modalDescription, modalGenres, modalDirector, modalActors, modalLink, modalTrailerLink);
 
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             movieTitle.textContent = `${movie.title} (${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'})`;
 
             const movieImg = document.createElement('img');
-            movieImg.src = movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Image';
+            movieImg.src = movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : "../assets/imgs/posterNotFound.jpg";
             movieImg.alt = movie.title;
 
             movieDiv.addEventListener('click', () => showMovieDetails(movie));
@@ -97,26 +97,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function showMovieDetails(movie) {
         currentMovie = movie;
-        modalPoster.src = movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Image';
+        modalPoster.src = movie.poster_path 
+            ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+            : "../assets/imgs/posterNotFound.jpg";
         modalTitle.textContent = movie.title;
-        modalReleaseDate.innerHTML = `<strong>Fecha de estreno:</strong> ${movie.release_date || 'Desconocida'}`;
+        modalReleaseDate.textContent = `Fecha de estreno: ${movie.release_date || 'Desconocida'}`;
 
-        // Calificación con color
-        const rating = movie.vote_average;
-        if (rating) {
-            modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(rating)}">${rating.toFixed(1)}</span>`;
+        // Calificación con color o mensaje alternativo
+        if (movie.vote_average) {
+            modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(movie.vote_average)}">${movie.vote_average.toFixed(1)}</span>`;
         } else {
             modalRating.innerHTML = `<strong>Calificación:</strong> No disponible`;
         }
-        
+
         modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
 
         const genres = await getMovieGenres(movie.genre_ids);
-        modalGenres.innerHTML = `<strong>Géneros:</strong> ${genres.join(', ')}`;
+        modalGenres.textContent = `Géneros: ${genres.join(', ')}`;
 
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
 
-        // Obtener detalles de la película (incluye director y actores)
+        // Obtener detalles de la película (director y actores)
         const { director, actors } = await getMovieCredits(movie.id);
         modalDirector.innerHTML = `<strong>Director:</strong> ${director || 'Desconocido'}`;
         modalActors.innerHTML = `<strong>Actores principales:</strong> ${actors.length ? actors.join(', ') : 'No disponible'}`;
@@ -130,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalTrailerLink.style.display = 'none';
         }
 
+        // Mostrar el modal con transición suave
         overlay.classList.add('show');
         modal.classList.add('open');
     }
