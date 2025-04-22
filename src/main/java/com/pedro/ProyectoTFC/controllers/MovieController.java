@@ -26,15 +26,15 @@ public class MovieController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addMovie(@RequestBody Movie movie, @RequestParam Long userId) {
-        Optional<User> user = userService.findUserById(userId);
-        if (user.isPresent()) {
-            movie.setUser(user.get());
-            Movie savedMovie = movieService.saveMovie(movie);
-            return ResponseEntity.ok(savedMovie);
-        }
-        return ResponseEntity.badRequest().body("Usuario no encontrado");
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity<?> addMovie(@RequestBody Movie movie, @RequestParam Long userId) {
+//        Optional<User> user = userService.findUserById(userId);
+//        if (user.isPresent()) {
+//            movie.setUser(user.get());
+//            Movie savedMovie = movieService.saveMovie(movie);
+//            return ResponseEntity.ok(savedMovie);
+//        }
+//        return ResponseEntity.badRequest().body("Usuario no encontrado");
+//    }
 
 }

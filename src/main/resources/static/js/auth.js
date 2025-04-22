@@ -40,11 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejar registro/login
     authActionBtn.addEventListener('click', async () => {
-        const username = document.getElementById('authUsername').value.trim();
+        const usernameOrEmail = document.getElementById('authUsername').value.trim();
         const password = document.getElementById('authPassword').value.trim();
         const email = isLoginMode ? '' : document.getElementById('authEmail').value.trim();
 
-        if (!username || !password || (!isLoginMode && !email)) {
+        if (!usernameOrEmail || !password || (!isLoginMode && !email)) {
             alert('Por favor completa todos los campos');
             return;
         }
@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
             : 'http://localhost:8080/api/auth/register';
 
         const body = isLoginMode
-            ? { username, password }
-            : { username, password, email };
+            ? { usernameOrEmail, password }
+            : { usernameOrEmail, password, email };
 
         try {
             const response = await fetch(endpoint, {

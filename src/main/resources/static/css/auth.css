@@ -1,69 +1,116 @@
+/* Estilos generales para el modal */
 #authModal {
-    display: none;
+    display: none; /* Oculto por defecto */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
+    z-index: 2000; /* Asegura que esté por encima del contenido */
     justify-content: center;
     align-items: center;
+    animation: fadeIn 0.3s ease-in-out; /* Animación de aparición */
 }
 
+#authModal.show { /* Clase para mostrar el modal */
+    display: flex;
+}
+
+/* Contenido del modal */
 #authModal .modal-content {
-    background-color: #1c1e1d;
+    background-color: #1f1f1f; /* Fondo oscuro */
     padding: 30px;
-    border-radius: 10px;
-    width: 350px;
-    max-width: 90%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    border: 2px solid #3be39a;
+    border-radius: 12px; /* Bordes redondeados */
+    width: 400px;
+    max-width: 90%; /* Responsivo */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); /* Sombra */
+    border: 1px solid #3be39a; /* Borde verde */
+    animation: slideIn 0.4s ease-in-out; /* Animación de entrada */
+    text-align: center;
 }
 
+/* Título del modal */
 #authModal h2 {
-    color: #3be39a;
+    color: #3be39a; /* Color verde */
     text-align: center;
     margin-bottom: 20px;
+    font-size: 24px;
 }
 
+/* Campos de entrada */
 #authModal input {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #2a2d2b;
-    color: white;
+    border: 1px solid #3be39a; /* Borde verde */
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: #2a2d2b; /* Fondo oscuro */
+    color: white; /* Texto blanco */
     font-size: 16px;
+    transition: border-color 0.3s; /* Transición suave */
 }
 
+#authModal input:focus {
+    border-color: #2db67a; /* Borde verde más claro al enfocar */
+    outline: none;
+}
+
+/* Botones */
 #authModal button {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.3s;
+    font-size: 16px;
+    transition: all 0.3s; /* Transición suave */
 }
 
 #authActionBtn {
-    background-color: #3be39a;
-    color: #141716;
+    background-color: #3be39a; /* Fondo verde */
+    color: #141716; /* Texto oscuro */
     margin-bottom: 10px;
 }
 
 #toggleAuthMode {
     background-color: transparent;
-    color: #3be39a;
-    border: 1px solid #3be39a;
+    color: #3be39a; /* Texto verde */
+    border: 1px solid #3be39a; /* Borde verde */
 }
 
 #authActionBtn:hover {
-    background-color: #2db67a;
+    background-color: #2db67a; /* Fondo verde más claro al pasar el mouse */
 }
 
 #toggleAuthMode:hover {
-    background-color: rgba(59, 227, 154, 0.1);
+    background-color: rgba(59, 227, 154, 0.1); /* Fondo semitransparente */
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Bloqueo del contenido principal mientras el modal está activo */
+body.modal-active main {
+    pointer-events: none; /* Desactiva la interacción */
+    filter: blur(5px); /* Desenfoque opcional */
 }

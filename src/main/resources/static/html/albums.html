@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albums</title>
+    <title>Albums | Pandorasbox</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/albums.css">
+    <link rel="stylesheet" href="../css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
-    <script defer src="../js/script.js"></script>
 </head>
+<body>
     <header>
         <div class="header-container">
             <div class="logo">
@@ -29,12 +30,16 @@
             </nav>
         </div>
     </header>
-<body>
-<h1>Buscar Albums💿</h1>
-<form id="searchForm">
-    <input type="text" id="searchInput" placeholder="Find an album..." required>
-    <button type="submit">Search</button>
-</form>
-<div id="results"></div>
+    <main>
+        <section class="albums-section">
+            <h1>Buscar Albums 💿</h1>
+            <form id="searchForm" class="search-form">
+                <input type="text" id="searchInput" placeholder="Encuentra un álbum..." required>
+                <button type="submit">Buscar</button>
+            </form>
+            <div id="results" class="results-container"></div>
+        </section>
+    </main>
+
 </body>
 </html>
