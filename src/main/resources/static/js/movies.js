@@ -58,6 +58,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    async function saveMovieToUser(movieData) {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('Debes iniciar sesión primero');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/movies/add?userId=' + currentUser.id, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(movieData)
+            });
+
+            if (response.ok) {
+                alert('Película guardada correctamente');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     async function searchMovies(query) {
         const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
         try {

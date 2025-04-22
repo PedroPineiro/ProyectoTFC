@@ -1,0 +1,69 @@
+#authModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+#authModal .modal-content {
+    background-color: #1c1e1d;
+    padding: 30px;
+    border-radius: 10px;
+    width: 350px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 2px solid #3be39a;
+}
+
+#authModal h2 {
+    color: #3be39a;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#authModal input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2d2b;
+    color: white;
+    font-size: 16px;
+}
+
+#authModal button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+#authActionBtn {
+    background-color: #3be39a;
+    color: #141716;
+    margin-bottom: 10px;
+}
+
+#toggleAuthMode {
+    background-color: transparent;
+    color: #3be39a;
+    border: 1px solid #3be39a;
+}
+
+#authActionBtn:hover {
+    background-color: #2db67a;
+}
+
+#toggleAuthMode:hover {
+    background-color: rgba(59, 227, 154, 0.1);
+}

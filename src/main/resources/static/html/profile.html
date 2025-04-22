@@ -6,7 +6,9 @@
     <title>Mi Perfil | Seventh Heaven</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
+    <script defer src="../js/auth.js"></script>
 </head>
 <body>
     <header>
@@ -24,12 +26,24 @@
                         <a href="user-movies.html">User Movies</a>
                         <a href="user-games.html">User Games</a>
                         <a href="user-albums.html">User Albums</a>
+                        <a href="#" id="logoutBtn">Cerrar Sesión</a>
                     </div>
                 </div>
             </nav>
         </div>
     </header>
 <main>
+    <!-- Modal de Registro/Login -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h2 id="authTitle">Registro</h2>
+            <input type="text" id="authUsername" placeholder="Usuario">
+            <input type="password" id="authPassword" placeholder="Contraseña">
+            <input type="email" id="authEmail" placeholder="Email (solo registro)">
+            <button id="authActionBtn">Registrarse</button>
+            <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
+        </div>
+    </div>
     <h2>Mis Listas</h2>
     <div>
         <h3>Watchlist</h3>

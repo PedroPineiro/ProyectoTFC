@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ProyectoTfcApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(ProyectoTfcApplication.class, args);
 	}
 
