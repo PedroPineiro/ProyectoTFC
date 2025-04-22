@@ -3,60 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil | Seventh Heaven</title>
+    <title>Mi Perfil | Pandorasbox</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
     <script defer src="../js/auth.js"></script>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <a id="page-title" href="../index.html">Pandorasbox</a>
-            </div>
-            <nav class="navigation">
-                <a class="navLink" href="movies.html">Movies</a>
-                <a class="navLink" href="games.html">Games</a>
-                <a class="navLink" href="albums.html">Albums</a>
-                <div class="dropdown">
-                    <a class="navLink profile-link" href="profile.html">Profile ▼</a>
-                    <div class="dropdown-content">
-                        <a href="user-movies.html">User Movies</a>
-                        <a href="user-games.html">User Games</a>
-                        <a href="user-albums.html">User Albums</a>
-                        <a href="#" id="logoutBtn">Cerrar Sesión</a>
-                    </div>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <a id="page-title" href="../index.html">Pandorasbox</a>
+        </div>
+        <nav class="navigation">
+            <a class="navLink" href="movies.html">Movies</a>
+            <a class="navLink" href="games.html">Games</a>
+            <a class="navLink" href="albums.html">Albums</a>
+            <div class="dropdown">
+                <a class="navLink profile-link" href="profile.html">Profile ▼</a>
+                <div class="dropdown-content">
+                    <a href="user-movies.html">User Movies</a>
+                    <a href="user-games.html">User Games</a>
+                    <a href="user-albums.html">User Albums</a>
+                    <a href="#" id="logoutBtn">Cerrar Sesión</a>
                 </div>
-            </nav>
+            </div>
+        </nav>
+    </div>
+</header>
+
+    <main>
+        <!-- Modal centrado sin fondo oscuro -->
+        <div id="authModal">
+            <div class="modal-content">
+                <h2 id="authTitle">Registro</h2>
+                <input type="text" id="authUsername" placeholder="Usuario" required>
+                <input type="password" id="authPassword" placeholder="Contraseña" required>
+                <input type="email" id="authEmail" placeholder="Email (solo registro)" required>
+                <button id="authActionBtn">Registrarse</button>
+                <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
+            </div>
         </div>
-    </header>
-<main>
-    <!-- Modal de Registro/Login -->
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <h2 id="authTitle">Registro</h2>
-            <input type="text" id="authUsername" placeholder="Usuario">
-            <input type="password" id="authPassword" placeholder="Contraseña">
-            <input type="email" id="authEmail" placeholder="Email (solo registro)">
-            <button id="authActionBtn">Registrarse</button>
-            <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
+
+        <h2>Mis Listas</h2>
+        <div>
+            <h3>Watchlist</h3>
+            <ul id="watchlist">
+                <!-- Aquí se cargarán los elementos -->
+            </ul>
         </div>
-    </div>
-    <h2>Mis Listas</h2>
-    <div>
-        <h3>Watchlist</h3>
-        <ul id="watchlist">
-            <!-- Aquí se cargarán los elementos -->
-        </ul>
-    </div>
-    <div>
-        <h3>Vistos</h3>
-        <ul id="watched">
-            <!-- Aquí se cargarán los elementos -->
-        </ul>
-    </div>
-</main>
+        <div>
+            <h3>Vistos</h3>
+            <ul id="watched">
+                <!-- Aquí se cargarán los elementos -->
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>

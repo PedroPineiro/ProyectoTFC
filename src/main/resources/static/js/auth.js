@@ -53,15 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
             ? 'http://localhost:8080/api/auth/login'
             : 'http://localhost:8080/api/auth/register';
 
-        const body = isLoginMode
-            ? { usernameOrEmail, password }
-            : { usernameOrEmail, password, email };
+        let body;
+        if (isLoginMode) {
+            body = JSON.stringify({ usernameOrEmail, password });
+        } else {
+            body = JSON.stringify({ username: usernameOrEmail, password, email });
+        }
 
         try {
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
+                body: body,
                 credentials: 'include'
             });
 

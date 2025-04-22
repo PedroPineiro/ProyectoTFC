@@ -5,7 +5,8 @@ import com.pedro.ProyectoTFC.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.crypto.password.PasswordEncoder; // Import PasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.Map;
 import java.util.Optional;
@@ -33,25 +34,36 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody Map<String, String> loginData) {
+    public ResponseEntity<?> loginUser(@RequestBody Map<String, String> loginData, HttpSession session) {
         String usernameOrEmail = loginData.get("usernameOrEmail");
         String password = loginData.get("password");
 
-        // Buscar usuario por username o email usando el método combinado
         Optional<User> userOpt = userService.findByUsernameOrEmail(usernameOrEmail);
 
-        if (!userOpt.isPresent()) {
+        if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Usuario o email incorrecto"));
         }
 
         User user = userOpt.get();
 
-        // Verificar la contraseña
         if (!passwordEncoder.matches(password, user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Contraseña incorrecta"));
         }
 
-        // Si todo es correcto, devolver el usuario
+        // Guardar usuario en sesión
+        session.setAttribute("user", user);
+
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "No estás logueado"));
+        }
+        return ResponseEntity.ok(user);
+    }
+
+
 }

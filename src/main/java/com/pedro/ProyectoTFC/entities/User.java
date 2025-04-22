@@ -14,11 +14,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "El nombre de usuario no puede estar vacío")
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Email
-    @NotBlank
+    @NotBlank(message = "El email no puede estar vacío")
+    @Column(unique = true, nullable = false)
     private String email;
 
     @NotBlank

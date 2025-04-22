@@ -2,11 +2,7 @@
 #authModal {
     display: none; /* Oculto por defecto */
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo semitransparente */
+
     z-index: 2000; /* Asegura que esté por encima del contenido */
     justify-content: center;
     align-items: center;
@@ -40,7 +36,7 @@
 
 /* Campos de entrada */
 #authModal input {
-    width: 100%;
+    width: 93%;
     padding: 12px;
     margin-bottom: 15px;
     border: 1px solid #3be39a; /* Borde verde */
