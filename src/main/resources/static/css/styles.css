@@ -1,4 +1,10 @@
 /* Configuración general */
+html, body {
+  height: 100%; /* Asegura que ocupen toda la altura de la ventana */
+  display: flex;
+  flex-direction: column; /* Estructura en columna */
+}
+
 body {
   background-color: #1c1e1d;
   font-family: "Montserrat", "Kanit", sans-serif;
@@ -13,6 +19,11 @@ header {
   top: 0;
   z-index: 1000;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenido principal */
+main {
+  flex: 1; /* Toma todo el espacio disponible entre el header y el footer */
 }
 
 .header-container {

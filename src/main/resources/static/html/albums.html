@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Albums | Pandorasbox</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/albums.css">
+    <link rel="stylesheet" href="../css/browser.css">
     <link rel="stylesheet" href="../css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
+    <script defer src="../js/auth.js"></script>
 </head>
 <body>
     <header>
@@ -25,21 +26,25 @@
                         <a href="user-movies.html">User Movies</a>
                         <a href="user-games.html">User Games</a>
                         <a href="user-albums.html">User Albums</a>
+                        <a href="#" id="logoutBtn">Cerrar Sesión</a>
                     </div>
                 </div>
             </nav>
         </div>
     </header>
+    <!-- Contenido principal -->
     <main>
-        <section class="albums-section">
-            <h1>Buscar Albums 💿</h1>
-            <form id="searchForm" class="search-form">
-                <input type="text" id="searchInput" placeholder="Encuentra un álbum..." required>
-                <button type="submit">Buscar</button>
-            </form>
-            <div id="results" class="results-container"></div>
-        </section>
+        <h1>Buscar Albums💿</h1>
+        <form id="searchForm">
+            <input type="text" id="searchInput" placeholder="Find an album..." required>
+            <button class="searchButton" type="submit">Buscar</button>
+        </form>
+        <div id="results"></div>
     </main>
+
+    <footer>
+        <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
+    </footer>
 
 </body>
 </html>
