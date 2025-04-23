@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const authActionBtn = document.getElementById('authActionBtn');
     const toggleAuthMode = document.getElementById('toggleAuthMode');
     const logoutBtn = document.getElementById('logoutBtn');
+    const temporalDropdown = document.getElementById('temporalDropdown');
+
+    // Verificar si el usuario está logueado
+    const userLogged = JSON.parse(localStorage.getItem('currentUser'));
+
 
     // Verificar si el modal de autenticación existe antes de usarlo
     if (authModal) {
@@ -69,8 +74,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Manejar cierre de sesión
-    if (logoutBtn) {
+    if (userLogged) {
+        // Reemplazar el enlace por el dropdown
+        temporalDropdown.innerHTML = `
+            <div class="dropdown">
+                <a class="navLink profile-link" href="profile.html">Profile</a>
+                <div class="dropdown-content">
+                    <a href="user-movies.html">User Movies</a>
+                    <a href="user-games.html">User Games</a>
+                    <a href="user-albums.html">User Albums</a>
+                    <a href="" id="logoutBtn">Cerrar Sesión</a>
+                </div>
+            </div>
+        `;
+
+        // Manejar cierre de sesión
+        const logoutBtn = document.getElementById('logoutBtn');
         logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             try {
@@ -83,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             localStorage.removeItem('currentUser');
-            location.reload(); // Recargar la página para mostrar el modal de login/registro
+            location.reload(); // Recargar la página para volver al estado inicial
         });
     }
 

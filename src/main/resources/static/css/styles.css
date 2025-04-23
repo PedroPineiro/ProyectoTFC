@@ -49,7 +49,7 @@ main {
 .navLink {
   text-decoration: none;
   color: white;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   margin: 0 25px 0 25px;
   padding: 30px 0 30px 0; /* Aumenta el área interactiva */
@@ -60,11 +60,28 @@ main {
   color: #141716;
 }
 
+/* Profile sin estar logueado */
+#temporalDropdown{
+  position: relative;
+  display: inline-block;
+  padding: 10px; /* Aumenta el área interactiva */
+}
+
 /* Contenedor del dropdown */
 .dropdown {
   position: relative;
   display: inline-block;
   padding: 10px; /* Aumenta el área interactiva */
+}
+
+/* Ocultar el contenido del dropdown por defecto */
+.dropdown-content {
+  display: none;
+}
+
+/* Mostrar el contenido del dropdown solo si el usuario está logueado */
+.dropdown.logged-in .dropdown-content {
+  display: block;
 }
 
 /* Contenido del dropdown oculto */
