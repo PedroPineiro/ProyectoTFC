@@ -1,37 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authModal = document.getElementById('authModal');
+    const modalOverlay = document.querySelector('.modal-overlay');
     const authTitle = document.getElementById('authTitle');
     const authActionBtn = document.getElementById('authActionBtn');
     const toggleAuthMode = document.getElementById('toggleAuthMode');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const usernameInput = document.getElementById('authUsername');
+    const passwordInput = document.getElementById('authPassword');
+    const emailInput = document.getElementById('authEmail');
+    const emailIcon = emailInput?.previousElementSibling; // Ícono del email
     const temporalDropdown = document.getElementById('temporalDropdown');
 
-    // Verificar si el usuario está logueado
-    const userLogged = JSON.parse(localStorage.getItem('currentUser'));
+    let isLoginMode = true; // Estado inicial: modo "Iniciar Sesión"
 
+    // Configurar el estado inicial del modal
+    function setLoginMode() {
+        isLoginMode = true;
+        if (authTitle) authTitle.textContent = 'Iniciar Sesión';
+        if (authActionBtn) authActionBtn.textContent = 'Iniciar Sesión';
+        if (toggleAuthMode) toggleAuthMode.textContent = '¿Aún no tienes cuenta? Regístrate aquí';
+        if (usernameInput) usernameInput.placeholder = 'Usuario o Email';
+        if (emailInput) emailInput.style.display = 'none';
+        if (emailIcon) emailIcon.style.display = 'none';
+        if (usernameInput) usernameInput.value = '';
+        if (passwordInput) passwordInput.value = '';
+        if (emailInput) emailInput.value = '';
+    }
 
-    // Verificar si el modal de autenticación existe antes de usarlo
-    if (authModal) {
-        let isLoginMode = false;
+    function setRegisterMode() {
+        isLoginMode = false;
+        if (authTitle) authTitle.textContent = 'Registro';
+        if (authActionBtn) authActionBtn.textContent = 'Registrarse';
+        if (toggleAuthMode) toggleAuthMode.textContent = '¿Ya tienes cuenta? Inicia sesión';
+        if (usernameInput) usernameInput.placeholder = 'Usuario';
+        if (emailInput) emailInput.style.display = 'block';
+        if (emailIcon) emailIcon.style.display = 'block';
+        if (usernameInput) usernameInput.value = '';
+        if (passwordInput) passwordInput.value = '';
+        if (emailInput) emailInput.value = '';
+    }
 
-        // Mostrar modal automáticamente si no hay usuario logueado
-        if (!localStorage.getItem('currentUser')) {
-            authModal.style.display = 'block';
-        }
-
-        // Alternar entre login/registro
+    // Alternar entre login y registro
+    if (toggleAuthMode) {
         toggleAuthMode.addEventListener('click', () => {
-            isLoginMode = !isLoginMode;
-            authTitle.textContent = isLoginMode ? 'Iniciar Sesión' : 'Registro';
-            authActionBtn.textContent = isLoginMode ? 'Iniciar Sesión' : 'Registrarse';
-            document.getElementById('authEmail').style.display = isLoginMode ? 'none' : 'block';
+            if (isLoginMode) {
+                setRegisterMode();
+            } else {
+                setLoginMode();
+            }
         });
+    }
 
-        // Manejar registro/login
+    // Manejar el envío del formulario
+    if (authActionBtn) {
         authActionBtn.addEventListener('click', async () => {
-            const usernameOrEmail = document.getElementById('authUsername').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
-            const email = isLoginMode ? '' : document.getElementById('authEmail').value.trim();
+            const usernameOrEmail = usernameInput?.value.trim();
+            const password = passwordInput?.value.trim();
+            const email = isLoginMode ? '' : emailInput?.value.trim();
 
             if (!usernameOrEmail || !password || (!isLoginMode && !email)) {
                 alert('Por favor completa todos los campos');
@@ -42,12 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? 'http://localhost:8080/api/auth/login'
                 : 'http://localhost:8080/api/auth/register';
 
-            let body;
-            if (isLoginMode) {
-                body = JSON.stringify({ usernameOrEmail, password });
-            } else {
-                body = JSON.stringify({ username: usernameOrEmail, password, email });
-            }
+            const body = isLoginMode
+                ? JSON.stringify({ usernameOrEmail, password })
+                : JSON.stringify({ username: usernameOrEmail, password, email });
 
             try {
                 const response = await fetch(endpoint, {
@@ -65,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 localStorage.setItem('currentUser', JSON.stringify(data));
                 updateUIForLoggedInUser(data);
-                authModal.style.display = 'none';
-
+                closeModal(); // Cerrar modal al iniciar sesión
+                location.reload(); // Recargar la página para reflejar el estado logueado
             } catch (error) {
                 console.error('Error:', error);
                 alert(error.message);
@@ -74,36 +95,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (userLogged) {
+    // Mostrar el modal y el fondo oscuro si no hay usuario logueado
+    if (!localStorage.getItem('currentUser')) {
+        authModal.style.display = 'block';
+        modalOverlay.classList.add('active');
+        setLoginMode();
+    }
+
+    // Ocultar el modal y el fondo oscuro
+    function closeModal() {
+        authModal.style.display = 'none';
+        modalOverlay.classList.remove('active');
+    }
+
+    // Verificar si el usuario está logueado
+    const userLogged = JSON.parse(localStorage.getItem('currentUser'));
+    if (userLogged && temporalDropdown) {
         // Reemplazar el enlace por el dropdown
         temporalDropdown.innerHTML = `
             <div class="dropdown">
-                <a class="navLink profile-link" href="profile.html">Profile</a>
+                <a class="navLink profile-link" href="profile.html">${userLogged.username}</a>
                 <div class="dropdown-content">
                     <a href="user-movies.html">User Movies</a>
                     <a href="user-games.html">User Games</a>
                     <a href="user-albums.html">User Albums</a>
-                    <a href="" id="logoutBtn">Cerrar Sesión</a>
+                    <a href="#" id="logoutBtn">Cerrar Sesión</a>
                 </div>
             </div>
         `;
 
         // Manejar cierre de sesión
         const logoutBtn = document.getElementById('logoutBtn');
-        logoutBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            try {
-                await fetch('http://localhost:8080/api/auth/logout', {
-                    method: 'POST',
-                    credentials: 'include'
-                });
-            } catch (error) {
-                console.error('Error al cerrar sesión:', error);
-            }
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    await fetch('http://localhost:8080/api/auth/logout', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                } catch (error) {
+                    console.error('Error al cerrar sesión:', error);
+                }
 
-            localStorage.removeItem('currentUser');
-            location.reload(); // Recargar la página para volver al estado inicial
-        });
+                localStorage.removeItem('currentUser');
+                location.reload(); // Recargar la página para volver al estado inicial
+            });
+        }
     }
 
     // Actualizar la UI cuando el usuario está logueado

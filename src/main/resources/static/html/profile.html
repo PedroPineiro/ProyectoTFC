@@ -6,9 +6,11 @@
     <title>Mi Perfil | Pandorasbox</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/profile.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script defer src="../js/auth.js"></script>
+    <script defer src="../js/profile.js"></script>
 </head>
 <body>
 <header>
@@ -28,31 +30,67 @@
     </div>
 </header>
 
+    <!-- Fondo oscuro -->
+    <div class="modal-overlay"></div>
+
     <main>
         <!-- Modal centrado sin fondo oscuro -->
         <div id="authModal">
             <div class="modal-content">
                 <h2 id="authTitle">Registro</h2>
-                <input type="text" id="authUsername" placeholder="Usuario" required>
-                <input type="password" id="authPassword" placeholder="Contraseña" required>
-                <input type="email" id="authEmail" placeholder="Email (solo registro)" required>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="authUsername" placeholder="Usuario" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="authPassword" placeholder="Contraseña" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="authEmail" placeholder="Email" required>
+                </div>
                 <button id="authActionBtn">Registrarse</button>
                 <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
             </div>
         </div>
 
-        <h2>Mis Listas</h2>
-        <div>
-            <h3>Watchlist</h3>
-            <ul id="watchlist">
-                <!-- Aquí se cargarán los elementos -->
+        <!-- Información del usuario -->
+        <section id="user-info">
+            <h1 id="username-display">Nombre de Usuario</h1>
+            <p id="email-display">Correo Electrónico</p>
+            <div class="user-actions">
+                <button id="change-username-btn">Cambiar Usuario</button>
+                <button id="change-password-btn">Cambiar Contraseña</button>
+            </div>
+        </section>
+
+        <!-- Películas favoritas -->
+        <section id="favorite-movies">
+            <h2>Películas Favoritas</h2>
+            <ul id="favorite-movies-list">
+                <!-- Aquí se cargarán las películas favoritas -->
             </ul>
+        </section>
+
+        <!-- Modales -->
+        <div id="changeUsernameModal" class="modal">
+            <div class="modal-content">
+                <h2>Cambiar Usuario</h2>
+                <input type="text" id="new-username" placeholder="Nuevo Usuario">
+                <button id="save-username-btn">Guardar</button>
+                <button class="close-modal">Cancelar</button>
+            </div>
         </div>
-        <div>
-            <h3>Vistos</h3>
-            <ul id="watched">
-                <!-- Aquí se cargarán los elementos -->
-            </ul>
+
+        <div id="changePasswordModal" class="modal">
+            <div class="modal-content">
+                <h2>Cambiar Contraseña</h2>
+                <input type="password" id="current-password" placeholder="Contraseña Actual">
+                <input type="password" id="new-password" placeholder="Nueva Contraseña">
+                <button id="save-password-btn">Guardar</button>
+                <button class="close-modal">Cancelar</button>
+            </div>
         </div>
     </main>
 

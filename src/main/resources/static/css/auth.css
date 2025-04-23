@@ -1,57 +1,97 @@
+/* Fondo oscuro para bloquear el contenido excepto el header */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1); /* Fondo oscuro semitransparente */
+    z-index: 998; /* Debajo del modal pero encima del contenido */
+    display: none; /* Oculto por defecto */
+}
+
+/* Mostrar el fondo oscuro cuando el modal esté activo */
+.modal-overlay.active {
+    display: block;
+}
+
+/* Excluir el header del fondo oscuro */
+header {
+    position: relative;
+    z-index: 1000; /* Asegura que esté encima del fondo oscuro */
+}
+
 /* Estilos generales para el modal */
 #authModal {
     display: none; /* Oculto por defecto */
     position: fixed;
-    top: 50%; /* Centrado verticalmente */
-    left: 50%; /* Centrado horizontalmente */
-    transform: translate(-50%, -50%); /* Ajusta el punto de referencia al centro */
-    z-index: 2000; /* Asegura que esté por encima del contenido */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.3s ease-in-out; /* Animación de aparición */
+    animation: fadeIn 0.3s ease-in-out;
 }
 
-#authModal.show { /* Clase para mostrar el modal */
+#authModal.show {
     display: flex;
 }
 
 /* Contenido del modal */
 #authModal .modal-content {
-    background-color: #1f1f1f; /* Fondo oscuro */
+    background-color: #1f1f1f;
     padding: 30px;
-    border-radius: 12px; /* Bordes redondeados */
+    border-radius: 12px;
     width: 400px;
-    max-width: 90%; /* Responsivo */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); /* Sombra */
-    border: 1px solid #3be39a; /* Borde verde */
-    animation: slideIn 0.4s ease-in-out; /* Animación de entrada */
+    max-width: 90%;
+    box-shadow: 0 8px 30px #3be39a;
+    border: 1px solid #3be39a;
+    animation: slideIn 0.6s ease-in-out;
     text-align: center;
 }
 
 /* Título del modal */
 #authModal h2 {
-    color: #3be39a; /* Color verde */
+    color: #3be39a;
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
 }
 
-/* Campos de entrada */
-#authModal input {
-    width: 93%;
-    padding: 12px;
+/* Contenedor de los campos */
+.input-group {
+    display: flex;
+    align-items: center;
     margin-bottom: 15px;
-    border: 1px solid #3be39a; /* Borde verde */
-    border-radius: 8px; /* Bordes redondeados */
-    background-color: #2a2d2b; /* Fondo oscuro */
-    color: white; /* Texto blanco */
-    font-size: 16px;
-    transition: border-color 0.3s; /* Transición suave */
 }
 
-#authModal input:focus {
-    border-color: #2db67a; /* Borde verde más claro al enfocar */
+.input-group i {
+    color: #3be39a;
+    font-size: 18px;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #3be39a;
+    border-radius: 8px;
+    background-color: #2a2d2b;
+    color: white;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.1s ease;
+}
+
+.input-group input:focus {
+    border-color: #2db67a;
+    box-shadow: 0 0 8px #2db67a;
     outline: none;
+}
+
+.input-group:focus-within i {
+    color: #2db67a;
 }
 
 /* Botones */
@@ -63,27 +103,27 @@
     cursor: pointer;
     font-weight: bold;
     font-size: 16px;
-    transition: all 0.3s; /* Transición suave */
+    transition: all 0.3s ease;
 }
 
 #authActionBtn {
-    background-color: #3be39a; /* Fondo verde */
-    color: #141716; /* Texto oscuro */
+    background-color: #3be39a;
+    color: #141716;
     margin-bottom: 10px;
 }
 
 #toggleAuthMode {
     background-color: transparent;
-    color: #3be39a; /* Texto verde */
-    border: 1px solid #3be39a; /* Borde verde */
+    color: #3be39a;
+    border: 1px solid #3be39a;
 }
 
 #authActionBtn:hover {
-    background-color: #2db67a; /* Fondo verde más claro al pasar el mouse */
+    background-color: #2db67a;
 }
 
 #toggleAuthMode:hover {
-    background-color: rgba(59, 227, 154, 0.1); /* Fondo semitransparente */
+    background-color: rgba(59, 227, 154, 0.1);
 }
 
 /* Animaciones */
@@ -105,10 +145,4 @@
         transform: translateY(0);
         opacity: 1;
     }
-}
-
-/* Bloqueo del contenido principal mientras el modal está activo */
-body.modal-active main {
-    pointer-events: none; /* Desactiva la interacción */
-    filter: blur(5px); /* Desenfoque opcional */
 }
