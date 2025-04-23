@@ -148,6 +148,17 @@ main {
   transform: translateY(0);
 }
 
+#settings i {
+  font-size: 25px;
+  color: white;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#settings i:hover {
+  color: #141716;
+  transform: rotate(-45deg); /* Gira el ícono 20 grados */
+}
+
 
 /* Footer */
 footer {
