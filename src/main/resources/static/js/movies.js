@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
 
-    // Elementos del modal
     const modal = document.createElement('div');
     modal.classList.add('modal');
     const overlay = document.createElement('div');
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModalButton.classList.add('close-modal');
     modalContent.appendChild(closeModalButton);
 
-    // Elementos dentro del modal
     const modalPoster = document.createElement('img');
     const modalDetails = document.createElement('div');
     modalDetails.classList.add('modal-details');
@@ -42,13 +40,21 @@ document.addEventListener('DOMContentLoaded', () => {
     modalTrailerLink.target = '_blank';
     modalTrailerLink.style.display = 'none';
 
-    // Agregar imagen y detalles al modal
     modalContent.append(modalPoster, modalDetails);
-    modalDetails.append(modalTitle, modalReleaseDate, modalRating, modalDescription, modalGenres, modalDirector, modalActors, modalLink, modalTrailerLink);
+    modalDetails.append(
+        modalTitle,
+        modalReleaseDate,
+        modalRating,
+        modalDescription,
+        modalGenres,
+        modalDirector,
+        modalActors,
+        modalLink,
+        modalTrailerLink
+    );
 
     let currentMovie = null;
 
-    // Evento de búsqueda
     searchForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const query = searchInput.value.trim();
@@ -58,32 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    async function saveMovieToUser(movieData) {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser) {
-            alert('Debes iniciar sesión primero');
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/movies/add?userId=' + currentUser.id, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(movieData)
-            });
-
-            if (response.ok) {
-                alert('Película guardada correctamente');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
     async function searchMovies(query) {
         const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
         try {
             const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Error al buscar películas');
+            }
             const data = await response.json();
             return data.results;
         } catch (error) {
@@ -119,13 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function showMovieDetails(movie) {
         currentMovie = movie;
-        modalPoster.src = movie.poster_path 
+
+        modalPoster.src = movie.poster_path
             ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
             : "../assets/imgs/posterNotFound.jpg";
         modalTitle.textContent = movie.title;
         modalReleaseDate.innerHTML = `<strong>Fecha de estreno:</strong> ${movie.release_date || 'Desconocida'}`;
 
-        // Calificación con color o mensaje alternativo
         if (movie.vote_average) {
             modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(movie.vote_average)}">${movie.vote_average.toFixed(1)}</span>`;
         } else {
@@ -139,12 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
 
-        // Obtener detalles de la película (director y actores)
         const { director, actors } = await getMovieCredits(movie.id);
         modalDirector.innerHTML = `<strong>Director:</strong> ${director || 'Desconocido'}`;
         modalActors.innerHTML = `<strong>Actores principales:</strong> ${actors.length ? actors.join(', ') : 'No disponible'}`;
 
-        // Obtener tráiler
         const trailerUrl = await getTrailer(movie.id);
         if (trailerUrl) {
             modalTrailerLink.href = trailerUrl;
@@ -153,7 +138,21 @@ document.addEventListener('DOMContentLoaded', () => {
             modalTrailerLink.style.display = 'none';
         }
 
-        // Mostrar el modal con transición suave
+        // Botones de guardar
+        modalDetails.querySelectorAll('button.saveLog-modal, button.saveWishlist-modal').forEach(btn => btn.remove());
+
+        const saveLogButton = document.createElement('button');
+        saveLogButton.textContent = 'Marcar como vista';
+        saveLogButton.classList.add('saveLog-modal');
+        saveLogButton.addEventListener('click', () => saveMovie('PLAYED'));
+        modalDetails.appendChild(saveLogButton);
+
+        const saveWishlistButton = document.createElement('button');
+        saveWishlistButton.textContent = 'Añadir a wishlist';
+        saveWishlistButton.classList.add('saveWishlist-modal');
+        saveWishlistButton.addEventListener('click', () => saveMovie('WISHLIST'));
+        modalDetails.appendChild(saveWishlistButton);
+
         overlay.classList.add('show');
         modal.classList.add('open');
     }
@@ -162,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
         try {
             const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Error al obtener géneros');
+            }
             const data = await response.json();
             return data.genres.filter(genre => genreIds.includes(genre.id)).map(genre => genre.name);
         } catch (error) {
@@ -174,6 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}`;
         try {
             const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Error al obtener créditos');
+            }
             const data = await response.json();
             const director = data.crew.find(person => person.job === 'Director')?.name || null;
             const actors = data.cast.slice(0, 5).map(actor => actor.name);
@@ -188,6 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`;
         try {
             const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Error al obtener tráiler');
+            }
             const data = await response.json();
             const trailer = data.results.find(video => video.type === 'Trailer');
             return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
@@ -207,5 +215,44 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeModal() {
         modal.classList.remove('open');
         overlay.classList.remove('show');
+    }
+
+    async function saveMovie(status) {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            alert('Debes iniciar sesión para guardar películas');
+            return;
+        }
+
+        try {
+            const movieData = {
+                title: currentMovie.title,
+                releaseYear: currentMovie.release_date ? parseInt(currentMovie.release_date.substring(0, 4)) : 0,
+                director: modalDirector.textContent.replace('Director: ', '') || 'Desconocido',
+                genre: modalGenres.textContent.replace('Géneros: ', ''),
+                rating: status === 'PLAYED' ? currentMovie.vote_average : null,
+                imageUrl: currentMovie.poster_path ? `https://image.tmdb.org/t/p/w300${currentMovie.poster_path}` : null,
+                status: status,
+                isFavorite: false,
+                userId: currentUser.id
+            };
+
+            const response = await fetch('http://localhost:8080/api/movies/add', { // URL corregida
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(movieData)
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
+
+            const savedMovie = await response.json();
+            alert(`Película guardada como ${status === 'PLAYED' ? 'vista' : 'en wishlist'}`);
+        } catch (error) {
+            console.error('Error al guardar la película:', error);
+            alert('Error al guardar: ' + error.message);
+        }
     }
 });

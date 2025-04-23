@@ -40,6 +40,19 @@ public class Movie {
     public Movie() {
     }
 
+    public Movie(Long id, String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Status status, boolean isFavorite, User user) {
+        this.id = id;
+        this.title = title;
+        this.releaseYear = releaseYear;
+        this.director = director;
+        this.genre = genre;
+        this.rating = rating;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.isFavorite = isFavorite;
+        this.user = user;
+    }
+
     public Movie(String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Status status, boolean isFavorite, User user) {
         this.title = title;
         this.releaseYear = releaseYear;

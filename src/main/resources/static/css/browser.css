@@ -193,6 +193,35 @@ form {
   background-color: red;
 }
 
+/* Estilos para los botones de guardado */
+.saveLog-modal, .saveWishlist-modal {
+  padding: 10px 15px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.saveLog-modal {
+  background-color: #3be39a;
+  color: #141716;
+}
+
+.saveWishlist-modal {
+  background-color: #6a5acd;
+  color: white;
+}
+
+.saveLog-modal:hover {
+  background-color: #2db67a;
+}
+
+.saveWishlist-modal:hover {
+  background-color: #5a4acd;
+}
+
 /* Contenido de la ventana modal */
 .modal-content {
   display: grid;
