@@ -99,6 +99,11 @@ main {
   color: #141716;
 }
 
+#logoutBtn:hover {
+  background-color: red;
+  color: #141716;
+}
+
 /* Estilo del pico */
 .dropdown::after {
   content: "";
