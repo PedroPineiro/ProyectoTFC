@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUIForLoggedInUser(user) {
         const profileLink = document.querySelector('.profile-link');
         if (profileLink) {
-            profileLink.textContent = `${user.username} ▼`;
+            profileLink.textContent = `${user.username}`;
         }
 
         // Mostrar contenido protegido
