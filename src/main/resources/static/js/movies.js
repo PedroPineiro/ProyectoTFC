@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(overlay);
 
     const closeModalButton = document.createElement('button');
-    closeModalButton.textContent = 'Cerrar';
+    closeModalButton.textContent = '🗙';
     closeModalButton.classList.add('close-modal');
     modalContent.appendChild(closeModalButton);
 

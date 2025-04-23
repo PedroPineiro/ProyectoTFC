@@ -23,7 +23,7 @@ header {
 
 /* Contenido principal */
 main {
-  flex: 1; /* Toma todo el espacio disponible entre el header y el footer */
+  flex: 1; /* Toma toodo el espacio disponible entre el header y el footer */
 }
 
 .header-container {
@@ -49,10 +49,10 @@ main {
 .navLink {
   text-decoration: none;
   color: white;
-  margin: 0 15px;
   font-size: 18px;
   font-weight: bold;
-  padding-left: 5px;
+  margin: 0 25px 0 25px;
+  padding: 30px 0 30px 0; /* Aumenta el área interactiva */
   transition: color 0.2s ease;
 }
 
@@ -64,11 +64,12 @@ main {
 .dropdown {
   position: relative;
   display: inline-block;
+  padding: 10px; /* Aumenta el área interactiva */
 }
 
 /* Contenido del dropdown oculto */
 .dropdown-content {
-  display: none;
+  display: block;
   position: absolute;
   background-color: #0f0f0f;
   min-width: 140px;
@@ -76,8 +77,11 @@ main {
   border-radius: 5px;
   text-align: left;
   top: 140%;
-  left: 40%;
-  transform: translateX(-50%);
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px); /* Posición inicial */
+  opacity: 0; /* Oculto inicialmente */
+  pointer-events: none; /* Evita interacción cuando está oculto */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Transición suave */
   z-index: 1000;
 }
 
@@ -105,18 +109,22 @@ main {
   border-width: 5px;
   border-style: solid;
   border-color: #0f0f0f transparent transparent transparent;
-  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* Mostrar el dropdown y el pico al pasar el mouse */
 .dropdown:hover .dropdown-content {
-  display: block;
+  opacity: 1; /* Visible */
+  transform: translateX(-50%) translateY(0); /* Posición final */
+  pointer-events: auto; /* Permite interacción */
 }
 
 .dropdown:hover::after {
-  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
-
 
 
 /* Footer */
