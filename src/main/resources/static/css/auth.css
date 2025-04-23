@@ -2,7 +2,9 @@
 #authModal {
     display: none; /* Oculto por defecto */
     position: fixed;
-
+    top: 50%; /* Centrado verticalmente */
+    left: 50%; /* Centrado horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta el punto de referencia al centro */
     z-index: 2000; /* Asegura que esté por encima del contenido */
     justify-content: center;
     align-items: center;
