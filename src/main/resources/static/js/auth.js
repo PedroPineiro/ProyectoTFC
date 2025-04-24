@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <a href="user-movies.html">User Movies</a>
                     <a href="user-games.html">User Games</a>
                     <a href="user-albums.html">User Albums</a>
-                    <a href="#" id="logoutBtn">Cerrar Sesión</a>
+                    <a href="profile.html" id="logoutBtn">Cerrar Sesión</a>
                 </div>
             </div>
         `;
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 localStorage.removeItem('currentUser');
-                location.reload(); // Recargar la página para volver al estado inicial
+                window.location.href = 'profile.html'; // Redirigir a profile.html
             });
         }
     }
