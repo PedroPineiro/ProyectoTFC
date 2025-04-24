@@ -28,3 +28,13 @@ main {
     justify-content: center; /* Centra verticalmente el contenido */
     font-size: 30px;
 }
+
+#username-display{
+    font-size: 70px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#email-display{
+    margin-top: 5px;
+}
