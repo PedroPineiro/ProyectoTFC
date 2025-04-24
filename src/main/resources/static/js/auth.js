@@ -51,49 +51,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Manejar el envío del formulario
-    if (authActionBtn) {
-        authActionBtn.addEventListener('click', async () => {
-            const usernameOrEmail = usernameInput?.value.trim();
-            const password = passwordInput?.value.trim();
-            const email = isLoginMode ? '' : emailInput?.value.trim();
+    async function handleFormSubmit() {
+        const usernameOrEmail = usernameInput?.value.trim();
+        const password = passwordInput?.value.trim();
+        const email = isLoginMode ? '' : emailInput?.value.trim();
 
-            if (!usernameOrEmail || !password || (!isLoginMode && !email)) {
-                alert('Por favor completa todos los campos');
-                return;
+        if (!usernameOrEmail || !password || (!isLoginMode && !email)) {
+            alert('Por favor completa todos los campos');
+            return;
+        }
+
+        const endpoint = isLoginMode
+            ? 'http://localhost:8080/api/auth/login'
+            : 'http://localhost:8080/api/auth/register';
+
+        const body = isLoginMode
+            ? JSON.stringify({ usernameOrEmail, password })
+            : JSON.stringify({ username: usernameOrEmail, password, email });
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: body,
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Error desconocido');
             }
 
-            const endpoint = isLoginMode
-                ? 'http://localhost:8080/api/auth/login'
-                : 'http://localhost:8080/api/auth/register';
-
-            const body = isLoginMode
-                ? JSON.stringify({ usernameOrEmail, password })
-                : JSON.stringify({ username: usernameOrEmail, password, email });
-
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: body,
-                    credentials: 'include'
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Error desconocido');
-                }
-
-                localStorage.setItem('currentUser', JSON.stringify(data));
-                updateUIForLoggedInUser(data);
-                closeModal(); // Cerrar modal al iniciar sesión
-                location.reload(); // Recargar la página para reflejar el estado logueado
-            } catch (error) {
-                console.error('Error:', error);
-                alert(error.message);
-            }
-        });
+            localStorage.setItem('currentUser', JSON.stringify(data));
+            updateUIForLoggedInUser(data);
+            closeModal(); // Cerrar modal al iniciar sesión
+            location.reload(); // Recargar la página para reflejar el estado logueado
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error.message);
+        }
     }
+
+    // Agregar evento al botón
+    if (authActionBtn) {
+        authActionBtn.addEventListener('click', handleFormSubmit);
+    }
+
+    // Agregar evento para detectar la tecla Enter
+    [usernameInput, passwordInput, emailInput].forEach(input => {
+        if (input) {
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Evita el comportamiento por defecto
+                    handleFormSubmit(); // Llama a la función de envío
+                }
+            });
+        }
+    });
 
     // Mostrar el modal y el fondo oscuro si no hay usuario logueado
     if (!localStorage.getItem('currentUser')) {
