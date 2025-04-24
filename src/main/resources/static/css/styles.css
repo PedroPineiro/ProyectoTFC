@@ -72,13 +72,6 @@ main {
   padding: 10px; /* Aumenta el área interactiva */
 }
 
-/* Contenedor del dropdown */
-.dropdown {
-  position: relative;
-  display: inline-block;
-  padding: 10px; /* Aumenta el área interactiva */
-}
-
 /* Ocultar el contenido del dropdown por defecto */
 .dropdown-content {
   display: none;
