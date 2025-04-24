@@ -1,107 +1,30 @@
-/* Información del usuario */
-#user-info {
-    text-align: center;
-    margin: 20px 0;
+/* Archivo profile.css */
+main {
+    margin: 70px;
+    color: var(--text-color);
 }
 
-#username-display {
-    font-size: 2.5rem;
-    color: #3be39a;
-}
-
-#email-display {
-    font-size: 1.5rem;
-    color: #aaaaaa;
-}
-
-.user-actions button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #3be39a;
-    color: #141716;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.user-actions button:hover {
-    background-color: #2db67a;
-}
-
-/* Películas favoritas */
-#favorite-movies {
-    margin: 20px;
-}
-
-#favorite-movies h2 {
-    text-align: center;
-    color: #3be39a;
-}
-
-#favorite-movies-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    list-style: none;
-    padding: 0;
-}
-
-#favorite-movies-list li {
-    background-color: #0f0f0f;
-    padding: 10px;
-    border-radius: 5px;
-    color: white;
-    text-align: center;
-    width: 200px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* Modales */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: #141716;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
+#profile-pic {
     width: 300px;
+    height: 300px;
+    border-radius: 50%; /* Hace que la imagen sea circular */
+    border: 3px solid var(--text-color);
+    object-fit: cover; /* Asegura que la imagen se ajuste correctamente dentro del círculo */
 }
 
-.modal-content input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #3be39a;
-    border-radius: 5px;
-    background-color: #2a2d2b;
-    color: white;
+.profile-picture {
+    flex-shrink: 0; /* Evita que la imagen se reduzca */
 }
 
-.modal-content button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #3be39a;
-    color: #141716;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.profile-header {
+    display: flex; /* Alinea los elementos en una fila */
+    align-items: center; /* Centra verticalmente los elementos */
+    gap: 80px; /* Espacio entre la foto y la información */
 }
 
-.modal-content button:hover {
-    background-color: #2db67a;
+#user-info {
+    display: flex;
+    flex-direction: column; /* Alinea el texto en columna */
+    justify-content: center; /* Centra verticalmente el contenido */
+    font-size: 30px;
 }

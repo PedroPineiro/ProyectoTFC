@@ -13,6 +13,7 @@
     <script defer src="../js/profile.js"></script>
 </head>
 <body>
+
 <header>
     <div class="header-container">
         <div class="logo">
@@ -33,35 +34,38 @@
     <!-- Fondo oscuro -->
     <div class="modal-overlay"></div>
 
-    <main>
-        <!-- Modal centrado sin fondo oscuro -->
-        <div id="authModal">
-            <div class="modal-content">
-                <h2 id="authTitle">Registro</h2>
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="authUsername" placeholder="Usuario" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="authPassword" placeholder="Contraseña" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="authEmail" placeholder="Email" required>
-                </div>
-                <button id="authActionBtn">Registrarse</button>
-                <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
+    <!-- Modal centrado sin fondo oscuro -->
+    <div id="authModal">
+        <div class="modal-content">
+            <h2 id="authTitle">Registro</h2>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="authUsername" placeholder="Usuario" required>
             </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="authPassword" placeholder="Contraseña" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="authEmail" placeholder="Email" required>
+            </div>
+            <button id="authActionBtn">Registrarse</button>
+            <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
         </div>
+    </div>
 
+    <main>
         <!-- Información del usuario -->
-        <section id="user-info">
-            <h1 id="username-display">Nombre de Usuario</h1>
-            <p id="email-display">Correo Electrónico</p>
-            <div class="user-actions">
-                <button id="change-username-btn">Cambiar Usuario</button>
-                <button id="change-password-btn">Cambiar Contraseña</button>
+        <section class="profile-components">
+            <div class="profile-header">
+                <div class="profile-picture">
+                    <img id="profile-pic" src="../assets/imgs/defaultProfileImage.jpg" alt="Foto de perfil">
+                </div>
+                <div id="user-info">
+                    <h2 id="username-display">Nombre de Usuario</h2>
+                    <p id="email-display">Correo Electrónico</p>
+                </div>
             </div>
         </section>
 
@@ -73,25 +77,28 @@
             </ul>
         </section>
 
-        <!-- Modales -->
-        <div id="changeUsernameModal" class="modal">
-            <div class="modal-content">
-                <h2>Cambiar Usuario</h2>
-                <input type="text" id="new-username" placeholder="Nuevo Usuario">
-                <button id="save-username-btn">Guardar</button>
-                <button class="close-modal">Cancelar</button>
-            </div>
-        </div>
+        <!-- Juegos favoritos -->
+        <section id="favorite-games">
+            <h2>Juegos Favoritos</h2>
+            <ul id="favorite-games-list">
+                <!-- Aquí se cargarán los juegos favoritos -->
+            </ul>
+        </section>
 
-        <div id="changePasswordModal" class="modal">
-            <div class="modal-content">
-                <h2>Cambiar Contraseña</h2>
-                <input type="password" id="current-password" placeholder="Contraseña Actual">
-                <input type="password" id="new-password" placeholder="Nueva Contraseña">
-                <button id="save-password-btn">Guardar</button>
-                <button class="close-modal">Cancelar</button>
-            </div>
-        </div>
+        <!-- Álbumes favoritos -->
+        <section id="favorite-albums">
+            <h2>Álbumes Favoritos</h2>
+            <ul id="favorite-albums-list">
+                <!-- Aquí se cargarán los álbumes favoritos -->
+            </ul>
+        </section>
+
+        <!-- Botones de acción -->
+        <section class="action-buttons">
+            <button id="edit-profile-btn">Editar Perfil</button>
+            <button id="logout-btn">Cerrar Sesión</button>
+            <button id="delete-account-btn">Eliminar Cuenta</button>
+        </section>
     </main>
 
     <footer>

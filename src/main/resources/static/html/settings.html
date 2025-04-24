@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración | Pandorasbox</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/setting.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script defer src="../js/settings.js"></script>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <a id="page-title" href="../index.html">Pandorasbox</a>
+        </div>
+        <nav class="navigation">
+            <a class="navLink" href="movies.html">Movies</a>
+            <a class="navLink" href="games.html">Games</a>
+            <a class="navLink" href="albums.html">Albums</a>
+            <div id="temporalDropdown">
+                <a class="navLink profile-link" href="profile.html">Profile</a>
+            </div>
+            <a id="settings" href="settings.html"><i class="fas fa-cog"></i></a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1>Configuración</h1>
+    <section class="settings-option">
+        <h2>Cambiar Idioma</h2>
+        <select id="language-select">
+            <option value="es">Español</option>
+            <option value="en">Inglés</option>
+        </select>
+    </section>
+
+    <section class="settings-option">
+        <h2>Modo Claro/Oscuro</h2>
+        <label class="switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider"></span>
+        </label>
+    </section>
+
+    <section class="settings-option">
+        <h2>Restablecer Configuración</h2>
+        <button id="reset-settings-btn">Restablecer</button>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
+</footer>
+</body>
+</html>

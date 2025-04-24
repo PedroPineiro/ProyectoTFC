@@ -4,12 +4,17 @@ html, body {
   display: flex;
   flex-direction: column; /* Estructura en columna */
 }
+:root {
+  --background-color: #141716; /* Modo oscuro */
+  --text-color: white; /* Modo oscuro */
+}
 
 body {
-  background-color: #1c1e1d;
-  font-family: "Montserrat", "Kanit", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
   margin: 0;
   padding: 0;
+  font-family: "Montserrat", "Kanit", sans-serif;
 }
 
 /* Estilo del encabezado */
