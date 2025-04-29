@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,34 +30,47 @@ public class User {
     private String bio; // Biografía del usuario
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore  // Evita referencias circulares en JSON
+    @JsonIgnore
     private List<Movie> movies;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore  // Evita referencias circulares en JSON
+    @JsonIgnore
     private List<Game> games;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore  // Evita referencias circulares en JSON
+    @JsonIgnore
     private List<Album> albums;
 
-
-    //Getter, Setter y Constructor
-
+    // Constructor vacío (requerido por JPA)
     public User() {
     }
 
-    public User(String username, String email, String password, String profilePicture, String bio, List<Movie> movies, List<Game> games, List<Album> albums) {
+    // Constructor sin id (para registro o autenticación)
+    public User(String username, String email, String password, String profilePicture, String bio) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.profilePicture = profilePicture;
         this.bio = bio;
-        this.movies = movies;
-        this.games = games;
-        this.albums = albums;
+    }
+
+    // Constructor con id (para instancias completas)
+    public User(Long id, String username, String email, String password, String profilePicture, String bio) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.profilePicture = profilePicture;
+        this.bio = bio;
+    }
+
+    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
