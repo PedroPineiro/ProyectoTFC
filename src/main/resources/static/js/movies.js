@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="loader"></div>`;
     document.body.appendChild(loader);
 
-
     modalLink.textContent = 'Ver más en TMDB';
     modalLink.target = '_blank';
 
@@ -91,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayMovies(movies) {
-        resultsDiv.innerHTML = ''; // Limpiar resultados anteriores
+        resultsDiv.innerHTML = '';
 
         if (movies.length === 0) {
             resultsDiv.innerHTML = '<p>No se encontraron películas.</p>';
@@ -115,11 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     async function showMovieDetails(movie) {
         currentMovie = movie;
-
-        loader.classList.add('show'); // <-- MUESTRA EL LOADER
+        loader.classList.add('show'); // Mostrar loader al cargar detalles
 
         try {
             modalPoster.src = movie.poster_path
@@ -153,13 +150,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalTrailerLink.style.display = 'none';
             }
 
-            modal.classList.add('open');
-            overlay.classList.add('show');
+            // Botones de guardar
+            modalDetails.querySelectorAll('button.saveLog-modal, button.saveWishlist-modal').forEach(btn => btn.remove());
 
+            const saveLogButton = document.createElement('button');
+            saveLogButton.textContent = 'Marcar como vista';
+            saveLogButton.classList.add('saveLog-modal');
+            saveLogButton.addEventListener('click', () => saveMovie('PLAYED'));
+            modalDetails.appendChild(saveLogButton);
+
+            const saveWishlistButton = document.createElement('button');
+            saveWishlistButton.textContent = 'Añadir a wishlist';
+            saveWishlistButton.classList.add('saveWishlist-modal');
+            saveWishlistButton.addEventListener('click', () => saveMovie('WISHLIST'));
+            modalDetails.appendChild(saveWishlistButton);
+
+            overlay.classList.add('show');
+            modal.classList.add('open');
         } catch (error) {
             console.error('Error al cargar detalles:', error);
         } finally {
-            loader.classList.remove('show'); // <-- OCULTA EL LOADER SIEMPRE
+            loader.classList.remove('show'); // Ocultar loader cuando termina
         }
     }
 
@@ -243,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 userId: currentUser.id
             };
 
-            const response = await fetch('http://localhost:8080/api/movies/add', { // URL corregida
+            const response = await fetch('http://localhost:8080/api/movies/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(movieData)
