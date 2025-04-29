@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalLink = document.createElement('a');
     const modalTrailerLink = document.createElement('a');
 
+    // Loader (rueda de carga)
+    const loader = document.createElement('div');
+    loader.classList.add('loader-overlay');
+    loader.innerHTML = `
+        <div class="loader"></div>`;
+    document.body.appendChild(loader);
+
+
     modalLink.textContent = 'Ver más en TMDB';
     modalLink.target = '_blank';
 
@@ -58,9 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
     searchForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const query = searchInput.value.trim();
+
         if (query) {
+            loader.classList.add('show'); // Mostrar el loader cuando se empieza la búsqueda
             const movies = await searchMovies(query);
             displayMovies(movies);
+            loader.classList.remove('show'); // Ocultar el loader después de recibir los resultados
         }
     });
 
@@ -80,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayMovies(movies) {
-        resultsDiv.innerHTML = '';
+        resultsDiv.innerHTML = ''; // Limpiar resultados anteriores
 
         if (movies.length === 0) {
             resultsDiv.innerHTML = '<p>No se encontraron películas.</p>';
@@ -104,57 +115,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     async function showMovieDetails(movie) {
         currentMovie = movie;
 
-        modalPoster.src = movie.poster_path
-            ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-            : "../assets/imgs/posterNotFound.jpg";
-        modalTitle.textContent = movie.title;
-        modalReleaseDate.innerHTML = `<strong>Fecha de estreno:</strong> ${movie.release_date || 'Desconocida'}`;
+        loader.classList.add('show'); // <-- MUESTRA EL LOADER
 
-        if (movie.vote_average) {
-            modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(movie.vote_average)}">${movie.vote_average.toFixed(1)}</span>`;
-        } else {
-            modalRating.innerHTML = `<strong>Calificación:</strong> No disponible`;
+        try {
+            modalPoster.src = movie.poster_path
+                ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+                : "../assets/imgs/posterNotFound.jpg";
+            modalTitle.textContent = movie.title;
+            modalReleaseDate.innerHTML = `<strong>Fecha de estreno:</strong> ${movie.release_date || 'Desconocida'}`;
+
+            if (movie.vote_average) {
+                modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(movie.vote_average)}">${movie.vote_average.toFixed(1)}</span>`;
+            } else {
+                modalRating.innerHTML = `<strong>Calificación:</strong> No disponible`;
+            }
+
+            modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
+
+            const genres = await getMovieGenres(movie.genre_ids);
+            modalGenres.innerHTML = `<strong>Géneros:</strong> ${genres.length ? genres.join(', ') : 'No disponible'}`;
+
+            modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
+
+            const { director, actors } = await getMovieCredits(movie.id);
+            modalDirector.innerHTML = `<strong>Director:</strong> ${director || 'Desconocido'}`;
+            modalActors.innerHTML = `<strong>Actores principales:</strong> ${actors.length ? actors.join(', ') : 'No disponible'}`;
+
+            const trailerUrl = await getTrailer(movie.id);
+            if (trailerUrl) {
+                modalTrailerLink.href = trailerUrl;
+                modalTrailerLink.style.display = 'inline-block';
+            } else {
+                modalTrailerLink.style.display = 'none';
+            }
+
+            modal.classList.add('open');
+            overlay.classList.add('show');
+
+        } catch (error) {
+            console.error('Error al cargar detalles:', error);
+        } finally {
+            loader.classList.remove('show'); // <-- OCULTA EL LOADER SIEMPRE
         }
-
-        modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
-
-        const genres = await getMovieGenres(movie.genre_ids);
-        modalGenres.innerHTML = `<strong>Géneros:</strong> ${genres.length ? genres.join(', ') : 'No disponible'}`;
-
-        modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
-
-        const { director, actors } = await getMovieCredits(movie.id);
-        modalDirector.innerHTML = `<strong>Director:</strong> ${director || 'Desconocido'}`;
-        modalActors.innerHTML = `<strong>Actores principales:</strong> ${actors.length ? actors.join(', ') : 'No disponible'}`;
-
-        const trailerUrl = await getTrailer(movie.id);
-        if (trailerUrl) {
-            modalTrailerLink.href = trailerUrl;
-            modalTrailerLink.style.display = 'inline-block';
-        } else {
-            modalTrailerLink.style.display = 'none';
-        }
-
-        // Botones de guardar
-        modalDetails.querySelectorAll('button.saveLog-modal, button.saveWishlist-modal').forEach(btn => btn.remove());
-
-        const saveLogButton = document.createElement('button');
-        saveLogButton.textContent = 'Marcar como vista';
-        saveLogButton.classList.add('saveLog-modal');
-        saveLogButton.addEventListener('click', () => saveMovie('PLAYED'));
-        modalDetails.appendChild(saveLogButton);
-
-        const saveWishlistButton = document.createElement('button');
-        saveWishlistButton.textContent = 'Añadir a wishlist';
-        saveWishlistButton.classList.add('saveWishlist-modal');
-        saveWishlistButton.addEventListener('click', () => saveMovie('WISHLIST'));
-        modalDetails.appendChild(saveWishlistButton);
-
-        overlay.classList.add('show');
-        modal.classList.add('open');
     }
 
     async function getMovieGenres(genreIds) {
