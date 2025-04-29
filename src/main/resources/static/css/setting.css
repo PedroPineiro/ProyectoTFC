@@ -1,33 +1,113 @@
-body {
+/* Variables de color para temas */
+:root {
+    --background-color: #1c1e1d;
+    --text-color: white;
+    --primary-color: #3be39a;
+    --card-bg-color: #252827;
+    --border-color: #3a3d3c;
+    --text-secondary: #b0b0b0;
+    --danger-color: #e74c3c;
+}
+
+/* Estructura principal */
+.settings-container {
+    margin: 0 auto; /* Centra horizontalmente */
+    padding: 20px 1.5rem;
+    display: flex; /* Activa flexbox */
+    flex-direction: column; /* Asegura que los elementos estén en columna */
+    justify-content: center; /* Centra verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+}
+
+
+.settings-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+/* Tarjetas de configuración */
+.settings-card {
+    background-color: var(--card-bg-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    width: 170%; /* Ocupa ttodo el ancho del contenedor */
+}
+
+.settings-card.danger-zone {
+    border-left: 4px solid var(--danger-color);
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.8rem;
+}
+
+.settings-icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: var(--primary-color);
+}
+
+.danger-zone .settings-icon {
+    color: var(--danger-color);
+}
+
+.settings-content {
+    padding: 0 0.5rem;
+}
+
+.settings-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+/* Elementos de formulario */
+.settings-select {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
     font-family: 'Montserrat', sans-serif;
-    background-color: var(--background-color, #141716);
-    color: var(--text-color, white);
-    margin: 0;
-    padding: 0;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
 }
 
-main {
-    padding: 20px;
+/* Interruptor de tema mejorado */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
 }
 
-.settings-option {
-    margin-bottom: 20px;
+#theme-status {
+    font-weight: 500;
 }
 
-h1, h2 {
-    color: var(--text-color, white);
-}
-
-/* Estilo del interruptor */
 .switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 25px;
+    width: 60px;
+    height: 30px;
 }
 
 .switch input {
-    display: none;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
@@ -37,27 +117,172 @@ h1, h2 {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 25px;
+    background-color: #555;
+    transition: .4s;
+    border-radius: 34px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 19px;
-    width: 19px;
-    left: 3px;
-    bottom: 3px;
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
     background-color: white;
-    transition: 0.4s;
+    transition: .4s;
     border-radius: 50%;
 }
 
 input:checked + .slider {
-    background-color: #3be39a;
+    background-color: var(--primary-color);
 }
 
 input:checked + .slider:before {
-    transform: translateX(25px);
+    transform: translateX(30px);
+}
+
+/* Botones de acción */
+.danger-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: transparent;
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.danger-btn:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Footer */
+.settings-footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 2rem;
+}
+
+.version-info {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 0.5rem;
+}
+
+/* Modal de confirmación */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: var(--card-bg-color);
+    margin: 15% auto;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 500px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.modal-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.cancel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.confirm-btn {
+    background-color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 0 1rem;
+    }
+
+    .settings-title {
+        font-size: 2rem;
+    }
+
+    .modal-content {
+        margin: 20% auto;
+        width: 90%;
+    }
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    border-radius: 4px;
+    color: white;
+    background-color: #333;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+.toast-success {
+    background-color: #2ecc71;
+}
+
+.toast-warning {
+    background-color: #f39c12;
+}
+
+.toast-error {
+    background-color: #e74c3c;
 }

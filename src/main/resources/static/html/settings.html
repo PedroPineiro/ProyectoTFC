@@ -24,37 +24,80 @@
             <div id="temporalDropdown">
                 <a class="navLink profile-link" href="profile.html">Profile</a>
             </div>
-            <a id="settings" href="settings.html"><i class="fas fa-cog"></i></a>
+            <a id="settings" href="settings.html" aria-label="Configuración"><i class="fas fa-cog"></i></a>
         </nav>
     </div>
 </header>
 
-<main>
-    <h1>Configuración</h1>
-    <section class="settings-option">
-        <h2>Cambiar Idioma</h2>
-        <select id="language-select">
-            <option value="es">Español</option>
-            <option value="en">Inglés</option>
-        </select>
+<main class="settings-container">
+    <h1 class="settings-title">Configuración</h1>
+
+    <section class="settings-card">
+        <div class="settings-header">
+            <i class="fas fa-language settings-icon"></i>
+            <h2>Idioma</h2>
+        </div>
+        <div class="settings-content">
+            <select id="language-select" class="settings-select">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+            </select>
+            <p class="settings-description">Selecciona tu idioma preferido</p>
+        </div>
     </section>
 
-    <section class="settings-option">
-        <h2>Modo Oscuro</h2>
-        <label class="switch">
-            <input type="checkbox" id="theme-toggle">
-            <span class="slider"></span>
-        </label>
+    <section class="settings-card">
+        <div class="settings-header">
+            <i class="fas fa-moon settings-icon"></i>
+            <h2>Apariencia</h2>
+        </div>
+        <div class="settings-content">
+            <div class="toggle-container">
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span id="theme-status">Modo oscuro activado</span>
+            </div>
+            <p class="settings-description">Personaliza el tema claro u oscuro</p>
+        </div>
     </section>
 
-    <section class="settings-option">
-        <h2>Restablecer Configuración</h2>
-        <button id="reset-settings-btn">Restablecer</button>
+    <section class="settings-card danger-zone">
+        <div class="settings-header">
+            <i class="fas fa-exclamation-triangle settings-icon"></i>
+            <h2>Zona de peligro</h2>
+        </div>
+        <div class="settings-content">
+            <button id="reset-settings-btn" class="danger-btn">
+                <i class="fas fa-trash-alt"></i> Restablecer configuración
+            </button>
+            <p class="settings-description">Esto borrará todas tus preferencias</p>
+
+            <button id="delete-account-btn" class="danger-btn">
+                <i class="fas fa-user-times"></i> Eliminar cuenta
+            </button>
+            <p class="settings-description">Eliminará permanentemente tu cuenta y datos</p>
+        </div>
     </section>
 </main>
 
-<footer>
+<footer class="settings-footer">
     <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
 </footer>
+
+<!-- Modal de confirmación -->
+<div id="confirm-modal" class="modal">
+    <div class="modal-content">
+        <h3 id="modal-title">¿Estás seguro?</h3>
+        <p id="modal-message">Esta acción no se puede deshacer.</p>
+        <div class="modal-actions">
+            <button id="modal-cancel" class="modal-btn cancel-btn">Cancelar</button>
+            <button id="modal-confirm" class="modal-btn confirm-btn">Confirmar</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
