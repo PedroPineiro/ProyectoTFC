@@ -4,10 +4,6 @@ html, body {
   display: flex;
   flex-direction: column; /* Estructura en columna */
 }
-:root {
-  --background-color: #141716; /* Modo oscuro */
-  --text-color: white; /* Modo oscuro */
-}
 
 body {
   background-color: var(--background-color);

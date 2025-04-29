@@ -1,6 +1,6 @@
 /* Fondo y ajustes generales para la página de películas */
 body {
-  background-color: #1c1e1d; /* Fondo ligeramente diferente al general */
+    background-color: var(--background-color); /* Fondo ligeramente diferente al general */
   padding: 0px;
   margin: 0px;
 }
@@ -62,10 +62,10 @@ form {
   width: 80%;
   max-width: 800px;
   padding: 15px;
-  background-color: #0f0f0f;
+  background-color: var(--results-box-color);
   border: 2px solid #3be39a;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 4px #3be39a;
 }
 
 #results ul {
@@ -111,9 +111,7 @@ form {
 
 /* Caja de cada película */
 .movie {
-  background-color: rgba(
-    20,23,22,0.8
-  ); /* Negro con un poco de transparencia */
+  background-color: var(--background-color); /* Negro con un poco de transparencia */
   border-radius: 8px;
   padding: 10px;
   text-align: center;
@@ -136,7 +134,7 @@ form {
 /* Título de la película */
 .movie h3 {
   font-size: 1rem;
-  color: white;
+  color: var(--text-color);
   margin-top: 8px;
 }
 
@@ -162,10 +160,10 @@ form {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.9); /* Reducido inicialmente */
-  background: #141716;
+  background: var(--background-color);
   border-radius: 10px;
   border: #3be39a 2px solid;
-  color: white;
+  color: var(--text-color);
   padding: 20px;
   max-width: 800px;
   max-height: 90vh;
@@ -181,7 +179,7 @@ form {
   position: absolute;
   background-color: transparent; /* Fondo transparente */
   border: none; /* Sin borde */
-  color: white;
+  color: var(--text-color);
   top: 5px;
   right: 10px;
   font-size: 30px;
@@ -302,7 +300,7 @@ form {
 
 /* Animación de carga (puedes poner aquí tu gif también) */
 .loader {
-  border: 8px solid #f3f3f3;
+  border: 8px solid var(--text-color);
   border-top: 8px solid #3be39a; /* verde */
   border-radius: 50%;
   width: 60px;

@@ -1,17 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
 
-    // Cambiar tema al alternar el interruptor
+    // Aplicar el tema guardado o el modo oscuro por defecto
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    console.log('Tema guardado:', savedTheme); // Depuración
+
+    applyTheme(savedTheme);
+
+    themeToggle.checked = savedTheme === 'dark';
     themeToggle.addEventListener('change', () => {
-        const isDarkMode = themeToggle.checked;
-        document.body.style.setProperty('--background-color', isDarkMode ? '#141716' : '#ffffff');
-        document.body.style.setProperty('--text-color', isDarkMode ? 'white' : '#000000');
-        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        const newTheme = themeToggle.checked ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        console.log('Nuevo tema seleccionado:', newTheme); // Depuración
+        applyTheme(newTheme);
     });
 
-    // Cargar configuración guardada o aplicar modo oscuro por defecto
-    const savedTheme = localStorage.getItem('theme');
-    const isDarkMode = savedTheme ? savedTheme === 'dark' : true; // Por defecto, modo oscuro
-    document.body.style.setProperty('--background-color', isDarkMode ? '#141716' : '#ffffff');
-    document.body.style.setProperty('--text-color', isDarkMode ? 'white' : '#000000');
+    function applyTheme(theme) {
+        const isDarkMode = theme === 'dark';
+        document.body.style.setProperty('--background-color', isDarkMode ? '#1c1e1d' : '#dcf0e7');
+        document.body.style.setProperty('--text-color', isDarkMode ? 'white' : '#000000');
+        document.body.style.setProperty('--content--background-color', isDarkMode ? 'red' : 'blue');
+        document.body.style.setProperty('--results-box-color', isDarkMode ? '#000000' : '#cdd6d2');
+    }
 });
