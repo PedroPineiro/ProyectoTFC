@@ -1,13 +1,14 @@
 /* Fondo y ajustes generales para la página de películas */
 body {
     background-color: var(--background-color); /* Fondo ligeramente diferente al general */
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 h1 {
+  font-family: 'Kanit', sans-serif;
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: #3be39a;
   margin-bottom: 20px;
 }
