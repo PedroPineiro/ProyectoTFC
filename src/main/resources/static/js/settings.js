@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalConfirm = document.getElementById('modal-confirm');
     const modalTitle = document.getElementById('modal-title');
     const modalMessage = document.getElementById('modal-message');
+    const brandColorPickerCustom = document.getElementById('brand-color-picker-custom');
+    const presetColorBoxes = document.querySelectorAll('.preset-color-box-wide:not(.rainbow-box-wide)'); // Excluimos la caja arcoíris
+    const rainbowBoxWide = document.querySelector('.rainbow-box-wide');
 
     // Cargar configuraciones guardadas
     loadSettings();
@@ -47,6 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
         modalConfirm.addEventListener('click', confirmAction);
     }
 
+    presetColorBoxes.forEach(box => {
+        box.addEventListener('click', selectPresetColor);
+    });
+
+    // Event listener para la caja arcoíris que abrirá el selector de color
+    if (rainbowBoxWide && brandColorPickerCustom) {
+        rainbowBoxWide.addEventListener('click', () => {
+            brandColorPickerCustom.click();
+        });
+    }
+
+    if (brandColorPickerCustom) {
+        brandColorPickerCustom.addEventListener('input', changeBrandColor);
+    }
+
+
     // Funciones
     function loadSettings() {
         // Tema
@@ -64,7 +83,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        applyTheme(initialTheme);
+        const savedBrandColor = localStorage.getItem('brandColor');
+        const initialBrandColor = savedBrandColor || '#3be39a';
+        applyTheme(initialTheme, initialBrandColor);
+        if (themeStatus) {
+            updateThemeStatus(initialTheme);
+        }
+        if (brandColorPickerCustom) {
+            brandColorPickerCustom.value = initialBrandColor;
+        }
+        applyTheme(initialTheme, initialBrandColor);
         if (themeStatus) {
             updateThemeStatus(initialTheme);
         }
@@ -74,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const savedLanguage = localStorage.getItem('language') || 'es';
             languageSelect.value = savedLanguage;
         }
+
+        // Color de marca seleccionado
+        markSelectedColor(initialBrandColor);
 
         // Habilitar el toggle después de la carga inicial
         if (themeToggle) {
@@ -86,13 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleTheme() {
         const newTheme = themeToggle.checked ? 'light' : 'dark'; // Invertimos la lógica
         localStorage.setItem('theme', newTheme);
-        applyTheme(newTheme);
+        const currentBrandColor = localStorage.getItem('brandColor') || '#3be39a';
+        applyTheme(newTheme, currentBrandColor);
         if (themeStatus) {
             updateThemeStatus(newTheme);
         }
     }
 
-    function applyTheme(theme) {
+    function applyTheme(theme, brandColor = '#3be39a') {
         const isDarkMode = theme === 'dark';
 
         // Colores base
@@ -105,14 +137,76 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.style.setProperty('--border-color', isDarkMode ? '#2d2d2d' : '#e2e8f0');
 
         // Colores de marca
-        document.documentElement.style.setProperty('--brand-color', isDarkMode ? '#3be39a' : '#2bc184');
-        document.documentElement.style.setProperty('--background-brand-color', isDarkMode ? '#1a2e25' : '#e0f7ec');
-        document.documentElement.style.setProperty('--hover-brand-color', isDarkMode ? '#68f7b5' : '#3be39a');
+        document.documentElement.style.setProperty('--brand-color', brandColor);
+        document.documentElement.style.setProperty('--background-brand-color', isDarkMode ? lightenColor(brandColor, -60) : lightenColor(brandColor, 60)); // Ajusta el fondo del brand color
+        document.documentElement.style.setProperty('--hover-brand-color', lightenColor(brandColor, 30)); // Oscurece/aclara para el hover
 
-        // Colores adicionales
+        // Colores adicionales (puedes ajustarlos para que dependan del brandColor si lo deseas)
         document.documentElement.style.setProperty('--danger-color', isDarkMode ? '#ff6b6b' : '#ff4757');
         document.documentElement.style.setProperty('--warning-color', isDarkMode ? '#ffc107' : '#ffb800');
         document.documentElement.style.setProperty('--info-color', isDarkMode ? '#6b8cff' : '#4d7bff');
+
+        document.documentElement.style.setProperty('--brand-color', brandColor);
+        document.documentElement.style.setProperty('--background-brand-color', isDarkMode ? lightenColor(brandColor, -60) : lightenColor(brandColor, 60));
+        document.documentElement.style.setProperty('--hover-brand-color', lightenColor(brandColor, 30));
+    }
+
+    function lightenColor(hex, percent) {
+        let R = parseInt(hex.substring(1, 3), 16);
+        let G = parseInt(hex.substring(3, 5), 16);
+        let B = parseInt(hex.substring(5, 7), 16);
+
+        R = parseInt(R * (100 + percent) / 100);
+        G = parseInt(G * (100 + percent) / 100);
+        B = parseInt(B * (100 + percent) / 100);
+
+        R = (R < 255) ? R : 255;
+        G = (G < 255) ? G : 255;
+        B = (B < 255) ? B : 255;
+
+        R = Math.round(R);
+        G = Math.round(G);
+        B = Math.round(B);
+
+        const RR = ((R.toString(16).length === 1) ? '0' + R.toString(16) : R.toString(16));
+        const GG = ((G.toString(16).length === 1) ? '0' + G.toString(16) : G.toString(16));
+        const BB = ((B.toString(16).length === 1) ? '0' + B.toString(16) : B.toString(16));
+
+        return '#' + RR + GG + BB;
+    }
+
+    function changeBrandColor(event) {
+        const newBrandColor = event.target.value;
+        localStorage.setItem('brandColor', newBrandColor);
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(currentTheme, newBrandColor);
+        markSelectedColor(newBrandColor);
+
+        // Marcar la caja arcoíris como seleccionada cuando se elige un color personalizado
+        if (rainbowBoxWide) {
+            rainbowBoxWide.style.border = '2px solid var(--text-color)';
+        }
+        // Desmarcar las otras cajas predefinidas
+        presetColorBoxes.forEach(box => {
+            if (box.dataset.color !== newBrandColor) {
+                box.style.border = '1px solid transparent';
+            }
+        });
+    }
+
+    function selectPresetColor(event) {
+        const selectedColor = event.target.dataset.color;
+        localStorage.setItem('brandColor', selectedColor);
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(currentTheme, selectedColor);
+        if (brandColorPickerCustom) {
+            brandColorPickerCustom.value = selectedColor;
+        }
+        markSelectedColor(selectedColor);
+        // Desmarcar la caja arcoíris cuando se selecciona un color predefinido
+        if (rainbowBoxWide) {
+            rainbowBoxWide.style.border = '1px solid transparent';
+        }
     }
 
     function updateThemeStatus(theme) {
@@ -142,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetSettings() {
         localStorage.removeItem('theme');
         localStorage.removeItem('language');
+        localStorage.removeItem('brandColor'); // Elimina el color de marca guardado
         loadSettings();
         closeModal();
         showToast('Configuración restablecida');
@@ -197,5 +292,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.removeChild(toast);
             }, 300);
         }, 3000);
+    }
+
+    function markSelectedColor(color) {
+        presetColorBoxes.forEach(box => {
+            if (box.dataset.color === color) {
+                box.style.border = '2px solid var(--text-color)';
+            } else {
+                box.style.border = '1px solid transparent';
+            }
+        });
+
+        // También marcar la caja arcoíris si el color coincide con el valor del input
+        if (brandColorPickerCustom && rainbowBoxWide && brandColorPickerCustom.value === color) {
+            rainbowBoxWide.style.border = '2px solid var(--text-color)';
+        } else if (rainbowBoxWide) {
+            // Desmarcar la caja arcoíris si el color no coincide con el valor del input
+            let isPresetSelected = false;
+            presetColorBoxes.forEach(box => {
+                if (box.dataset.color === color) {
+                    isPresetSelected = true;
+                }
+            });
+            if (!isPresetSelected) {
+                rainbowBoxWide.style.border = '1px solid transparent';
+            }
+        }
     }
 });

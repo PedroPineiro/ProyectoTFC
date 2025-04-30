@@ -17,13 +17,15 @@ body {
 
 /* Estructura principal */
 .settings-container {
-    margin: 0 auto; /* Centra horizontalmente */
-    padding: 20px 1.5rem;
-    display: flex; /* Activa flexbox */
-    flex-direction: column; /* Asegura que los elementos estén en columna */
-    justify-content: center; /* Centra verticalmente */
-    align-items: center; /* Centra horizontalmente */
-    min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+    margin: 0 auto;
+    padding: 20px 1.5rem; /* Manteniendo el padding horizontal */
+    padding-top: 40px; /* Añade espacio en la parte superior */
+    padding-bottom: 40px; /* Añade espacio en la parte inferior */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinea los elementos al inicio (arriba) */
+    align-items: center;
+    min-height: auto; /* Ya no forzamos la altura completa inicialmente */
 }
 
 
@@ -291,4 +293,135 @@ input:checked + .slider:before {
 
 .toast-error {
     background-color: #e74c3c;
+}
+
+/* Estilos para el selector de color */
+.settings-color-picker {
+    width: 100%;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--background-color);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.settings-color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.settings-color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: 5px;
+}
+
+.settings-card:nth-child(1) .settings-header { /* Estilo específico para la tarjeta de color */
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Estilos para el selector de color personalizado */
+.brand-color-options {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.custom-color-label {
+    font-weight: 500;
+}
+
+.custom-color-label i {
+    margin-left: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.settings-color-picker {
+    width: 60px; /* Reduce el ancho del selector */
+    height: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--background-color);
+    cursor: pointer;
+}
+
+.settings-color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.settings-color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: 5px;
+}
+
+/* Estilos para la barra de arcoíris */
+.rainbow-bar {
+    height: 15px;
+    border-radius: 5px;
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer; /* Opcional: si quieres que sea interactiva */
+}
+
+/* ... tu css anterior ... */
+
+/* ... tu css anterior ... */
+
+/* Estilos para los colores predefinidos anchos */
+.preset-colors-wide {
+    display: flex;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.preset-color-box-wide {
+    flex-grow: 1;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    position: relative; /* Para posicionar el input dentro */
+    overflow: hidden; /* Recorta el input si se expande demasiado */
+}
+
+.preset-color-box-wide:last-child {
+    margin-right: 0;
+}
+
+.preset-color-box-wide:hover {
+    border-color: var(--border-color);
+}
+
+.rainbow-box-wide {
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    color: var(--text-color);
+}
+
+.rainbow-edit-icon-preset-wide {
+    /* Centrado por flexbox */
+    font-size: 1.1rem; /* Ajusta el tamaño del icono */
+}
+
+/* Input de color que ocupa toda la caja arcoíris */
+.settings-color-picker-input-wide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Ocultar visualmente */
+    cursor: pointer;
+    border: none;
+    background: transparent;
 }

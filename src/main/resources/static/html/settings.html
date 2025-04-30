@@ -34,6 +34,27 @@
 
     <section class="settings-card">
         <div class="settings-header">
+            <i class="fas fa-palette settings-icon"></i>
+            <h2>Color Principal</h2>
+        </div>
+        <div class="settings-content">
+            <div class="preset-colors-wide">
+                <div class="preset-color-box-wide" data-color="#CE1C40" style="background-color: #CE1C40;"></div>
+                <div class="preset-color-box-wide" data-color="#E1DC4C" style="background-color: #E1DC4C;"></div>
+                <div class="preset-color-box-wide" data-color="#3BDBDE" style="background-color: #3BDBDE;"></div>
+                <div class="preset-color-box-wide" data-color="#3BE39A" style="background-color: #3BE39A;"></div>
+                <div class="preset-color-box-wide" data-color="#8B1EB3" style="background-color: #8B1EB3;"></div>
+                <div class="preset-color-box-wide rainbow-box-wide">
+                    <i class="fas fa-edit rainbow-edit-icon-preset-wide"></i>
+                    <input type="color" id="brand-color-picker-custom" class="settings-color-picker-input-wide">
+                </div>
+            </div>
+            <p class="settings-description">Elige el color principal de la aplicación</p>
+        </div>
+    </section>
+
+    <section class="settings-card">
+        <div class="settings-header">
             <i class="fas fa-language settings-icon"></i>
             <h2>Idioma</h2>
         </div>
@@ -88,7 +109,6 @@
     <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
 </footer>
 
-<!-- Modal de confirmación -->
 <div id="confirm-modal" class="modal">
     <div class="modal-content">
         <h3 id="modal-title">¿Estás seguro?</h3>

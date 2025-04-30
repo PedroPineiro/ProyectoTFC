@@ -45,15 +45,15 @@ header {
     border-radius: 12px;
     width: 400px;
     max-width: 90%;
-    box-shadow: 0 8px 30px #3be39a;
-    border: 1px solid #3be39a;
+    box-shadow: 0 8px 30px var(--brand-color);
+    border: 1px solid var(--brand-color);
     animation: slideIn 0.6s ease-in-out;
     text-align: center;
 }
 
 /* Título del modal */
 #authModal h2 {
-    color: #3be39a;
+    color: var(--brand-color);
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
@@ -67,7 +67,7 @@ header {
 }
 
 .input-group i {
-    color: #3be39a;
+    color: var(--brand-color);
     font-size: 18px;
     margin-right: 10px;
     transition: color 0.3s ease;
@@ -76,7 +76,7 @@ header {
 .input-group input {
     flex: 1;
     padding: 12px;
-    border: 1px solid #3be39a;
+    border: 1px solid var(--brand-color);
     border-radius: 8px;
     background-color: #2a2d2b;
     color: white;
@@ -85,13 +85,13 @@ header {
 }
 
 .input-group input:focus {
-    border-color: #2db67a;
-    box-shadow: 0 0 8px #2db67a;
+    border-color: var(--hover-brand-color);
+    box-shadow: 0 0 8px var(--hover-brand-color);
     outline: none;
 }
 
 .input-group:focus-within i {
-    color: #2db67a;
+    color: var(--hover-brand-color);
 }
 
 /* Botones */
@@ -107,23 +107,23 @@ header {
 }
 
 #authActionBtn {
-    background-color: #3be39a;
+    background-color: var(--brand-color);
     color: #141716;
     margin-bottom: 10px;
 }
 
 #toggleAuthMode {
     background-color: transparent;
-    color: #3be39a;
-    border: 1px solid #3be39a;
+    color: var(--brand-color);
+    border: 1px solid var(--brand-color);
 }
 
 #authActionBtn:hover {
-    background-color: #2db67a;
+    background-color: var(--hover-brand-color);
 }
 
 #toggleAuthMode:hover {
-    background-color: rgba(59, 227, 154, 0.1);
+    background-color: var(--background-brand-color);
 }
 
 /* Animaciones */
