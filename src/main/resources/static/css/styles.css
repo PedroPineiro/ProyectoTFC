@@ -1,4 +1,8 @@
 /* Configuración general */
+:root {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 html, body {
   height: 100%; /* Asegura que ocupen toda la altura de la ventana */
   display: flex;
@@ -15,7 +19,7 @@ body {
 
 /* Estilo del encabezado */
 header {
-  background-color: #3be39a;
+  background-color: var(--brand-color);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -106,7 +110,7 @@ main {
 }
 
 .dropdown-content a:hover {
-  background-color: #3be39a;
+  background-color: var(--brand-color);
   color: #141716;
 }
 

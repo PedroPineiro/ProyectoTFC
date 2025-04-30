@@ -1,6 +1,6 @@
 /* Fondo y ajustes generales para la página de películas */
 body {
-    background-color: var(--background-color); /* Fondo ligeramente diferente al general */
+  background-color: var(--background-color);
   padding: 0;
   margin: 0;
 }
@@ -9,14 +9,14 @@ h1 {
   font-family: 'Kanit', sans-serif;
   text-align: center;
   font-size: 3rem;
-  color: #3be39a;
+  color: var(--brand-color);
   margin-bottom: 20px;
 }
 
 #results {
   text-align: center;
   font-size: 1.5rem;
-  color: #3be39a;
+  color: var(--brand-color);
   margin-bottom: 20px;
 }
 
@@ -31,20 +31,20 @@ form {
   width: 40%;
   padding: 10px;
   font-size: 1.1rem;
-  border: 2px solid #3be39a;
+  border: 2px solid var(--brand-color);
   border-radius: 5px 0 0 5px;
   outline: none;
   color: #141716;
 }
 
 #searchInput:focus {
-  border-color: #68f7b5;
+  border-color: var(--hover-brand-color);
 }
 
 .searchButton {
   padding: 10px 25px;
   font-size: 1.1rem;
-  background-color: #3be39a;
+  background-color: var(--brand-color);
   color: #141716;
   border: none;
   border-radius: 0 5px 5px 0;
@@ -53,7 +53,7 @@ form {
 }
 
 .searchButton:hover {
-  background-color: #68f7b5;
+  background-color: var(--hover-brand-color);
   color: white;
 }
 
@@ -63,10 +63,10 @@ form {
   width: 80%;
   max-width: 800px;
   padding: 15px;
-  background-color: var(--results-box-color);
-  border: 2px solid #3be39a;
+  background-color: var(second-background-color);
+  border: 2px solid var(--brand-color);
   border-radius: 10px;
-  box-shadow: 0 2px 4px #3be39a;
+  box-shadow: 0 2px 4px var(--brand-color);
 }
 
 #results ul {
@@ -79,7 +79,7 @@ form {
   padding: 10px;
   font-size: 1.1rem;
   color: white;
-  border-bottom: 1px solid #3be39a;
+  border-bottom: 1px solid var(--brand-color);
   transition: background-color 0.3s ease;
 }
 
@@ -88,7 +88,7 @@ form {
 }
 
 #results li:hover {
-  background-color: #3be39a;
+  background-color: var(--brand-color);
   color: #141716;
 }
 
@@ -112,7 +112,7 @@ form {
 
 /* Caja de cada película */
 .movie {
-  background-color: var(--background-color); /* Negro con un poco de transparencia */
+  background-color: var(--third-background-color);
   border-radius: 8px;
   padding: 10px;
   text-align: center;
@@ -155,6 +155,7 @@ form {
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+
 /* Estilo de la ventana modal */
 .modal {
   position: fixed;
@@ -163,7 +164,7 @@ form {
   transform: translate(-50%, -50%) scale(0.9); /* Reducido inicialmente */
   background: var(--background-color);
   border-radius: 10px;
-  border: #3be39a 2px solid;
+  border: var(--brand-color) 2px solid;
   color: var(--text-color);
   padding: 20px;
   max-width: 800px;
@@ -204,7 +205,7 @@ form {
 }
 
 .saveLog-modal {
-  background-color: #3be39a;
+  background-color: var(--brand-color);
   color: #141716;
 }
 
@@ -214,7 +215,7 @@ form {
 }
 
 .saveLog-modal:hover {
-  background-color: #2db67a;
+  background-color: var(--background-brand-color);
 }
 
 .saveWishlist-modal:hover {
@@ -250,19 +251,19 @@ form {
 
 .modal-details p strong {
   font-weight: bold; /* Hacer en negrita solo los títulos */
-  color: #3be39a;
+  color: var(--brand-color);
 }
 
 /* Título de la película en la ventana modal */
 .modal-content h2 {
   font-size: 2.5rem;
-  color: #00ff91;
+  color: var(--hover-brand-color);
   margin-bottom: 25px;
 }
 
 /* Enlaces de la ventana modal */
 .modal-content a{
-  color: #3be39a;
+  color: var(--brand-color);
   font-weight: bold;
   text-decoration: none;
   margin-right: 80px;
@@ -302,7 +303,7 @@ form {
 /* Animación de carga (puedes poner aquí tu gif también) */
 .loader {
   border: 8px solid var(--text-color);
-  border-top: 8px solid #3be39a; /* verde */
+  border-top: 8px solid var(--brand-color); /* verde */
   border-radius: 50%;
   width: 60px;
   height: 60px;

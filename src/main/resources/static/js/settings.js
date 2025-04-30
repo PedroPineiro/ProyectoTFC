@@ -14,60 +14,119 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar configuraciones guardadas
     loadSettings();
 
+    // Desactivar el toggle inicialmente
+    if (themeToggle) {
+        themeToggle.disabled = true;
+    }
+
     // Event listeners
-    themeToggle.addEventListener('change', toggleTheme);
-    languageSelect.addEventListener('change', changeLanguage);
-    resetSettingsBtn.addEventListener('click', () => showConfirmModal(
-        'Restablecer configuración',
-        '¿Estás seguro de que quieres restablecer todas tus configuraciones?',
-        resetSettings
-    ));
-    deleteAccountBtn.addEventListener('click', () => showConfirmModal(
-        'Eliminar cuenta',
-        'Esta acción eliminará permanentemente tu cuenta y todos tus datos. ¿Estás seguro?',
-        deleteAccount
-    ));
-    modalCancel.addEventListener('click', closeModal);
-    modalConfirm.addEventListener('click', confirmAction);
+    if (themeToggle) {
+        themeToggle.addEventListener('change', toggleTheme);
+    }
+    if (languageSelect) {
+        languageSelect.addEventListener('change', changeLanguage);
+    }
+    if (resetSettingsBtn) {
+        resetSettingsBtn.addEventListener('click', () => showConfirmModal(
+            'Restablecer configuración',
+            '¿Estás seguro de que quieres restablecer todas tus configuraciones?',
+            resetSettings
+        ));
+    }
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', () => showConfirmModal(
+            'Eliminar cuenta',
+            'Esta acción eliminará permanentemente tu cuenta y todos tus datos. ¿Estás seguro?',
+            deleteAccount
+        ));
+    }
+    if (modalCancel) {
+        modalCancel.addEventListener('click', closeModal);
+    }
+    if (modalConfirm) {
+        modalConfirm.addEventListener('click', confirmAction);
+    }
 
     // Funciones
     function loadSettings() {
         // Tema
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        applyTheme(savedTheme);
-        themeToggle.checked = savedTheme === 'dark';
-        updateThemeStatus(savedTheme);
+        const savedTheme = localStorage.getItem('theme');
+        let initialTheme = 'dark'; // Modo default es oscuro
+
+        if (savedTheme === 'light') {
+            initialTheme = 'light';
+            if (themeToggle) {
+                themeToggle.checked = true; // Simula que el toggle está activado para modo claro
+            }
+        } else {
+            if (themeToggle) {
+                themeToggle.checked = false; // Asegura que el toggle esté desactivado para el default oscuro
+            }
+        }
+
+        applyTheme(initialTheme);
+        if (themeStatus) {
+            updateThemeStatus(initialTheme);
+        }
 
         // Idioma
-        const savedLanguage = localStorage.getItem('language') || 'es';
-        languageSelect.value = savedLanguage;
+        if (languageSelect) {
+            const savedLanguage = localStorage.getItem('language') || 'es';
+            languageSelect.value = savedLanguage;
+        }
+
+        // Habilitar el toggle después de la carga inicial
+        if (themeToggle) {
+            setTimeout(() => {
+                themeToggle.disabled = false;
+            }, 100); // Pequeño delay para asegurar que el estado inicial se aplique
+        }
     }
 
     function toggleTheme() {
-        const newTheme = themeToggle.checked ? 'dark' : 'light';
+        const newTheme = themeToggle.checked ? 'light' : 'dark'; // Invertimos la lógica
         localStorage.setItem('theme', newTheme);
         applyTheme(newTheme);
-        updateThemeStatus(newTheme);
+        if (themeStatus) {
+            updateThemeStatus(newTheme);
+        }
     }
 
     function applyTheme(theme) {
         const isDarkMode = theme === 'dark';
-        document.documentElement.style.setProperty('--background-color', isDarkMode ? '#1c1e1d' : '#dcf0e7');
-        document.documentElement.style.setProperty('--text-color', isDarkMode ? 'white' : '#333333');
-        document.documentElement.style.setProperty('--card-bg-color', isDarkMode ? '#252827' : '#ffffff');
-        document.documentElement.style.setProperty('--text-secondary', isDarkMode ? '#b0b0b0' : '#666666');
-        document.documentElement.style.setProperty('--border-color', isDarkMode ? '#3a3d3c' : '#d1d9d6');
+
+        // Colores base
+        document.documentElement.style.setProperty('--background-color', isDarkMode ? '#121212' : '#f8fcfb');
+        document.documentElement.style.setProperty('--second-background-color', isDarkMode ? '#1e1e1e' : '#ffffff');
+        document.documentElement.style.setProperty('--third-background-color', isDarkMode ? '#252525' : '#f0f5f3');
+        document.documentElement.style.setProperty('--card-bg-color', isDarkMode ? '#1e1e1e' : '#ffffff');
+        document.documentElement.style.setProperty('--text-color', isDarkMode ? '#f0f0f0' : '#2d3748');
+        document.documentElement.style.setProperty('--text-secondary', isDarkMode ? '#b0b0b0' : '#718096');
+        document.documentElement.style.setProperty('--border-color', isDarkMode ? '#2d2d2d' : '#e2e8f0');
+
+        // Colores de marca
+        document.documentElement.style.setProperty('--brand-color', isDarkMode ? '#3be39a' : '#2bc184');
+        document.documentElement.style.setProperty('--background-brand-color', isDarkMode ? '#1a2e25' : '#e0f7ec');
+        document.documentElement.style.setProperty('--hover-brand-color', isDarkMode ? '#68f7b5' : '#3be39a');
+
+        // Colores adicionales
+        document.documentElement.style.setProperty('--danger-color', isDarkMode ? '#ff6b6b' : '#ff4757');
+        document.documentElement.style.setProperty('--warning-color', isDarkMode ? '#ffc107' : '#ffb800');
+        document.documentElement.style.setProperty('--info-color', isDarkMode ? '#6b8cff' : '#4d7bff');
     }
 
     function updateThemeStatus(theme) {
-        themeStatus.textContent = theme === 'dark' ? 'Modo oscuro activado' : 'Modo claro activado';
+        if (themeStatus) {
+            themeStatus.textContent = theme === 'dark' ? 'Modo oscuro activado' : 'Modo claro activado';
+        }
     }
 
     function changeLanguage() {
-        const language = languageSelect.value;
-        localStorage.setItem('language', language);
-        // Aquí podrías implementar la internacionalización
-        showToast(`Idioma cambiado a ${getLanguageName(language)}`);
+        if (languageSelect) {
+            const language = languageSelect.value;
+            localStorage.setItem('language', language);
+            showToast(`Idioma cambiado a ${getLanguageName(language)}`);
+        }
     }
 
     function getLanguageName(code) {
@@ -89,42 +148,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function deleteAccount() {
-        // Aquí iría la lógica para eliminar la cuenta
         closeModal();
         showToast('Tu cuenta se eliminará pronto', 'warning');
-        // Simulación de eliminación de cuenta
         setTimeout(() => {
             showToast('Cuenta eliminada correctamente', 'success');
-            // Redirigir al logout o página principal
             window.location.href = '../index.html';
         }, 1500);
     }
 
     function showConfirmModal(title, message, action) {
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        confirmModal.style.display = 'block';
-        modalConfirm.dataset.action = action.name;
+        if (modalTitle) modalTitle.textContent = title;
+        if (modalMessage) modalMessage.textContent = message;
+        if (confirmModal) confirmModal.style.display = 'block';
+        if (modalConfirm) modalConfirm.dataset.action = action.name;
     }
 
     function closeModal() {
-        confirmModal.style.display = 'none';
+        if (confirmModal) confirmModal.style.display = 'none';
     }
 
     function confirmAction() {
-        const actionName = this.dataset.action;
-        switch(actionName) {
-            case 'resetSettings':
-                resetSettings();
-                break;
-            case 'deleteAccount':
-                deleteAccount();
-                break;
+        if (this && this.dataset && this.dataset.action) {
+            const actionName = this.dataset.action;
+            switch(actionName) {
+                case 'resetSettings':
+                    resetSettings();
+                    break;
+                case 'deleteAccount':
+                    deleteAccount();
+                    break;
+            }
         }
     }
 
     function showToast(message, type = 'success') {
-        // Implementación básica de toast (puedes mejorarla)
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;

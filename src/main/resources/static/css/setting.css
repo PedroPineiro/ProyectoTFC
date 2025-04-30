@@ -1,12 +1,18 @@
 /* Variables de color para temas */
 :root {
-    --background-color: #1c1e1d;
-    --text-color: white;
-    --primary-color: #3be39a;
-    --card-bg-color: #252827;
-    --border-color: #3a3d3c;
-    --text-secondary: #b0b0b0;
-    --danger-color: #e74c3c;
+    transition:
+            background-color 0.5s ease-out,
+            color 0.3s ease-out;
+}
+
+body {
+    transition:
+            background-color 0.5s ease-out,
+            color 0.3s ease-out;
+}
+
+.modal-content {
+    transition: background-color 0.5s ease-out;
 }
 
 /* Estructura principal */
@@ -25,7 +31,7 @@
     font-family: 'Kanit', sans-serif;
     font-size: 2.5rem;
     margin-bottom: 2rem;
-    color: var(--primary-color);
+    color: var(--brand-color);
     text-align: center;
 }
 
@@ -55,7 +61,7 @@
 .settings-icon {
     font-size: 1.5rem;
     margin-right: 1rem;
-    color: var(--primary-color);
+    color: var(--brand-color);
 }
 
 .danger-zone .settings-icon {
@@ -135,7 +141,7 @@
 }
 
 input:checked + .slider {
-    background-color: var(--primary-color);
+    background-color: var(--brand-color);
 }
 
 input:checked + .slider:before {
@@ -276,7 +282,7 @@ input:checked + .slider:before {
 }
 
 .toast-success {
-    background-color: #2ecc71;
+    background-color: var(--background-brand-color);
 }
 
 .toast-warning {
