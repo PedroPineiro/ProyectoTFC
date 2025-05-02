@@ -1,61 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
     const user = JSON.parse(localStorage.getItem('currentUser'));
+    const moviesContainer = document.getElementById('user-movies');
 
-    // Mostrar información del usuario
+    if (!moviesContainer) {
+        console.error('El contenedor de películas no existe en el DOM.');
+        return;
+    }
+
     if (user) {
         document.getElementById('username-display').textContent = user.username;
         document.getElementById('email-display').textContent = user.email;
+
+        fetch('http://localhost:8080/api/auth/me', { credentials: 'include' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No autenticado');
+                }
+                return response.json();
+            })
+            .then(user => console.log('Usuario autenticado:', user))
+            .catch(error => console.error('Error de autenticación:', error));
+        fetch('http://localhost:8080/api/movies/user/' + user.id, { // Asegúrate de usar la URL correcta de tu backend
+            method: 'GET',
+            credentials: 'include'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        console.error('Endpoint no encontrado.');
+                    } else if (response.status === 401) {
+                        alert('No estás autorizado. Por favor, inicia sesión.');
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(movies => {
+                if (movies.length > 0) {
+                    movies.forEach(movie => {
+                        const movieCard = document.createElement('div');
+                        movieCard.classList.add('movie-card');
+                        movieCard.innerHTML = `
+                            <h3>${movie.title}</h3>
+                            <p>Director: ${movie.director}</p>
+                            <p>Género: ${movie.genre}</p>
+                            <p>Estado: ${movie.status}</p>
+                        `;
+                        moviesContainer.appendChild(movieCard);
+                    });
+                } else {
+                    moviesContainer.innerHTML = '<p>No has guardado ninguna película aún.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar las películas:', error);
+                moviesContainer.innerHTML = '<p>Error al cargar tus películas.</p>';
+            });
     }
-
-    // Modales
-    const changeUsernameModal = document.getElementById('changeUsernameModal');
-    const changePasswordModal = document.getElementById('changePasswordModal');
-
-    // Botones para abrir modales
-    document.getElementById('change-username-btn').addEventListener('click', () => {
-        changeUsernameModal.style.display = 'flex';
-    });
-
-    document.getElementById('change-password-btn').addEventListener('click', () => {
-        changePasswordModal.style.display = 'flex';
-    });
-
-    // Botones para cerrar modales
-    document.querySelectorAll('.close-modal').forEach(btn => {
-        btn.addEventListener('click', () => {
-            changeUsernameModal.style.display = 'none';
-            changePasswordModal.style.display = 'none';
-        });
-    });
-
-    // Guardar nuevo nombre de usuario
-    document.getElementById('save-username-btn').addEventListener('click', () => {
-        const newUsername = document.getElementById('new-username').value.trim();
-        if (newUsername) {
-            user.username = newUsername;
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            document.getElementById('username-display').textContent = newUsername;
-            changeUsernameModal.style.display = 'none';
-        }
-    });
-
-    // Guardar nueva contraseña (simulación)
-    document.getElementById('save-password-btn').addEventListener('click', () => {
-        const currentPassword = document.getElementById('current-password').value.trim();
-        const newPassword = document.getElementById('new-password').value.trim();
-
-        if (currentPassword && newPassword) {
-            alert('Contraseña actualizada correctamente');
-            changePasswordModal.style.display = 'none';
-        }
-    });
-
-    // Cargar películas favoritas (simulación)
-    const favoriteMovies = ['Inception', 'The Matrix', 'Interstellar'];
-    const favoriteMoviesList = document.getElementById('favorite-movies-list');
-    favoriteMovies.forEach(movie => {
-        const li = document.createElement('li');
-        li.textContent = movie;
-        favoriteMoviesList.appendChild(li);
-    });
 });

@@ -50,10 +50,23 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Contraseña incorrecta"));
         }
 
-        // Guardar usuario en sesión
-        session.setAttribute("user", user);
+        // Guardar solo el ID del usuario en sesión por seguridad
+        session.setAttribute("userId", user.getId());
 
-        return ResponseEntity.ok(user);
+        // Crear respuesta simplificada sin datos sensibles
+        Map<String, Object> response = Map.of(
+                "id", user.getId(),
+                "username", user.getUsername(),
+                "email", user.getEmail()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutUser(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok().body(Map.of("message", "Sesión cerrada correctamente"));
     }
 
     @GetMapping("/me")
