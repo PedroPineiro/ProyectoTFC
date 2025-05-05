@@ -203,12 +203,25 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
     padding: 1rem;
     color: white;
     opacity: 0;
     transition: opacity 0.3s ease;
+    z-index: 1; /* asegura que esté por encima del fondo pero debajo del texto */
 }
+
+/* Añadimos una sombra más alta sin mover el texto */
+.movie-card .movie-overlay::before {
+    content: "";
+    position: absolute;
+    top: -100%; /* extiende la sombra hacia arriba */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    z-index: -1; /* se coloca detrás del texto */
+}
+
 
 .movie-card:hover .movie-overlay {
     opacity: 1;
@@ -217,13 +230,13 @@
 .movie-card .movie-title {
     font-weight: 600;
     margin-bottom: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
 .movie-card .movie-meta {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     opacity: 0.9;
 }
 
@@ -273,76 +286,3 @@
     background: var(--hover-brand-color);
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .controls-container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1.5rem;
-    }
-
-    .mid-links {
-        justify-content: center;
-    }
-
-    .left-controls, .right-controls {
-        justify-content: center;
-    }
-
-    .modal-content {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Aún más pequeño en pantallas medianas */
-        gap: 0.75rem; /* Reduciendo aún más el espacio */
-    }
-
-    .toggle-view button {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .sort-options {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .user-content {
-        padding: 0 1rem;
-    }
-
-    .mid-links {
-        overflow-x: auto;
-        padding-bottom: 0.5rem;
-        justify-content: flex-start;
-    }
-
-    .mid-links a {
-        white-space: nowrap;
-    }
-
-    .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Lo más pequeño en móviles */
-        gap: 0.5rem;
-    }
-
-    .modal {
-        width: 95%;
-        padding: 15px;
-    }
-
-    .modal-content h2 {
-        font-size: 1.8rem;
-    }
-}
