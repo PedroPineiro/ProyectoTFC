@@ -160,12 +160,12 @@
 }
 
 .stats-badge {
-    background: var(--background-brand-color);
-    color: var(--brand-color);
+    background: var(--brand-color);
+    color: var(--background-color);
     padding: 0.4rem 0.8rem;
     border-radius: 20px;
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Grid de películas */
