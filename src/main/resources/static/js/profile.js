@@ -20,41 +20,5 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(user => console.log('Usuario autenticado:', user))
             .catch(error => console.error('Error de autenticación:', error));
-        fetch('http://localhost:8080/api/movies/user/' + user.id, { // Asegúrate de usar la URL correcta de tu backend
-            method: 'GET',
-            credentials: 'include'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        console.error('Endpoint no encontrado.');
-                    } else if (response.status === 401) {
-                        alert('No estás autorizado. Por favor, inicia sesión.');
-                    }
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(movies => {
-                if (movies.length > 0) {
-                    movies.forEach(movie => {
-                        const movieCard = document.createElement('div');
-                        movieCard.classList.add('movie-card');
-                        movieCard.innerHTML = `
-                            <h3>${movie.title}</h3>
-                            <p>Director: ${movie.director}</p>
-                            <p>Género: ${movie.genre}</p>
-                            <p>Estado: ${movie.status}</p>
-                        `;
-                        moviesContainer.appendChild(movieCard);
-                    });
-                } else {
-                    moviesContainer.innerHTML = '<p>No has guardado ninguna película aún.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Error al cargar las películas:', error);
-                moviesContainer.innerHTML = '<p>Error al cargar tus películas.</p>';
-            });
     }
 });
