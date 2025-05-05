@@ -171,8 +171,8 @@
 /* Grid de películas */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Reduciendo el ancho mínimo de las columnas */
+    gap: 1rem; /* Reduciendo el espacio entre las películas */
     padding: 0 2rem;
 }
 
@@ -296,8 +296,8 @@
 
 @media (max-width: 768px) {
     .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Aún más pequeño en pantallas medianas */
+        gap: 0.75rem; /* Reduciendo aún más el espacio */
     }
 
     .toggle-view button {
@@ -333,7 +333,8 @@
     }
 
     .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Lo más pequeño en móviles */
+        gap: 0.5rem;
     }
 
     .modal {

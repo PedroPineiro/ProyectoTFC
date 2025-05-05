@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="fas fa-exclamation-triangle fa-3x"></i>
             <h3>Inicia sesión para ver tus películas</h3>
             <p>Necesitas iniciar sesión para acceder a esta sección.</p>
-            <a href="login.html" class="btn-primary">Iniciar sesión</a>
         `;
         emptyState.style.display = 'block';
     }
