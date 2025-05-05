@@ -48,4 +48,8 @@ public class MovieService {
         movieRepository.deleteById(id);
     }
 
+    public boolean isUserRatingValid(Double userRating) {
+        return userRating >= 0 && userRating <= 5 && (userRating * 10) % 5 == 0;
+    }
+
 }

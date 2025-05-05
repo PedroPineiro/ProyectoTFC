@@ -46,11 +46,22 @@ public class MovieController {
             movie.setReleaseYear(movieDTO.getReleaseYear());
             movie.setDirector(movieDTO.getDirector());
             movie.setGenre(movieDTO.getGenre());
-            movie.setRating(movieDTO.getRating());
+            movie.setGlobalRating(movieDTO.getGlobalRating());
             movie.setImageUrl(movieDTO.getImageUrl());
             movie.setStatus(movieDTO.getStatus());
             movie.setFavorite(movieDTO.isFavorite());
             movie.setUser(user.get());
+
+            try{
+                if(movieDTO.getStatus() == Status.PLAYED){
+                    movie.setUserRating(movieDTO.getUserRating());
+                    movieService.isUserRatingValid(movieDTO.getUserRating());
+                    movie.setWatchedDate(movieDTO.getWatchedDate());
+                }
+            }
+            catch (Exception e){
+                return ResponseEntity.badRequest().body("UserRating no valido: " + e.getMessage());
+            }
 
             Movie savedMovie = movieService.saveMovie(movie);
             return ResponseEntity.ok(savedMovie);

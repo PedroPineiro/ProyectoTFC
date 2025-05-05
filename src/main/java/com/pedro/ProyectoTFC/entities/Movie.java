@@ -3,7 +3,8 @@ package com.pedro.ProyectoTFC.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pedro.ProyectoTFC.entities.enums.Status;
 import jakarta.persistence.*;
-import java.util.List;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "movies")
@@ -21,10 +22,16 @@ public class Movie {
     private String genre;
 
     @Column(nullable = true) // Puede ser null si aún no ha sido calificada
-    private Double rating;
+    private Double globalRating;
 
     @Column(nullable = true) // Opcional por si no tiene imagen
     private String imageUrl;
+
+    @Column(nullable = true) // Puede ser null si aún no ha sido calificada
+    private Double userRating; // Valor de 0.0 a 10.0
+
+    @Column(nullable = true) // Opcional por si no tiene fecha de visualización
+    private LocalDate watchedDate;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -40,29 +47,41 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long id, String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Status status, boolean isFavorite, User user) {
+    public Movie(Long id, String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
         this.director = director;
         this.genre = genre;
-        this.rating = rating;
+        this.globalRating = rating;
         this.imageUrl = imageUrl;
+        this.userRating = userRating;
+        this.watchedDate = watchedDate;
         this.status = status;
         this.isFavorite = isFavorite;
         this.user = user;
     }
 
-    public Movie(String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Status status, boolean isFavorite, User user) {
+    public Movie(String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.title = title;
         this.releaseYear = releaseYear;
         this.director = director;
         this.genre = genre;
-        this.rating = rating;
+        this.globalRating = rating;
         this.imageUrl = imageUrl;
+        this.userRating = userRating;
+        this.watchedDate = watchedDate;
         this.status = status;
         this.isFavorite = isFavorite;
         this.user = user;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -97,12 +116,12 @@ public class Movie {
         this.genre = genre;
     }
 
-    public Double getRating() {
-        return rating;
+    public Double getGlobalRating() {
+        return globalRating;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public void setGlobalRating(Double rating) {
+        this.globalRating = rating;
     }
 
     public String getImageUrl() {
@@ -127,6 +146,22 @@ public class Movie {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public Double getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(Double userRating) {
+        this.userRating = userRating;
+    }
+
+    public LocalDate getWatchedDate() {
+        return watchedDate;
+    }
+
+    public void setWatchedDate(LocalDate watchedDate) {
+        this.watchedDate = watchedDate;
     }
 
     public User getUser() {

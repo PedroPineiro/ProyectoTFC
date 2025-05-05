@@ -2,13 +2,17 @@ package com.pedro.ProyectoTFC.entities.DTO;
 
 import com.pedro.ProyectoTFC.entities.enums.Status;
 
+import java.time.LocalDate;
+
 public class MovieDTO {
     private String title;
     private int releaseYear;
     private String director;
     private String genre;
-    private Double rating;
+    private Double globalRating;
     private String imageUrl;
+    private double userRating;
+    private LocalDate watchedDate;
     private Status status;
     private boolean isFavorite;
     private Long userId;
@@ -22,10 +26,14 @@ public class MovieDTO {
     public void setDirector(String director) { this.director = director; }
     public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
-    public Double getRating() { return rating; }
-    public void setRating(Double rating) { this.rating = rating; }
+    public Double getGlobalRating() { return globalRating; }
+    public void setGlobalRating(Double globalRating) { this.globalRating = globalRating; }
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public double getUserRating() { return userRating; }
+    public void setUserRating(double userRating) { this.userRating = userRating; }
+    public LocalDate getWatchedDate() { return watchedDate; }
+    public void setWatchedDate(LocalDate watchedDate) { this.watchedDate = watchedDate; }
     public Status getStatus() { return status; }
     public void setStatus(Status status) { this.status = status; }
     public boolean isFavorite() { return isFavorite; }
