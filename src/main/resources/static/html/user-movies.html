@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil | Pandorasbox</title>
+    <title>Mis Películas | Pandorasbox</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/user-movies.css">
+    <link rel="stylesheet" href="../css/movies-modal.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script defer src="../js/auth.js"></script>
     <script defer src="../js/user-movies.js"></script>
     <script defer src="../js/settings.js"></script>
-
 </head>
 <body>
-<header>
+<header class="navbar">
     <div class="header-container">
         <div class="logo">
             <a id="page-title" href="../index.html">Pandorasbox</a>
@@ -31,29 +31,33 @@
     </div>
 </header>
 
-<main>
+<main class="user-content">
     <div class="controls-container">
         <div class="left-controls">
             <div class="toggle-view">
-                <button id="viewed-movies-btn" class="active">Películas Vistas</button>
-                <button id="wishlist-movies-btn">Wishlist</button>
+                <button id="viewed-movies-btn" class="active">
+                    <i class="fas fa-eye"></i> Vistas
+                </button>
+                <button id="wishlist-movies-btn">
+                    <i class="fas fa-bookmark"></i> Wishlist
+                </button>
             </div>
         </div>
         <nav class="mid-links">
-            <a href="user-movies.html">User Movies</a>
-            <a href="user-games.html">User Games</a>
-            <a href="user-albums.html">User Albums</a>
+            <a href="user-movies.html" class="active"><i class="fas fa-film"></i> Películas</a>
+            <a href="user-games.html"><i class="fas fa-gamepad"></i> Juegos</a>
+            <a href="user-albums.html"><i class="fas fa-music"></i> Álbumes</a>
         </nav>
         <div class="right-controls">
             <div class="sort-options">
-                <label for="sort-by">Ordenar por:</label>
+                <label for="sort-by"><i class="fas fa-sort"></i> Ordenar por:</label>
                 <select id="sort-by">
-                    <option value="title">Título</option>
-                    <option value="year">Año</option>
-                    <option value="user-rating">User Rating</option>
+                    <option value="title">Título (A-Z)</option>
+                    <option value="year">Año (Nuevo)</option>
+                    <option value="user-rating">Valoración</option>
                     <option value="genre">Género</option>
                     <option value="duration">Duración</option>
-                    <option value="release-date">Fecha de Estreno</option>
+                    <option value="release-date">Fecha Estreno</option>
                     <option value="popularity">Popularidad</option>
                 </select>
             </div>
@@ -61,15 +65,43 @@
     </div>
 
     <section id="user-movies-section">
-        <h2>Mis Películas Guardadas</h2>
-        <div id="movie-list">
+        <div class="section-header">
+            <h2><i class="fas fa-film"></i> Mis Películas</h2>
+            <div class="stats-badge">
+                <span id="movies-count">0</span> películas
+            </div>
+        </div>
+        <div id="movie-list" class="grid-container">
+            <!-- Las películas se cargarán aquí -->
+        </div>
+        <div id="empty-state" class="empty-state">
+            <i class="fas fa-film fa-3x"></i>
+            <h3>No hay películas aquí</h3>
+            <p>Cuando agregues películas, aparecerán en esta sección.</p>
+            <a href="movies.html" class="btn-primary">Explorar películas</a>
         </div>
     </section>
 
+    <!-- Modal para detalles de película -->
+    <div id="movie-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer>
-    <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
+    <div class="footer-content">
+        <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+    </div>
 </footer>
 </body>
 </html>
