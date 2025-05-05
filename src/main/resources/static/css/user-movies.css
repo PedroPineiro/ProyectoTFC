@@ -1,0 +1,152 @@
+/* ../css/user-movies.css */
+
+/* Estilos generales para la sección de películas del usuario */
+#user-movies-section {
+    padding: 30px;
+    background-color: var(--second-background-color); /* Fondo secundario */
+}
+
+#user-movies-section h2 {
+    color: var(--text-color); /* Texto principal */
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+/* Estilos para el contenedor de controles */
+.controls-container {
+    background-color: var(--card-bg-color); /* Fondo de las tarjetas/contenedores */
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color); /* Borde */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* Estilos para el bloque de selección de vista (izquierda) */
+.left-controls {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-view button {
+    background-color: var(--third-background-color); /* Fondo terciario para elementos interativos */
+    color: var(--text-color);
+    border: none;
+    padding: 12px 20px;
+    margin-right: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.toggle-view button.active {
+    background-color: var(--brand-color); /* Color de marca para el botón activo */
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-view button:hover {
+    background-color: var(--background-brand-color); /* Fondo del color de marca al hacer hover */
+    color: var(--text-color);
+}
+
+.toggle-view button.active:hover {
+    background-color: var(--hover-brand-color); /* Hover del color de marca activo */
+}
+
+/* Estilos para los enlaces centrales */
+.mid-links nav {
+    display: flex;
+    gap: 20px;
+}
+
+.mid-links nav a {
+    text-decoration: none;
+    color: var(--text-secondary); /* Texto secundario */
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.mid-links nav a:hover {
+    color: var(--brand-color); /* Color de marca al hacer hover */
+}
+
+/* Estilos para el bloque de ordenación (derecha) */
+.right-controls {
+    display: flex;
+    align-items: center;
+}
+
+.sort-options label {
+    margin-right: 15px;
+    font-size: 1em;
+    color: var(--text-secondary); /* Texto secundario */
+}
+
+.sort-options select {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color); /* Borde */
+    border-radius: 8px;
+    font-size: 1em;
+    color: var(--text-color); /* Texto principal */
+    cursor: pointer;
+    appearance: none;
+    background-color: var(--third-background-color); /* Fondo terciario */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 10px;
+    padding-right: 30px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sort-options select:focus {
+    outline: none;
+    border-color: var(--brand-color); /* Color de marca al enfocar */
+    box-shadow: 0 0 5px rgba(var(--brand-color-rgb), 0.5); /* Asumiendo que tienes --brand-color-rgb definido si necesitas transparencia */
+}
+
+/* Estilos para la lista de películas */
+#movie-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--card-bg-color); /* Fondo de las tarjetas */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.movie-card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.movie-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius-top-left: 8px;
+    border-radius-top-right: 8px;
+}
+
+/* Estilos para cuando no hay películas */
+#movie-list p {
+    color: var(--text-secondary); /* Texto secundario */
+    text-align: center;
+    padding: 20px;
+}

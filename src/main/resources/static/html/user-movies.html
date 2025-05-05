@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil | Pandorasbox</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/user-movies.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script defer src="../js/auth.js"></script>
+    <script defer src="../js/user-movies.js"></script>
+    <script defer src="../js/settings.js"></script>
+
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <a id="page-title" href="../index.html">Pandorasbox</a>
+        </div>
+        <nav class="navigation">
+            <a class="navLink" href="movies.html">Movies</a>
+            <a class="navLink" href="games.html">Games</a>
+            <a class="navLink" href="albums.html">Albums</a>
+            <div id="temporalDropdown">
+                <a class="navLink profile-link" href="profile.html">Profile</a>
+            </div>
+            <a id="settings" href="settings.html"><i class="fas fa-cog"></i></a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="controls-container">
+        <div class="left-controls">
+            <div class="toggle-view">
+                <button id="viewed-movies-btn" class="active">Películas Vistas</button>
+                <button id="wishlist-movies-btn">Wishlist</button>
+            </div>
+        </div>
+        <nav class="mid-links">
+            <a href="user-movies.html">User Movies</a>
+            <a href="user-games.html">User Games</a>
+            <a href="user-albums.html">User Albums</a>
+        </nav>
+        <div class="right-controls">
+            <div class="sort-options">
+                <label for="sort-by">Ordenar por:</label>
+                <select id="sort-by">
+                    <option value="title">Título</option>
+                    <option value="year">Año</option>
+                    <option value="user-rating">User Rating</option>
+                    <option value="genre">Género</option>
+                    <option value="duration">Duración</option>
+                    <option value="release-date">Fecha de Estreno</option>
+                    <option value="popularity">Popularidad</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <section id="user-movies-section">
+        <h2>Mis Películas Guardadas</h2>
+        <div id="movie-list">
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
+</footer>
+</body>
+</html>
