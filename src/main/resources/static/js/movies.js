@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 toast.remove();
             }, 500);
-        }, 3000);
+        }, 1600);
     }
 
     async function saveMovie(status) {
