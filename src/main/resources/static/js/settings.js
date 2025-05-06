@@ -247,8 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Tu cuenta se eliminará pronto', 'warning');
         setTimeout(() => {
             showToast('Cuenta eliminada correctamente', 'success');
-            window.location.href = '../index.html';
-        }, 1500);
+        }, 4000);
     }
 
     function showConfirmModal(title, message, action) {
@@ -282,15 +281,18 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.textContent = message;
         document.body.appendChild(toast);
 
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 100);
+        // Forzar reflow para activar la animación
+        void toast.offsetWidth;
+
+        toast.classList.add('show');
 
         setTimeout(() => {
             toast.classList.remove('show');
+            toast.classList.add('hide');
+
             setTimeout(() => {
-                document.body.removeChild(toast);
-            }, 300);
+                toast.remove();
+            }, 400);
         }, 3000);
     }
 

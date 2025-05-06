@@ -1,0 +1,152 @@
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    color: white;
+    background-color: #2d3748;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 9999;
+    max-width: 90%;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+/* Iconos para cada tipo de toast */
+.toast::before {
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 1.2em;
+}
+
+.toast-success {
+    background-color: #38a169;
+    border-left: 4px solid #2f855a;
+}
+
+.toast-success::before {
+    content: '\f058'; /* Icono check-circle */
+}
+
+.toast-warning {
+    background-color: #dd6b20;
+    border-left: 4px solid #c05621;
+}
+
+.toast-warning::before {
+    content: '\f06a'; /* Icono exclamation-circle */
+}
+
+.toast-error {
+    background-color: #e53e3e;
+    border-left: 4px solid #c53030;
+}
+
+.toast-error::before {
+    content: '\f057'; /* Icono times-circle */
+}
+
+/* Efecto al hacer hover */
+.toast:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transform: translateX(-50%) translateY(-5px);
+}
+
+/* Animación de entrada/salida */
+@keyframes toast-in {
+    from {
+        transform: translateX(-50%) translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toast-out {
+    from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-50%) translateY(100%);
+        opacity: 0;
+    }
+}
+
+.toast.show {
+    animation: toast-in 0.4s forwards;
+}
+
+.toast.hide {
+    animation: toast-out 0.4s forwards;
+}
+
+/* Animación de compra/guardado */
+@keyframes confetti-fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes bounce-in {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.purchase-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.purchase-confirmation {
+    background: var(--brand-color);
+    color: white;
+    padding: 1.5rem 2.5rem;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.purchase-confirmation i {
+    font-size: 1.8rem;
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: #f00;
+    opacity: 0;
+    z-index: 9999;
+}
+
+/* Colores aleatorios para el confeti */
+.confetti:nth-child(5n) { background-color: #38a169; }
+.confetti:nth-child(5n+1) { background-color: #4299e1; }
+.confetti:nth-child(5n+2) { background-color: #9f7aea; }
+.confetti:nth-child(5n+3) { background-color: #ed8936; }
+.confetti:nth-child(5n+4) { background-color: #e53e3e; }
