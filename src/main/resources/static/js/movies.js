@@ -60,59 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modalTrailerLink
     );
 
-    function showToast(message, type = 'success') {
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-
-        // Contenido del toast
-        const toastContent = document.createElement('div');
-        toastContent.className = 'toast-content';
-        toastContent.textContent = message;
-
-        // Contenedor de confeti (dentro del toast)
-        const confettiContainer = document.createElement('div');
-        confettiContainer.className = 'confetti-container';
-
-        // Crear confeti (50 partículas)
-        for (let i = 0; i < 50; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-
-            // Posición horizontal aleatoria
-            confetti.style.left = `${Math.random() * 100}%`;
-
-            // Retraso de animación escalonado
-            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-
-            // Duración de animación variada
-            confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
-
-            // Tamaño aleatorio
-            const size = 6 + Math.random() * 10;
-            confetti.style.width = `${size}px`;
-            confetti.style.height = `${size}px`;
-
-            confettiContainer.appendChild(confetti);
-        }
-
-        toast.appendChild(toastContent);
-        toast.appendChild(confettiContainer);
-        document.body.appendChild(toast);
-
-        // Forzar reflow para activar la animación
-        void toast.offsetWidth;
-
-        // Mostrar toast
-        toast.classList.add('show');
-
-        // Ocultar y eliminar después de 3 segundos
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => {
-                toast.remove();
-            }, 500);
-        }, 3000);
-    }
     let currentMovie = null;
 
     searchForm.addEventListener('submit', async (event) => {
@@ -285,6 +232,60 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeModal() {
         modal.classList.remove('open');
         overlay.classList.remove('show');
+    }
+
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+
+        // Contenido del toast
+        const toastContent = document.createElement('div');
+        toastContent.className = 'toast-content';
+        toastContent.textContent = message;
+
+        // Contenedor de confeti (dentro del toast)
+        const confettiContainer = document.createElement('div');
+        confettiContainer.className = 'confetti-container';
+
+        // Crear confeti (50 partículas)
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+
+            // Posición horizontal aleatoria
+            confetti.style.left = `${Math.random() * 100}%`;
+
+            // Retraso de animación escalonado
+            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+
+            // Duración de animación variada
+            confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
+
+            // Tamaño aleatorio
+            const size = 6 + Math.random() * 10;
+            confetti.style.width = `${size}px`;
+            confetti.style.height = `${size}px`;
+
+            confettiContainer.appendChild(confetti);
+        }
+
+        toast.appendChild(toastContent);
+        toast.appendChild(confettiContainer);
+        document.body.appendChild(toast);
+
+        // Forzar reflow para activar la animación
+        void toast.offsetWidth;
+
+        // Mostrar toast
+        toast.classList.add('show');
+
+        // Ocultar y eliminar después de 3 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 3000);
     }
 
     async function saveMovie(status) {
