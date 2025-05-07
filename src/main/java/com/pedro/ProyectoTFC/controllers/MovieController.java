@@ -50,7 +50,7 @@ public class MovieController {
             );
 
             if (existingMovie.isPresent()) {
-                return ResponseEntity.badRequest().body("Esa película ya está en tu biblioteca");
+                return ResponseEntity.badRequest().body("Esta película ya está en tu biblioteca");
             }
 
             Movie movie = new Movie();
