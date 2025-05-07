@@ -174,16 +174,32 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupEventListeners() {
         viewedMoviesBtn.addEventListener('click', () => {
             currentFilter = 'PLAYED';
+            toggleActiveButton(viewedMoviesBtn, wishlistMoviesBtn);
             loadMovies(currentFilter);
         });
 
         wishlistMoviesBtn.addEventListener('click', () => {
             currentFilter = 'WISHLIST';
+            toggleActiveButton(wishlistMoviesBtn, viewedMoviesBtn);
             loadMovies(currentFilter);
         });
 
         closeModalButton.addEventListener('click', closeModal);
         overlay.addEventListener('click', closeModal);
+    }
+
+    function toggleActiveButton(activeButton, inactiveButton) {
+        // Actualizar los estados de los botones
+        activeButton.classList.add('active');
+        inactiveButton.classList.remove('active');
+
+        // Actualizar el atributo data-active del contenedor
+        const toggleContainer = document.querySelector('.toggle-view');
+        if (activeButton.id === 'viewed-movies-btn') {
+            toggleContainer.setAttribute('data-active', 'viewed');
+        } else {
+            toggleContainer.setAttribute('data-active', 'wishlist');
+        }
     }
 
     function closeModal() {
