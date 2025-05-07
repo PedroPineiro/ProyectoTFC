@@ -8,6 +8,7 @@ import com.pedro.ProyectoTFC.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieService {
@@ -50,6 +51,10 @@ public class MovieService {
 
     public boolean isUserRatingValid(Double userRating) {
         return userRating >= 0 && userRating <= 5 && (userRating * 10) % 5 == 0;
+    }
+
+    public Optional<Movie> findMovieByDetailsAndUser(String title, int releaseYear, String director, User user) {
+        return movieRepository.findByTitleAndReleaseYearAndDirectorAndUser(title, releaseYear, director, user);
     }
 
 }

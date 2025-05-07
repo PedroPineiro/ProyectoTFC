@@ -41,6 +41,18 @@ public class MovieController {
                 return ResponseEntity.badRequest().body("Usuario no encontrado");
             }
 
+            // Verificar si la película ya existe para el usuario
+            Optional<Movie> existingMovie = movieService.findMovieByDetailsAndUser(
+                    movieDTO.getTitle(),
+                    movieDTO.getReleaseYear(),
+                    movieDTO.getDirector(),
+                    user.get()
+            );
+
+            if (existingMovie.isPresent()) {
+                return ResponseEntity.badRequest().body("Esa película ya está en tu biblioteca");
+            }
+
             Movie movie = new Movie();
             movie.setTitle(movieDTO.getTitle());
             movie.setReleaseYear(movieDTO.getReleaseYear());
