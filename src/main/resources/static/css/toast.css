@@ -1,4 +1,4 @@
-/* Toast mejorado con confeti integrado */
+/* Estilos base para todos los toast */
 .toast {
     position: fixed;
     bottom: 2rem;
@@ -7,6 +7,7 @@
     padding: 1rem 2rem;
     border-radius: 12px;
     color: white;
+    font-size: 1.1rem;
     background-color: #2d3748;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     opacity: 0;
@@ -23,6 +24,27 @@
 .toast.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+/* Variaciones por tipo */
+.toast-success {
+    background-color: color-mix(in srgb, var(--brand-color) 100%, black 70%);
+    border: 1px solid color-mix(in srgb, var(--brand-color) 100%, black 100%);
+}
+
+.toast-success-settings {
+    background-color: #48ba3c;
+    border: 1px solid #399130;
+}
+
+.toast-error {
+    background-color: #e53e3e;
+    border: 1px solid #c53030;
+}
+
+.toast-warning {
+    background-color: #dd6b20;
+    border: 1px solid #c05621;
 }
 
 /* Confeti mejorado */
@@ -85,13 +107,6 @@
     height: 16px;
     border-radius: 50%;
 } /* Óvalos */
-
-
-/* Efecto de brillo opcional */
-.toast-success {
-    position: relative;
-    overflow: hidden;
-}
 
 .toast-success::after {
     content: '';

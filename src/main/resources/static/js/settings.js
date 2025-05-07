@@ -239,14 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('brandColor'); // Elimina el color de marca guardado
         loadSettings();
         closeModal();
-        showToast('Configuración restablecida');
+        showToast('Configuración restablecida', 'success-settings');
     }
 
     function deleteAccount() {
         closeModal();
         showToast('Tu cuenta se eliminará pronto', 'warning');
         setTimeout(() => {
-            showToast('Cuenta eliminada correctamente', 'success');
+            showToast('Cuenta eliminada correctamente', 'success-settings');
         }, 4000);
     }
 
@@ -276,23 +276,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showToast(message, type = 'success') {
+        // Limpiar toasts anteriores
+        document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
+        // Crear elemento toast
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
+
         document.body.appendChild(toast);
 
         // Forzar reflow para activar la animación
         void toast.offsetWidth;
 
+        // Mostrar toast
         toast.classList.add('show');
 
+        // Ocultar y eliminar después de 3 segundos
         setTimeout(() => {
             toast.classList.remove('show');
-            toast.classList.add('hide');
-
             setTimeout(() => {
                 toast.remove();
-            }, 400);
+            }, 500);
         }, 3000);
     }
 

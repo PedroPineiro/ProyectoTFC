@@ -235,42 +235,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showToast(message, type = 'success') {
+        // Limpiar toasts anteriores
+        document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
+        // Crear elemento toast
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
+        toast.textContent = message;
 
-        // Contenido del toast
-        const toastContent = document.createElement('div');
-        toastContent.className = 'toast-content';
-        toastContent.textContent = message;
+        // Agregar confeti solo si no es un error
+        if (type !== 'error') {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti-container';
 
-        // Contenedor de confeti (dentro del toast)
-        const confettiContainer = document.createElement('div');
-        confettiContainer.className = 'confetti-container';
+            // Crear confeti (50 partículas)
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
+                const size = 6 + Math.random() * 10;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confettiContainer.appendChild(confetti);
+            }
 
-        // Crear confeti (50 partículas)
-        for (let i = 0; i < 50; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-
-            // Posición horizontal aleatoria
-            confetti.style.left = `${Math.random() * 100}%`;
-
-            // Retraso de animación escalonado
-            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-
-            // Duración de animación variada
-            confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
-
-            // Tamaño aleatorio
-            const size = 6 + Math.random() * 10;
-            confetti.style.width = `${size}px`;
-            confetti.style.height = `${size}px`;
-
-            confettiContainer.appendChild(confetti);
+            toast.appendChild(confettiContainer);
         }
 
-        toast.appendChild(toastContent);
-        toast.appendChild(confettiContainer);
         document.body.appendChild(toast);
 
         // Forzar reflow para activar la animación
@@ -285,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 toast.remove();
             }, 500);
-        }, 1600);
+        }, 2000);
     }
 
     async function saveMovie(status) {

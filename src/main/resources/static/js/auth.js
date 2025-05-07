@@ -50,6 +50,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Mostrar el toast de notificación
+    function showToast(message, type = 'success') {
+        // Limpiar toasts anteriores
+        document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
+        // Crear elemento toast
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        // Forzar reflow para activar la animación
+        void toast.offsetWidth;
+
+        // Mostrar toast
+        toast.classList.add('show');
+
+        // Ocultar y eliminar después de 3 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 3000);
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    }
+
     // Manejar el envío del formulario
     async function handleFormSubmit() {
         const usernameOrEmail = usernameInput?.value.trim();
@@ -57,7 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = isLoginMode ? '' : emailInput?.value.trim();
 
         if (!usernameOrEmail || !password || (!isLoginMode && !email)) {
-            alert('Por favor completa todos los campos');
+            showToast('Por favor completa todos los campos', 'error');
+            return;
+        }
+
+        if (!isLoginMode && !isValidEmail(email)) {
+            showToast('El formato de email no es válido', 'error');
             return;
         }
 
@@ -89,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location.reload(); // Recargar la página para reflejar el estado logueado
         } catch (error) {
             console.error('Error:', error);
-            alert(error.message);
+            showToast(error.message, 'error');
         }
     }
 
