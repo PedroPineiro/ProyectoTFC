@@ -157,6 +157,57 @@ main {
   transform: rotate(-45deg); /* Gira el ícono 20 grados */
 }
 
+/* Barra Lateral */
+/* Personalización de la barra de desplazamiento - Para navegadores WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--third-background-color);
+  border-radius: 10px;
+  margin: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-color);
+  border-radius: 10px;
+  border: 2px solid var(--third-background-color);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hover-brand-color);
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--background-color);
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-color) var(--third-background-color);
+}
+
+/* Efecto suave al desplazar */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilo adicional para contenedores específicos */
+.scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-color) var(--third-background-color);
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
 
 /* Footer */
 footer {
