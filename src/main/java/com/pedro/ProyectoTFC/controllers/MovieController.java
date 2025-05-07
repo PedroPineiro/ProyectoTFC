@@ -114,4 +114,36 @@ public class MovieController {
         List<Movie> movies = movieService.getAllMoviesByUser(user.get());
         return ResponseEntity.ok(movies);
     }
+
+    // Aactualizar el status de la pelicula PLAYED o WISHLIST
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateMovieStatus(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        try {
+            String newStatus = request.get("status");
+            Optional<Movie> movieOptional = movieService.findMovieById(id);
+
+            if (movieOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Película no encontrada");
+            }
+
+            Movie movie = movieOptional.get();
+            movie.setStatus(Status.valueOf(newStatus.toUpperCase()));
+            movieService.saveMovie(movie);
+
+            return ResponseEntity.ok(movie);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al actualizar el estado: " + e.getMessage());
+        }
+    }
+
+    // Eliminar la pelicula de la base de datos del usuario
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMovie(@PathVariable Long id) {
+        try {
+            movieService.deleteMovie(id);
+            return ResponseEntity.ok("Película eliminada con éxito");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al eliminar la película: " + e.getMessage());
+        }
+    }
 }

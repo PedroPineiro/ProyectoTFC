@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
+    Optional<Movie> findById(Long id);
     List<Movie> findByTitleContaining(String query);
     List<Movie> findByUser(User user);
     List<Movie> findByUserAndStatus(User user, Status status);

@@ -57,4 +57,8 @@ public class MovieService {
         return movieRepository.findByTitleAndReleaseYearAndDirectorAndUser(title, releaseYear, director, user);
     }
 
+    public Optional<Movie> findMovieById(Long id) {
+        return movieRepository.findById(id);
+    }
+
 }

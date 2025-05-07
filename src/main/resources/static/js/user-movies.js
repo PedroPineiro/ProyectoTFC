@@ -43,6 +43,32 @@ document.addEventListener('DOMContentLoaded', () => {
         setupEventListeners();
     }
 
+    function showToast(message, type = 'success') {
+        // Limpiar toasts anteriores
+        document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
+        // Crear elemento toast
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        // Forzar reflow para activar la animación
+        void toast.offsetWidth;
+
+        // Mostrar toast
+        toast.classList.add('show');
+
+        // Ocultar y eliminar después de 3 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 3000);
+    }
+
     function showNotLoggedState() {
         moviesContainer.innerHTML = '';
         emptyState.innerHTML = `
@@ -162,13 +188,68 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalStatus = document.createElement('p');
         modalStatus.innerHTML = `<strong>Estado:</strong> ${movie.status === 'PLAYED' ? 'Vista' : 'En wishlist'}`;
 
-        modalDetails.append(modalTitle, modalYear, modalRating, modalGenre, modalDirector, modalStatus);
+        // Botón para cambiar el estado
+        const toggleStatusButton = document.createElement('button');
+        toggleStatusButton.textContent = movie.status === 'PLAYED' ? 'Mover a Wishlist' : 'Marcar como Vista';
+        toggleStatusButton.classList.add('btn-primary');
+        toggleStatusButton.addEventListener('click', () => toggleMovieStatus(movie));
+
+        // Botón para eliminar la película
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar Película';
+        deleteButton.classList.add('btn-danger');
+        deleteButton.addEventListener('click', () => deleteMovie(movie.id));
+
+        modalDetails.append(modalTitle, modalYear, modalRating, modalGenre, modalDirector, modalStatus, toggleStatusButton, deleteButton);
         modalContent.append(modalPoster, modalDetails);
 
         overlay.classList.add('show');
         modal.classList.add('open');
 
         loader.classList.remove('show');
+    }
+
+    function toggleMovieStatus(movie) {
+        const newStatus = movie.status === 'PLAYED' ? 'WISHLIST' : 'PLAYED';
+
+        fetch(`http://localhost:8080/api/movies/${movie.id}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cambiar el estado de la película');
+                }
+                return response.json();
+            })
+            .then(updatedMovie => {
+                showToast('Estado actualizado con éxito', 'success');
+                loadMovies(currentFilter); // Recargar dinámicamente las películas
+                closeModal(); // Cerrar el modal
+            })
+            .catch(error => {
+                console.error('Error al cambiar el estado:', error);
+                showToast('Error al cambiar el estado', 'error');
+            });
+    }
+
+    function deleteMovie(movieId) {
+        fetch(`http://localhost:8080/api/movies/${movieId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar la película');
+                }
+                showToast('Película eliminada con éxito', 'success');
+                loadMovies(currentFilter); // Recargar dinámicamente las películas
+                closeModal(); // Cerrar el modal
+            })
+            .catch(error => {
+                console.error('Error al eliminar la película:', error);
+                showToast('Error al eliminar la película', 'error');
+            });
     }
 
     function setupEventListeners() {
