@@ -1,0 +1,84 @@
+/* Estilo para las estrellas */
+.star-rating {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.star {
+    font-size: 2.5rem;
+    color: gray;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.star::before {
+    content: '★';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    color: gold;
+    transition: width 0.3s ease;
+    pointer-events: none;
+}
+
+.star.selected::before {
+    width: 100%;
+}
+
+.star.half::before {
+    width: 50%;
+}
+
+/* Estilo para el modal superpuesto */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--background-color);
+    border-radius: 10px;
+    border: var(--brand-color) 2px solid;
+    color: var(--text-color);
+    padding: 20px;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Modal superpuesto encima del principal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal.secondary {
+    z-index: 1100; /* Más alto que el modal principal */
+}

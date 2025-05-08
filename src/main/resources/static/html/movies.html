@@ -6,6 +6,7 @@
         <title>Movies</title>
         <link rel="stylesheet" href="../css/styles.css">
         <link rel="stylesheet" href="../css/movies-modal.css">
+        <link rel="stylesheet" href="../css/rating-movies-modal.css">
         <link rel="stylesheet" href="../css/browser.css">
         <link rel="stylesheet" href="../css/toast.css">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
@@ -43,6 +44,19 @@
         </form>
         <div id="results"></div>
     </main>
+
+    <!-- Modal de calificacion -->
+    <div id="rating-modal" class="modal">
+        <div class="modal-content">
+            <h2>Calificar Película</h2>
+            <div id="star-rating" class="star-rating">
+                <!-- Las estrellas se generarán dinámicamente -->
+            </div>
+            <label for="watched-date">Fecha de visualización:</label>
+            <input type="date" id="watched-date" />
+            <button id="save-rating" class="btn-primary">Guardar</button>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>

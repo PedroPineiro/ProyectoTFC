@@ -281,6 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
     }
 
+    function closeModal() {
+        modal.classList.remove('open');
+        overlay.classList.remove('show');
+    }
+
     async function saveMovie(status) {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (!currentUser) {
@@ -288,19 +293,37 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        try {
-            const movieData = {
-                title: currentMovie.title,
-                releaseYear: currentMovie.release_date ? parseInt(currentMovie.release_date.substring(0, 4)) : 0,
-                director: modalDirector.textContent.replace('Director: ', '') || 'Desconocido',
-                genre: modalGenres.textContent.replace('Géneros: ', ''),
-                rating: status === 'PLAYED' ? currentMovie.vote_average : null,
-                imageUrl: currentMovie.poster_path ? `https://image.tmdb.org/t/p/w300${currentMovie.poster_path}` : null,
-                status: status,
-                isFavorite: false,
-                userId: currentUser.id
-            };
+        const movieData = {
+            title: currentMovie.title,
+            releaseYear: currentMovie.release_date ? parseInt(currentMovie.release_date.substring(0, 4)) : 0,
+            director: modalDirector.textContent.replace('Director: ', '') || 'Desconocido',
+            genre: modalGenres.textContent.replace('Géneros: ', ''),
+            rating: null,
+            imageUrl: currentMovie.poster_path ? `https://image.tmdb.org/t/p/w300${currentMovie.poster_path}` : null,
+            status: status,
+            isFavorite: false,
+            userId: currentUser.id
+        };
 
+        if (status === 'PLAYED') {
+            // Mostrar el modal de calificación
+            showRatingModal(async (userRating, watchedDate) => {
+                // Completar los datos de la película con la calificación y la fecha
+                movieData.userRating = userRating;
+                movieData.watchedDate = watchedDate;
+
+                // Guardar la película después de completar el modal
+                await saveMovieToBackend(movieData);
+            });
+        } else {
+            // Guardar directamente si es wishlist
+            await saveMovieToBackend(movieData);
+            closeModal()
+        }
+    }
+
+    async function saveMovieToBackend(movieData) {
+        try {
             const response = await fetch('http://localhost:8080/api/movies/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -309,13 +332,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) throw new Error(await response.text());
 
-            // Mostrar animación de éxito
             showToast('¡Película guardada con éxito!', 'success');
-
         } catch (error) {
             console.error('Error al guardar:', error);
             showToast('Error al guardar: ' + error.message, 'error');
         }
+    }
+
+    function showRatingModal(onComplete) {
+        const ratingModal = document.getElementById('rating-modal');
+        const starRating = document.getElementById('star-rating');
+        const dateInput = document.getElementById('watched-date');
+        const saveButton = document.getElementById('save-rating');
+
+        // Generar las estrellas
+        starRating.innerHTML = '';
+        for (let i = 0; i < 10; i++) {
+            const star = document.createElement('span');
+            star.classList.add('star');
+            star.textContent = '★';
+            star.dataset.value = (i + 1) / 2; // Valores de 0.5 a 5
+            starRating.appendChild(star);
+        }
+
+        // Manejar la selección de estrellas
+        let selectedRating = 0;
+        starRating.addEventListener('click', (event) => {
+            if (event.target.classList.contains('star')) {
+                selectedRating = parseFloat(event.target.dataset.value);
+                updateStarSelection(selectedRating);
+            }
+        });
+
+        function updateStarSelection(rating) {
+            const stars = starRating.querySelectorAll('.star');
+            stars.forEach((star) => {
+                const starValue = parseFloat(star.dataset.value);
+                if (starValue <= rating) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+
+        // Mostrar el modal
+        ratingModal.classList.add('open');
+
+        // Guardar la calificación
+        saveButton.onclick = () => {
+            const watchedDate = dateInput.value;
+
+            if (!watchedDate || selectedRating === 0) {
+                showToast('Por favor, completa todos los campos', 'error');
+                return;
+            }
+
+            ratingModal.classList.remove('open'); // Cerrar el modal
+            onComplete(selectedRating, watchedDate); // Ejecutar el callback con los datos
+        };
     }
 
 });
