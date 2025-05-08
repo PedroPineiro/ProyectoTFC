@@ -142,3 +142,69 @@
 .btn-secondary:hover {
     background-color: #5a6268;
 }
+
+/* Estilos para el sistema de estrellas */
+.star-rating-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.star-rating-container {
+    display: flex;
+    position: relative;
+    height: 40px;
+}
+
+.star-rating-container .star {
+    font-size: 2.5rem;
+    color: #ccc;
+    cursor: pointer;
+    position: relative;
+    padding: 0 2px;
+    transition: color 0.2s;
+}
+
+.star-rating-container .star.selected {
+    color: gold;
+}
+
+.star-rating-container .star.half::before {
+    content: '★';
+    position: absolute;
+    left: 2px;
+    width: 50%;
+    overflow: hidden;
+    color: gold;
+}
+
+.reset-rating {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.reset-rating:hover {
+    color: #ff6b6b;
+    transform: scale(1.2);
+}
+
+.reset-rating.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+/* Estilos para las etiquetas */
+.rating-section label,
+.date-section label {
+    font-weight: bold;
+    color: var(--brand-color);
+    display: block;
+    margin-bottom: 5px;
+}

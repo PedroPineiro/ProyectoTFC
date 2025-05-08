@@ -346,18 +346,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveButton = document.getElementById('save-rating');
         const cancelButton = document.getElementById('cancel-rating');
         const closeButton = document.querySelector('.close-rating-modal');
+        const resetButton = document.querySelector('.reset-rating');
 
         // Resetear valores
         dateInput.valueAsDate = new Date(); // Fecha actual por defecto
         let selectedRating = 0;
         let hoverRating = 0;
 
-        // Generar las estrellas
+        // Generar 5 estrellas
         starRating.innerHTML = '';
         for (let i = 1; i <= 5; i++) {
             const star = document.createElement('div');
             star.classList.add('star');
-            star.dataset.value = i / 2; // Valores de 0.5 a 5
+            star.dataset.value = i;
             star.innerHTML = '★';
             starRating.appendChild(star);
         }
@@ -367,7 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Actualizar visualización de estrellas
         function updateStars() {
             const ratingToShow = hoverRating || selectedRating;
-            stars.forEach((star, index) => {
+
+            stars.forEach((star) => {
                 star.classList.remove('selected', 'half');
                 const starValue = parseFloat(star.dataset.value);
 
@@ -377,6 +379,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     star.classList.add('half');
                 }
             });
+
+            // Mostrar u ocultar botón de reset según si hay selección
+            if (selectedRating > 0) {
+                resetButton.classList.remove('hidden');
+            } else {
+                resetButton.classList.add('hidden');
+            }
         }
 
         // Manejar eventos de las estrellas
@@ -412,6 +421,12 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStars();
         });
 
+        // Manejar el botón de reset
+        resetButton.addEventListener('click', () => {
+            selectedRating = 0;
+            updateStars();
+        });
+
         // Mostrar el modal
         ratingModal.classList.add('open');
 
@@ -422,15 +437,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Manejar el botón de guardar
         saveButton.onclick = () => {
-            const watchedDate = dateInput.value;
-
-            if (selectedRating === 0) {
-                showToast('Por favor, selecciona una calificación', 'error');
-                return;
-            }
+            const finalRating = selectedRating > 0 ? selectedRating : null;
+            const finalDate = dateInput.value || null;
 
             closeRatingModal();
-            onComplete(selectedRating, watchedDate);
+            onComplete(finalRating, finalDate);
         };
 
         // Manejar el botón de cancelar
@@ -443,6 +454,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeRatingModal();
             }
         });
+
+        // Inicializar vista
+        updateStars();
     }
 
 });
