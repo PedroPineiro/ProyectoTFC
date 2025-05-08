@@ -3,12 +3,14 @@ package com.pedro.ProyectoTFC.entities.DTO;
 import com.pedro.ProyectoTFC.entities.enums.Status;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class MovieDTO {
     private String title;
     private int releaseYear;
     private String director;
-    private String genre;
+    private List<String> actors;
+    private List<String> genre;
     private Double globalRating;
     private String imageUrl;
     private double userRating;
@@ -24,8 +26,10 @@ public class MovieDTO {
     public void setReleaseYear(int releaseYear) { this.releaseYear = releaseYear; }
     public String getDirector() { return director; }
     public void setDirector(String director) { this.director = director; }
-    public String getGenre() { return genre; }
-    public void setGenre(String genre) { this.genre = genre; }
+    public List<String> getGenre() { return genre; }
+    public List<String> getActors() { return actors; }
+    public void setActors(List<String> actors) { this.actors = actors; }
+    public void setGenre(List<String> genre) { this.genre = genre; }
     public Double getGlobalRating() { return globalRating; }
     public void setGlobalRating(Double globalRating) { this.globalRating = globalRating; }
     public String getImageUrl() { return imageUrl; }

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pedro.ProyectoTFC.entities.enums.Status;
 import jakarta.persistence.*;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
@@ -19,7 +21,15 @@ public class Movie {
 
     private String director;
 
-    private String genre;
+    @ElementCollection
+    @CollectionTable(name = "movie_actors", joinColumns = @JoinColumn(name = "movie_id"))
+    @Column(name = "actor")
+    private List<String> actors;
+
+    @ElementCollection
+    @CollectionTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"))
+    @Column(name = "genre")
+    private List<String> genre;
 
     @Column(nullable = true) // Puede ser null si aún no ha sido calificada
     private Double globalRating;
@@ -47,13 +57,14 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long id, String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
+    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
         this.director = director;
+        this.actors = actors;
         this.genre = genre;
-        this.globalRating = rating;
+        this.globalRating = globalRating;
         this.imageUrl = imageUrl;
         this.userRating = userRating;
         this.watchedDate = watchedDate;
@@ -62,12 +73,13 @@ public class Movie {
         this.user = user;
     }
 
-    public Movie(String title, int releaseYear, String director, String genre, Double rating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
+    public Movie(String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.title = title;
         this.releaseYear = releaseYear;
         this.director = director;
+        this.actors = actors;
         this.genre = genre;
-        this.globalRating = rating;
+        this.globalRating = globalRating;
         this.imageUrl = imageUrl;
         this.userRating = userRating;
         this.watchedDate = watchedDate;
@@ -108,11 +120,19 @@ public class Movie {
         this.director = director;
     }
 
-    public String getGenre() {
+    public List<String> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<String> actors) {
+        this.actors = actors;
+    }
+
+    public List<String> getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(List<String> genre) {
         this.genre = genre;
     }
 

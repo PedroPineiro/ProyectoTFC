@@ -27,12 +27,14 @@ public class MovieController {
         this.userService = userService;
     }
 
+    // Buscar películas en TMDB
     @GetMapping("/search")
     public ResponseEntity<String> searchMoviesInTMDB(@RequestParam String query) {
         String result = movieService.searchMoviesInTMDB(query);
         return ResponseEntity.ok(result);
     }
 
+    // Agregar una película a la biblioteca del usuario
     @PostMapping("/add")
     public ResponseEntity<?> addMovie(@RequestBody MovieDTO movieDTO) {
         try {
@@ -57,6 +59,7 @@ public class MovieController {
             movie.setTitle(movieDTO.getTitle());
             movie.setReleaseYear(movieDTO.getReleaseYear());
             movie.setDirector(movieDTO.getDirector());
+            movie.setActors(movieDTO.getActors());
             movie.setGenre(movieDTO.getGenre());
             movie.setGlobalRating(movieDTO.getGlobalRating());
             movie.setImageUrl(movieDTO.getImageUrl());
@@ -82,6 +85,7 @@ public class MovieController {
         }
     }
 
+    // Obtener todas las películas de un usuario
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Movie>> getMoviesByUserAndStatus(@PathVariable Long userId, @RequestParam(required = false) String status) {
         Optional<User> user = userService.findUserById(userId);

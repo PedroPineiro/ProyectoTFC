@@ -283,22 +283,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function saveMovie(status) {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser) {
-            showToast('Debes iniciar sesión para guardar películas', 'error');
+        if (!currentUser || !currentUser.id) {
+            showToast('Debes iniciar sesión para guardar contenido');
             return;
         }
+
+        if (!currentMovie) {
+            showToast('No se ha seleccionado ninguna película');
+            return;
+        }
+
+        // Extraer y convertir géneros y actores en arrays
+        const genreText = modalGenres.textContent.replace('Géneros:', '').trim();
+        const actorText = modalActors.textContent.replace('Actores principales:', '').trim();
+
+        const genreList = genreText ? genreText.split(',').map(g => g.trim()) : [];
+        const actorList = actorText ? actorText.split(',').map(a => a.trim()) : [];
 
         const movieData = {
             title: currentMovie.title,
             releaseYear: currentMovie.release_date ? parseInt(currentMovie.release_date.substring(0, 4)) : 0,
-            director: modalDirector.textContent.replace('Director: ', '') || 'Desconocido',
-            genre: modalGenres.textContent.replace('Géneros: ', ''),
-            rating: null,
+            director: modalDirector.textContent.replace('Director:', '').trim() || 'Desconocido',
+            actors: actorList,
+            genre: genreList,
             imageUrl: currentMovie.poster_path ? `https://image.tmdb.org/t/p/w300${currentMovie.poster_path}` : null,
             status: status,
             isFavorite: false,
             userId: currentUser.id
         };
+
+
 
         if (status === 'PLAYED') {
             // Mostrar el modal de calificación

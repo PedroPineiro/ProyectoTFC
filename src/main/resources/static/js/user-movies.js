@@ -163,52 +163,79 @@ document.addEventListener('DOMContentLoaded', () => {
         modalContent.innerHTML = '';
         modalContent.appendChild(closeModalButton);
 
-        const modalPoster = document.createElement('img');
-        modalPoster.src = movie.imageUrl || '../assets/imgs/posterNotFound.jpg';
-        modalPoster.alt = movie.title;
-
         const modalDetails = document.createElement('div');
         modalDetails.classList.add('modal-details');
 
+        // Columna izquierda
+        const leftColumn = document.createElement('div');
+        leftColumn.classList.add('modal-column');
         const modalTitle = document.createElement('h2');
         modalTitle.textContent = movie.title;
 
         const modalYear = document.createElement('p');
         modalYear.innerHTML = `<strong>Año:</strong> ${movie.releaseYear || 'N/A'}`;
 
-        const modalRating = document.createElement('p');
-        modalRating.innerHTML = `<strong>Valoración:</strong> ${movie.rating ? `${movie.rating}/10` : 'No valorada'}`;
+        const modalDirector = document.createElement('p');
+        modalDirector.innerHTML = `<strong>Director:</strong> ${movie.director || 'Desconocido'}`;
+
+        const modalActors = document.createElement('p');
+        modalActors.innerHTML = `<strong>Actores:</strong> ${movie.actors || 'No disponible'}`;
 
         const modalGenre = document.createElement('p');
         modalGenre.innerHTML = `<strong>Género:</strong> ${movie.genre || 'Desconocido'}`;
 
-        const modalDirector = document.createElement('p');
-        modalDirector.innerHTML = `<strong>Director:</strong> ${movie.director || 'Desconocido'}`;
+        leftColumn.append(modalTitle, modalYear, modalDirector, modalActors, modalGenre);
 
-        const modalStatus = document.createElement('p');
-        modalStatus.innerHTML = `<strong>Estado:</strong> ${movie.status === 'PLAYED' ? 'Vista' : 'En wishlist'}`;
+        // Columna derecha
+        const rightColumn = document.createElement('div');
+        rightColumn.classList.add('modal-column');
 
-        // Botón para cambiar el estado
+        const descriptionButton = document.createElement('button');
+        descriptionButton.textContent = 'Descripción: Abrir';
+        descriptionButton.classList.add('btn-secondary');
+        const modalDescription = document.createElement('p');
+        modalDescription.textContent = movie.description || 'Sin descripción disponible.';
+        modalDescription.style.display = 'none';
+
+        descriptionButton.addEventListener('click', () => {
+            const isVisible = modalDescription.style.display === 'block';
+            modalDescription.style.display = isVisible ? 'none' : 'block';
+            descriptionButton.textContent = isVisible ? 'Descripción: Abrir' : 'Descripción: Cerrar';
+        });
+
+        const modalRating = document.createElement('div');
+        modalRating.innerHTML = `<strong>Calificación:</strong> ${movie.rating ? `${movie.rating}/5` : 'No valorada'}`;
+        modalRating.classList.add('star-rating');
+
+        const modalWatchedDate = document.createElement('p');
+        modalWatchedDate.innerHTML = `<strong>Fecha de visualización:</strong> ${movie.watchedDate || 'No disponible'}`;
+
+        rightColumn.append(descriptionButton, modalDescription, modalRating, modalWatchedDate);
+
+        // Botones debajo de las columnas
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.classList.add('modal-buttons');
+
         const toggleStatusButton = document.createElement('button');
         toggleStatusButton.textContent = movie.status === 'PLAYED' ? 'Mover a Wishlist' : 'Marcar como Vista';
         toggleStatusButton.classList.add('btn-primary');
         toggleStatusButton.addEventListener('click', () => toggleMovieStatus(movie));
 
-        // Botón para eliminar la película
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar Película';
         deleteButton.classList.add('btn-danger');
         deleteButton.addEventListener('click', () => deleteMovie(movie.id));
 
-        modalDetails.append(modalTitle, modalYear, modalRating, modalGenre, modalDirector, modalStatus, toggleStatusButton, deleteButton);
-        modalContent.append(modalPoster, modalDetails);
+        buttonsContainer.append(toggleStatusButton, deleteButton);
+
+        modalDetails.append(leftColumn, rightColumn);
+        modalContent.append(modalDetails, buttonsContainer);
 
         overlay.classList.add('show');
         modal.classList.add('open');
 
         loader.classList.remove('show');
     }
-
     function toggleMovieStatus(movie) {
         const newStatus = movie.status === 'PLAYED' ? 'WISHLIST' : 'PLAYED';
 
