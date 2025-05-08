@@ -1,84 +1,144 @@
-/* Estilo para las estrellas */
-.star-rating {
+/* Modal de calificación */
+.rating-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
-    gap: 5px;
-    cursor: pointer;
-    position: relative;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001; /* Mayor que el modal principal */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.star {
-    font-size: 2.5rem;
-    color: gray;
-    transition: color 0.3s ease;
-    position: relative;
-}
-
-.star::before {
-    content: '★';
+.rating-modal-overlay {
     position: absolute;
     top: 0;
     left: 0;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    color: gold;
-    transition: width 0.3s ease;
-    pointer-events: none;
-}
-
-.star.selected::before {
     width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1;
 }
 
-.star.half::before {
-    width: 50%;
-}
-
-/* Estilo para el modal superpuesto */
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.rating-modal-content {
+    position: relative;
     background: var(--background-color);
     border-radius: 10px;
     border: var(--brand-color) 2px solid;
     color: var(--text-color);
-    padding: 20px;
-    max-width: 800px;
-    max-height: 90vh;
-    overflow-y: auto;
-    z-index: 1000;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    z-index: 2;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
-.modal.open {
-    visibility: visible;
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+.close-rating-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-/* Modal superpuesto encima del principal */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.close-rating-modal:hover {
+    color: red;
 }
 
-.modal-overlay.show {
+.rating-modal-container.open {
     visibility: visible;
     opacity: 1;
 }
 
-.modal.secondary {
-    z-index: 1100; /* Más alto que el modal principal */
+/* Sistema de estrellas mejorado */
+.star-rating-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    position: relative;
+    height: 40px;
+}
+
+.star-rating-container .star {
+    font-size: 2.5rem;
+    color: #ccc;
+    cursor: pointer;
+    position: relative;
+    padding: 0 2px;
+    transition: color 0.2s;
+}
+
+.star-rating-container .star.selected {
+    color: gold;
+}
+
+.star-rating-container .star.half:before {
+    content: '★';
+    position: absolute;
+    left: 2px;
+    width: 50%;
+    overflow: hidden;
+    color: gold;
+}
+
+.rating-inputs {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rating-inputs label {
+    font-weight: bold;
+    color: var(--brand-color);
+}
+
+.rating-inputs input[type="date"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid var(--text-color);
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.rating-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: var(--brand-color);
+    color: #141716;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--hover-brand-color);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
 }

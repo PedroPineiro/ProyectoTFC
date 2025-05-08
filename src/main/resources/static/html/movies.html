@@ -46,15 +46,22 @@
     </main>
 
     <!-- Modal de calificacion -->
-    <div id="rating-modal" class="modal">
-        <div class="modal-content">
+    <div id="rating-modal" class="rating-modal-container">
+        <div class="rating-modal-overlay"></div>
+        <div class="rating-modal-content">
+            <span class="close-rating-modal">🗙</span>
             <h2>Calificar Película</h2>
-            <div id="star-rating" class="star-rating">
+            <div id="star-rating" class="star-rating-container">
                 <!-- Las estrellas se generarán dinámicamente -->
             </div>
-            <label for="watched-date">Fecha de visualización:</label>
-            <input type="date" id="watched-date" />
-            <button id="save-rating" class="btn-primary">Guardar</button>
+            <div class="rating-inputs">
+                <label for="watched-date">Fecha de visualización:</label>
+                <input type="date" id="watched-date" />
+            </div>
+            <div class="rating-buttons">
+                <button id="cancel-rating" class="btn-secondary">Cancelar</button>
+                <button id="save-rating" class="btn-primary">Guardar</button>
+            </div>
         </div>
     </div>
 

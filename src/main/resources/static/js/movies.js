@@ -340,57 +340,109 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showRatingModal(onComplete) {
-        const ratingModal = document.getElementById('rating-modal');
+        const ratingModal = document.querySelector('.rating-modal-container');
         const starRating = document.getElementById('star-rating');
         const dateInput = document.getElementById('watched-date');
         const saveButton = document.getElementById('save-rating');
+        const cancelButton = document.getElementById('cancel-rating');
+        const closeButton = document.querySelector('.close-rating-modal');
+
+        // Resetear valores
+        dateInput.valueAsDate = new Date(); // Fecha actual por defecto
+        let selectedRating = 0;
+        let hoverRating = 0;
 
         // Generar las estrellas
         starRating.innerHTML = '';
-        for (let i = 0; i < 10; i++) {
-            const star = document.createElement('span');
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('div');
             star.classList.add('star');
-            star.textContent = '★';
-            star.dataset.value = (i + 1) / 2; // Valores de 0.5 a 5
+            star.dataset.value = i / 2; // Valores de 0.5 a 5
+            star.innerHTML = '★';
             starRating.appendChild(star);
         }
 
-        // Manejar la selección de estrellas
-        let selectedRating = 0;
-        starRating.addEventListener('click', (event) => {
-            if (event.target.classList.contains('star')) {
-                selectedRating = parseFloat(event.target.dataset.value);
-                updateStarSelection(selectedRating);
-            }
-        });
+        const stars = starRating.querySelectorAll('.star');
 
-        function updateStarSelection(rating) {
-            const stars = starRating.querySelectorAll('.star');
-            stars.forEach((star) => {
+        // Actualizar visualización de estrellas
+        function updateStars() {
+            const ratingToShow = hoverRating || selectedRating;
+            stars.forEach((star, index) => {
+                star.classList.remove('selected', 'half');
                 const starValue = parseFloat(star.dataset.value);
-                if (starValue <= rating) {
+
+                if (ratingToShow >= starValue) {
                     star.classList.add('selected');
-                } else {
-                    star.classList.remove('selected');
+                } else if (ratingToShow >= starValue - 0.5) {
+                    star.classList.add('half');
                 }
             });
         }
 
+        // Manejar eventos de las estrellas
+        starRating.addEventListener('mousemove', (e) => {
+            if (!e.target.classList.contains('star')) return;
+
+            const star = e.target;
+            const rect = star.getBoundingClientRect();
+            const xPos = e.clientX - rect.left;
+            const starWidth = rect.width;
+            const starValue = parseFloat(star.dataset.value);
+
+            // Determinar si es media estrella (clic en la mitad izquierda)
+            hoverRating = xPos < starWidth / 2 ? starValue - 0.5 : starValue;
+            updateStars();
+        });
+
+        starRating.addEventListener('mouseleave', () => {
+            hoverRating = 0;
+            updateStars();
+        });
+
+        starRating.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('star')) return;
+
+            const star = e.target;
+            const rect = star.getBoundingClientRect();
+            const xPos = e.clientX - rect.left;
+            const starWidth = rect.width;
+            const starValue = parseFloat(star.dataset.value);
+
+            selectedRating = xPos < starWidth / 2 ? starValue - 0.5 : starValue;
+            updateStars();
+        });
+
         // Mostrar el modal
         ratingModal.classList.add('open');
 
-        // Guardar la calificación
+        // Función para cerrar el modal
+        function closeRatingModal() {
+            ratingModal.classList.remove('open');
+        }
+
+        // Manejar el botón de guardar
         saveButton.onclick = () => {
             const watchedDate = dateInput.value;
 
-            if (!watchedDate || selectedRating === 0) {
-                showToast('Por favor, completa todos los campos', 'error');
+            if (selectedRating === 0) {
+                showToast('Por favor, selecciona una calificación', 'error');
                 return;
             }
 
-            ratingModal.classList.remove('open'); // Cerrar el modal
-            onComplete(selectedRating, watchedDate); // Ejecutar el callback con los datos
+            closeRatingModal();
+            onComplete(selectedRating, watchedDate);
         };
+
+        // Manejar el botón de cancelar
+        cancelButton.onclick = closeRatingModal;
+        closeButton.onclick = closeRatingModal;
+
+        // Permitir cerrar con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeRatingModal();
+            }
+        });
     }
 
 });
