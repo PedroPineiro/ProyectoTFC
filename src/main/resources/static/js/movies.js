@@ -337,16 +337,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function showRatingModal(onComplete) {
         const ratingModal = document.querySelector('.rating-modal-container');
         const starRating = document.getElementById('star-rating');
-        const dateInput = document.getElementById('watched-date');
         const saveButton = document.getElementById('save-rating');
         const cancelButton = document.getElementById('cancel-rating');
-        const closeButton = document.querySelector('.close-rating-modal');
         const resetRatingButton = document.querySelector('.reset-rating');
+        const dateInput = document.getElementById('watched-date');
         const resetDateButton = document.querySelector('.reset-date');
 
+        // Establecer fecha actual por defecto
+        dateInput.valueAsDate = new Date();
+
         // Resetear valores
-        dateInput.value = ''; // Fecha vacía por defecto
-        let selectedRating = null; // Valor inicial nulo
+        let selectedRating = null;
         let hoverRating = 0;
 
         // Generar 5 estrellas
@@ -376,13 +377,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Mostrar u ocultar botón de reset según si hay selección
+            // Mostrar u ocultar botón de reset
             if (selectedRating !== null) {
-                resetRatingButton.classList.remove('hidden');
+                resetRatingButton.classList.add('visible');
             } else {
-                resetRatingButton.classList.add('hidden');
+                resetRatingButton.classList.remove('visible');
             }
         }
+
+        // Función para actualizar la visibilidad del botón de reset
+        function updateResetDateVisibility() {
+            if (dateInput.value) {
+                resetDateButton.classList.add('visible');
+            } else {
+                resetDateButton.classList.remove('visible');
+            }
+        }
+
+        // Escuchar cambios en el campo de fecha
+        dateInput.addEventListener('input', updateResetDateVisibility);
+
+        // Escuchar clic en el botón de reset
+        resetDateButton.addEventListener('click', () => {
+            dateInput.value = ''; // Vaciar el campo de fecha
+            updateResetDateVisibility(); // Actualizar la visibilidad
+        });
+
+        // Inicializar visibilidad al cargar
+        updateResetDateVisibility();
 
         // Manejar eventos de las estrellas
         starRating.addEventListener('mousemove', (e) => {
@@ -394,7 +416,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const starWidth = rect.width;
             const starValue = parseFloat(star.dataset.value);
 
-            // Determinar si es media estrella (clic en la mitad izquierda)
             hoverRating = xPos < starWidth / 2 ? starValue - 0.5 : starValue;
             updateStars();
         });
@@ -417,13 +438,13 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStars();
         });
 
-        // Manejar el botón de reset para las estrellas
+        // Resetear rating
         resetRatingButton.addEventListener('click', () => {
             selectedRating = null;
             updateStars();
         });
 
-        // Manejar el botón de reset para la fecha
+        // Resetear fecha
         resetDateButton.addEventListener('click', () => {
             dateInput.value = '';
         });
@@ -438,8 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Manejar el botón de guardar
         saveButton.onclick = () => {
-            const finalRating = selectedRating; // Puede ser null si no se seleccionó nada
-            const finalDate = dateInput.value || null; // Puede ser null si no se seleccionó fecha
+            const finalRating = selectedRating;
+            const finalDate = dateInput.value || null;
 
             closeRatingModal();
             onComplete(finalRating, finalDate);
@@ -447,7 +468,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Manejar el botón de cancelar
         cancelButton.onclick = closeRatingModal;
-        closeButton.onclick = closeRatingModal;
 
         // Permitir cerrar con ESC
         document.addEventListener('keydown', (e) => {
