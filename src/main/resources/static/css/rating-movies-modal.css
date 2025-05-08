@@ -208,3 +208,19 @@
     display: block;
     margin-bottom: 5px;
 }
+
+.reset-date {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.reset-date:hover {
+    color: #ff6b6b;
+    transform: scale(1.2);
+}

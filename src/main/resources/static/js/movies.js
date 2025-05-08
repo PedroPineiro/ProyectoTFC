@@ -281,11 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
     }
 
-    function closeModal() {
-        modal.classList.remove('open');
-        overlay.classList.remove('show');
-    }
-
     async function saveMovie(status) {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (!currentUser) {
@@ -346,11 +341,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveButton = document.getElementById('save-rating');
         const cancelButton = document.getElementById('cancel-rating');
         const closeButton = document.querySelector('.close-rating-modal');
-        const resetButton = document.querySelector('.reset-rating');
+        const resetRatingButton = document.querySelector('.reset-rating');
+        const resetDateButton = document.querySelector('.reset-date');
 
         // Resetear valores
-        dateInput.valueAsDate = new Date(); // Fecha actual por defecto
-        let selectedRating = 0;
+        dateInput.value = ''; // Fecha vacía por defecto
+        let selectedRating = null; // Valor inicial nulo
         let hoverRating = 0;
 
         // Generar 5 estrellas
@@ -381,10 +377,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Mostrar u ocultar botón de reset según si hay selección
-            if (selectedRating > 0) {
-                resetButton.classList.remove('hidden');
+            if (selectedRating !== null) {
+                resetRatingButton.classList.remove('hidden');
             } else {
-                resetButton.classList.add('hidden');
+                resetRatingButton.classList.add('hidden');
             }
         }
 
@@ -421,10 +417,15 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStars();
         });
 
-        // Manejar el botón de reset
-        resetButton.addEventListener('click', () => {
-            selectedRating = 0;
+        // Manejar el botón de reset para las estrellas
+        resetRatingButton.addEventListener('click', () => {
+            selectedRating = null;
             updateStars();
+        });
+
+        // Manejar el botón de reset para la fecha
+        resetDateButton.addEventListener('click', () => {
+            dateInput.value = '';
         });
 
         // Mostrar el modal
@@ -437,8 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Manejar el botón de guardar
         saveButton.onclick = () => {
-            const finalRating = selectedRating > 0 ? selectedRating : null;
-            const finalDate = dateInput.value || null;
+            const finalRating = selectedRating; // Puede ser null si no se seleccionó nada
+            const finalDate = dateInput.value || null; // Puede ser null si no se seleccionó fecha
 
             closeRatingModal();
             onComplete(finalRating, finalDate);
