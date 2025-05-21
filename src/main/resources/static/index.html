@@ -7,6 +7,7 @@
     <link rel="icon" href="assets/imgs/logoPandoras.jpg" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/toast.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script defer src="js/auth.js"></script>
@@ -14,23 +15,17 @@
 
 </head>
 <body>
-    <header>
+    <header class="navbar">
         <div class="header-container">
             <div class="logo">
                 <a id="page-title" href="index.html">Pandorasbox</a>
             </div>
             <nav class="navigation">
-                <a class="navLink" href="html/movies.html">Movies</a>
-                <a class="navLink" href="html/games.html">Games</a>
-                <a class="navLink" href="html/albums.html">Albums</a>
-                <div class="dropdown">
+                <a class="navLink" href="html/movies.html"><i class="fas fa-film"></i> Movies</a>
+                <a class="navLink" href="html/games.html"><i class="fas fa-gamepad"></i> Games</a>
+                <a class="navLink" href="html/albums.html"><i class="fas fa-music"></i> Albums</a>
+                <div id="temporalDropdown">
                     <a class="navLink profile-link" href="html/profile.html">Profile</a>
-                    <div class="dropdown-content">
-                        <a href="html/user-movies.html">User Movies</a>
-                        <a href="html/user-games.html">User Games</a>
-                        <a href="html/user-albums.html">User Albums</a>
-                        <a href="#" id="logoutBtn">Cerrar Sesión</a>
-                    </div>
                 </div>
                 <a id="settings" href="html/settings.html"><i class="fas fa-cog"></i></a>
             </nav>

@@ -162,16 +162,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Verificar si el usuario está logueado
     const userLogged = JSON.parse(localStorage.getItem('currentUser'));
+
+    // Determina si el archivo actual está en la carpeta html/
+    const isInHtmlFolder = window.location.pathname.includes('/html/');
+
+    // Usa la ruta relativa adecuada
+    const profileHref = isInHtmlFolder ? 'profile.html' : 'html/profile.html';
+
     if (userLogged && temporalDropdown) {
         // Reemplazar el enlace por el dropdown
         temporalDropdown.innerHTML = `
             <div class="dropdown">
-                <a class="navLink profile-link" href="profile.html">${userLogged.username}</a>
+                <a class="navLink profile-link" href="${profileHref}">${userLogged.username}</a>
                 <div class="dropdown-content">
-                    <a href="user-movies.html">User Movies</a>
-                    <a href="user-games.html">User Games</a>
-                    <a href="user-albums.html">User Albums</a>
-                    <a href="profile.html" id="logoutBtn">Cerrar Sesión</a>
+                    <a href="${isInHtmlFolder ? 'user-movies.html' : 'html/user-movies.html'}">User Movies</a>
+                    <a href="${isInHtmlFolder ? 'user-games.html' : 'html/user-games.html'}">User Games</a>
+                    <a href="${isInHtmlFolder ? 'user-albums.html' : 'html/user-albums.html'}">User Albums</a>
+                    <a href="" id="logoutBtn">Cerrar Sesión</a>
                 </div>
             </div>
         `;

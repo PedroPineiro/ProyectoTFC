@@ -1,11 +1,11 @@
 /* Hero Section */
 .hero {
   position: relative;
-  background-image: url("../assets/imgs/heroPandora.jpg"); /* Cambia esta URL por la imagen que quieras */
+  background-image: url("../assets/imgs/heroPandora.jpg");
   background-size: cover;
   background-position: center;
-  height: 70vh; /* Ajusta la altura del hero */
-  color: white;
+  height: 70vh;
+  color: var(--text-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +14,7 @@
 }
 
 .hero-text {
-  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+  background-color: rgba(0,0,0, 0.5);
   padding: 20px 40px;
   border-radius: 8px;
 }
@@ -22,20 +22,20 @@
 .hero h1 {
   font-size: 48px;
   margin: 0;
-  color: #3be39a;
+  color: var(--brand-color);
 }
 
 .hero p {
   font-size: 20px;
-  color: #ffffff;
+  color: var(--text-color);
   margin-top: 10px;
 }
 
 /* About Section */
 .about {
   position: relative;
-  background-color: #1a1c1a;
-  margin-top: -50px; /* Para solaparse ligeramente con la sección hero */
+  background-color: var(--second-background-color);
+  margin-top: -50px;
   border-radius: 20px 20px 0 0;
   padding: 40px 20px;
   box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
@@ -50,70 +50,12 @@
 .about h2 {
   font-size: 36px;
   margin-bottom: 20px;
-  color: #3be39a;
+  color: var(--brand-color);
 }
 
 .about p {
   font-size: 18px;
   line-height: 1.6;
-  color: #cccccc;
+  color: var(--text-secondary);
   margin-bottom: 15px;
-}
-
-/* Registro / Inicio Sesion */
-/* Estilos del Modal */
-.modal {
-  display: flex;
-  position: fixed;
-  z-index: 2000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  align-items: center;
-  justify-content: center;
-}
-
-/* Contenido del modal */
-.modal-content {
-  background: #1c1e1d;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  width: 300px;
-}
-
-.modal-content h2 {
-  color: white;
-}
-
-.modal-content input {
-  width: 90%;
-  padding: 10px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-}
-
-.modal-content button {
-  background: #3be39a;
-  color: black;
-  padding: 10px;
-  margin-top: 20px;
-  border: none;
-  width: 100%;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.modal-content button:hover {
-  background: #2db67a;
-}
-
-/* Bloquear scroll del body cuando el modal está abierto */
-body.modal-open {
-  overflow: hidden;
 }
