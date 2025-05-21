@@ -1,345 +1,293 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiKey = '998d343674fbacfea441d0e40df4f0ea';
-    const searchForm = document.getElementById('searchForm');
-    const searchInput = document.getElementById('searchInput');
-    const resultsDiv = document.getElementById('results');
+    // Configuración
+    const config = {
+        apiKey: '998d343674fbacfea441d0e40df4f0ea',
+        apiBaseUrl: 'https://api.themoviedb.org/3',
+        posterBaseUrl: 'https://image.tmdb.org/t/p/',
+        backendUrl: 'http://localhost:8080/api/movies/add'
+    };
 
-    const modal = document.createElement('div');
-    modal.classList.add('modal');
-    const overlay = document.createElement('div');
-    overlay.classList.add('modal-overlay');
+    // Elementos del DOM
+    const elements = {
+        searchForm: document.getElementById('searchForm'),
+        searchInput: document.getElementById('searchInput'),
+        results: document.getElementById('results'),
+        movieModal: document.getElementById('movieModal'),
+        modalOverlay: document.querySelector('.modal-overlay'),
+        loader: document.querySelector('.loader-overlay'),
+        ratingModal: document.getElementById('rating-modal')
+    };
 
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
-    modal.appendChild(modalContent);
-    document.body.appendChild(modal);
-    document.body.appendChild(overlay);
+    // Elementos del modal de película
+    const modalElements = {
+        poster: document.querySelector('.modal-poster'),
+        title: document.querySelector('.modal-title'),
+        releaseDate: document.querySelector('.modal-release-date .value'),
+        rating: document.querySelector('.modal-rating .value'),
+        description: document.querySelector('.modal-description'),
+        genres: document.querySelector('.modal-genres .value'),
+        director: document.querySelector('.modal-director .value'),
+        actors: document.querySelector('.modal-actors .value'),
+        tmdbLink: document.querySelector('.tmdb-link'),
+        trailerLink: document.querySelector('.trailer-link'),
+        saveLogButton: document.querySelector('.saveLog-modal'),
+        saveWishlistButton: document.querySelector('.saveWishlist-modal'),
+        closeButton: document.querySelector('.close-modal')
+    };
 
-    const closeModalButton = document.createElement('button');
-    closeModalButton.textContent = '🗙';
-    closeModalButton.classList.add('close-modal');
-    modalContent.appendChild(closeModalButton);
+    // Estado de la aplicación
+    const state = {
+        currentMovie: null,
+        currentUser: JSON.parse(localStorage.getItem('currentUser'))
+    };
 
-    const modalPoster = document.createElement('img');
-    const modalDetails = document.createElement('div');
-    modalDetails.classList.add('modal-details');
-    const modalTitle = document.createElement('h2');
-    const modalReleaseDate = document.createElement('p');
-    const modalRating = document.createElement('p');
-    const modalDescription = document.createElement('p');
-    const modalGenres = document.createElement('p');
-    const modalDirector = document.createElement('p');
-    const modalActors = document.createElement('p');
-    const modalLink = document.createElement('a');
-    const modalTrailerLink = document.createElement('a');
+    // Inicialización de eventos
+    function initEventListeners() {
+        // Formulario de búsqueda
+        elements.searchForm.addEventListener('submit', handleSearch);
 
-    // Loader (rueda de carga)
-    const loader = document.createElement('div');
-    loader.classList.add('loader-overlay');
-    loader.innerHTML = `
-        <div class="loader"></div>`;
-    document.body.appendChild(loader);
+        // Modal
+        elements.modalOverlay.addEventListener('click', closeModal);
+        modalElements.closeButton.addEventListener('click', closeModal);
 
-    modalLink.textContent = 'Ver más en TMDB';
-    modalLink.target = '_blank';
+        // Botones de guardar
+        modalElements.saveLogButton.addEventListener('click', () => saveMovie('PLAYED'));
+        modalElements.saveWishlistButton.addEventListener('click', () => saveMovie('WISHLIST'));
+    }
 
-    modalTrailerLink.textContent = 'Ver tráiler';
-    modalTrailerLink.target = '_blank';
-    modalTrailerLink.style.display = 'none';
-
-    modalContent.append(modalPoster, modalDetails);
-    modalDetails.append(
-        modalTitle,
-        modalReleaseDate,
-        modalRating,
-        modalDescription,
-        modalGenres,
-        modalDirector,
-        modalActors,
-        modalLink,
-        modalTrailerLink
-    );
-
-    let currentMovie = null;
-
-    searchForm.addEventListener('submit', async (event) => {
+    // Manejador de búsqueda
+    async function handleSearch(event) {
         event.preventDefault();
-        const query = searchInput.value.trim();
+        const query = elements.searchInput.value.trim();
 
         if (query) {
-            loader.classList.add('show'); // Mostrar el loader cuando se empieza la búsqueda
-            const movies = await searchMovies(query);
-            displayMovies(movies);
-            loader.classList.remove('show'); // Ocultar el loader después de recibir los resultados
-        }
-    });
-
-    async function searchMovies(query) {
-        const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error al buscar películas');
+            showLoader();
+            try {
+                const movies = await searchMovies(query);
+                displayMovies(movies);
+            } catch (error) {
+                console.error('Error en la búsqueda:', error);
+                elements.results.innerHTML = '<p>Error al buscar películas. Inténtalo de nuevo.</p>';
+            } finally {
+                hideLoader();
             }
-            const data = await response.json();
-            return data.results;
-        } catch (error) {
-            console.error('Error al obtener datos:', error);
-            return [];
         }
     }
 
+    // Buscar películas en la API
+    async function searchMovies(query) {
+        const url = `${config.apiBaseUrl}/search/movie?api_key=${config.apiKey}&query=${query}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error('Error al buscar películas');
+        }
+
+        const data = await response.json();
+        return data.results;
+    }
+
+    // Mostrar resultados de películas
     function displayMovies(movies) {
-        resultsDiv.innerHTML = '';
+        elements.results.innerHTML = '';
 
         if (movies.length === 0) {
-            resultsDiv.innerHTML = '<p>No se encontraron películas.</p>';
+            elements.results.innerHTML = '<p>No se encontraron películas.</p>';
             return;
         }
 
         movies.forEach(movie => {
-            const movieDiv = document.createElement('div');
-            movieDiv.classList.add('movie');
-            const movieTitle = document.createElement('h3');
-            movieTitle.textContent = `${movie.title} (${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'})`;
-
-            const movieImg = document.createElement('img');
-            movieImg.src = movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : "../assets/imgs/posterNotFound.jpg";
-            movieImg.alt = movie.title;
-
-            movieDiv.addEventListener('click', () => showMovieDetails(movie));
-
-            movieDiv.append(movieImg, movieTitle);
-            resultsDiv.appendChild(movieDiv);
+            const movieElement = createMovieElement(movie);
+            elements.results.appendChild(movieElement);
         });
     }
 
+    // Crear elemento de película
+    function createMovieElement(movie) {
+        const movieDiv = document.createElement('div');
+        movieDiv.classList.add('movie');
+
+        const movieImg = document.createElement('img');
+        movieImg.src = movie.poster_path
+            ? `${config.posterBaseUrl}w200${movie.poster_path}`
+            : "../assets/imgs/posterNotFound.jpg";
+        movieImg.alt = movie.title;
+
+        const movieTitle = document.createElement('h3');
+        movieTitle.textContent = `${movie.title} (${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'})`;
+
+        movieDiv.addEventListener('click', () => showMovieDetails(movie));
+        movieDiv.append(movieImg, movieTitle);
+
+        return movieDiv;
+    }
+
+    // Mostrar detalles de la película
     async function showMovieDetails(movie) {
-        currentMovie = movie;
-        loader.classList.add('show'); // Mostrar loader al cargar detalles
+        state.currentMovie = movie;
+        showLoader();
 
         try {
-            modalPoster.src = movie.poster_path
-                ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+            // Configurar elementos del modal con los datos básicos
+            modalElements.poster.src = movie.poster_path
+                ? `${config.posterBaseUrl}w300${movie.poster_path}`
                 : "../assets/imgs/posterNotFound.jpg";
-            modalTitle.textContent = movie.title;
-            modalReleaseDate.innerHTML = `<strong>Fecha de estreno:</strong> ${movie.release_date || 'Desconocida'}`;
 
+            modalElements.title.textContent = movie.title;
+            modalElements.releaseDate.textContent = movie.release_date || 'Desconocida';
+            modalElements.description.textContent = movie.overview || 'Sin descripción disponible.';
+            modalElements.tmdbLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
+
+            // Calificación con color
             if (movie.vote_average) {
-                modalRating.innerHTML = `<strong>Calificación:</strong> <span style="font-weight: bold; color: ${getRatingColor(movie.vote_average)}">${movie.vote_average.toFixed(1)}</span>`;
+                modalElements.rating.textContent = movie.vote_average.toFixed(1);
+                modalElements.rating.style.color = getRatingColor(movie.vote_average);
             } else {
-                modalRating.innerHTML = `<strong>Calificación:</strong> No disponible`;
+                modalElements.rating.textContent = 'No disponible';
+                modalElements.rating.style.color = '';
             }
 
-            modalDescription.textContent = movie.overview || 'Sin descripción disponible.';
+            // Obtener datos adicionales
+            const [genres, credits, trailerUrl] = await Promise.all([
+                getMovieGenres(movie.genre_ids),
+                getMovieCredits(movie.id),
+                getTrailer(movie.id)
+            ]);
 
-            const genres = await getMovieGenres(movie.genre_ids);
-            modalGenres.innerHTML = `<strong>Géneros:</strong> ${genres.length ? genres.join(', ') : 'No disponible'}`;
+            // Actualizar modal con datos adicionales
+            modalElements.genres.textContent = genres.length ? genres.join(', ') : 'No disponible';
+            modalElements.director.textContent = credits.director || 'Desconocido';
+            modalElements.actors.textContent = credits.actors.length ? credits.actors.join(', ') : 'No disponible';
 
-            modalLink.href = `https://www.themoviedb.org/movie/${movie.id}`;
-
-            const { director, actors } = await getMovieCredits(movie.id);
-            modalDirector.innerHTML = `<strong>Director:</strong> ${director || 'Desconocido'}`;
-            modalActors.innerHTML = `<strong>Actores principales:</strong> ${actors.length ? actors.join(', ') : 'No disponible'}`;
-
-            const trailerUrl = await getTrailer(movie.id);
+            // Configurar enlace del tráiler
             if (trailerUrl) {
-                modalTrailerLink.href = trailerUrl;
-                modalTrailerLink.style.display = 'inline-block';
+                modalElements.trailerLink.href = trailerUrl;
+                modalElements.trailerLink.style.display = 'inline-block';
             } else {
-                modalTrailerLink.style.display = 'none';
+                modalElements.trailerLink.style.display = 'none';
             }
 
-            // Botones de guardar
-            modalDetails.querySelectorAll('button.saveLog-modal, button.saveWishlist-modal').forEach(btn => btn.remove());
+            // Mostrar/ocultar descripción
+            const descriptionButton = document.querySelector('.description-toggle');
 
-            const saveLogButton = document.createElement('button');
-            saveLogButton.textContent = 'Marcar como vista';
-            saveLogButton.classList.add('saveLog-modal');
-            saveLogButton.addEventListener('click', () => saveMovie('PLAYED'));
-            modalDetails.appendChild(saveLogButton);
+            descriptionButton.onclick = () => {
+                const isVisible = modalElements.description.style.display === 'block';
+                modalElements.description.style.display = isVisible ? 'none' : 'block';
+                descriptionButton.textContent = isVisible ? 'Mostrar descripción ▲' : 'Ocultar descripción ▼';
+            };
 
-            const saveWishlistButton = document.createElement('button');
-            saveWishlistButton.textContent = 'Añadir a wishlist';
-            saveWishlistButton.classList.add('saveWishlist-modal');
-            saveWishlistButton.addEventListener('click', () => saveMovie('WISHLIST'));
-            modalDetails.appendChild(saveWishlistButton);
-
-            overlay.classList.add('show');
-            modal.classList.add('open');
+            // Mostrar modal
+            openModal();
         } catch (error) {
             console.error('Error al cargar detalles:', error);
+            showToast('Error al cargar detalles de la película', 'error');
         } finally {
-            loader.classList.remove('show'); // Ocultar loader cuando termina
+            hideLoader();
         }
     }
 
+    // Obtener géneros de la película
     async function getMovieGenres(genreIds) {
-        const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`;
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error al obtener géneros');
-            }
-            const data = await response.json();
-            return data.genres.filter(genre => genreIds.includes(genre.id)).map(genre => genre.name);
-        } catch (error) {
-            console.error('Error al obtener los géneros:', error);
-            return [];
+        const url = `${config.apiBaseUrl}/genre/movie/list?api_key=${config.apiKey}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error('Error al obtener géneros');
         }
+
+        const data = await response.json();
+        return data.genres
+            .filter(genre => genreIds.includes(genre.id))
+            .map(genre => genre.name);
     }
 
+    // Obtener créditos de la película
     async function getMovieCredits(movieId) {
-        const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}`;
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error al obtener créditos');
-            }
-            const data = await response.json();
-            const director = data.crew.find(person => person.job === 'Director')?.name || null;
-            const actors = data.cast.slice(0, 5).map(actor => actor.name);
-            return { director, actors };
-        } catch (error) {
-            console.error('Error al obtener créditos:', error);
-            return { director: null, actors: [] };
+        const url = `${config.apiBaseUrl}/movie/${movieId}/credits?api_key=${config.apiKey}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error('Error al obtener créditos');
         }
+
+        const data = await response.json();
+        const director = data.crew.find(person => person.job === 'Director')?.name || null;
+        const actors = data.cast.slice(0, 5).map(actor => actor.name);
+
+        return { director, actors };
     }
 
+    // Obtener tráiler de la película
     async function getTrailer(movieId) {
-        const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`;
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error al obtener tráiler');
-            }
-            const data = await response.json();
-            const trailer = data.results.find(video => video.type === 'Trailer');
-            return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
-        } catch (error) {
-            console.error('Error al obtener el tráiler:', error);
-            return null;
-        }
-    }
+        const url = `${config.apiBaseUrl}/movie/${movieId}/videos?api_key=${config.apiKey}`;
+        const response = await fetch(url);
 
-    function getRatingColor(rating) {
-        return rating <= 3 ? 'red' : rating <= 5 ? 'orange' : rating <= 8 ? 'yellow' : 'green';
-    }
-
-    overlay.addEventListener('click', closeModal);
-    closeModalButton.addEventListener('click', closeModal);
-
-    function closeModal() {
-        modal.classList.remove('open');
-        overlay.classList.remove('show');
-    }
-
-    function showToast(message, type = 'success') {
-        // Limpiar toasts anteriores
-        document.querySelectorAll('.toast').forEach(toast => toast.remove());
-
-        // Crear elemento toast
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.textContent = message;
-
-        // Agregar confeti solo si no es un error
-        if (type !== 'error') {
-            const confettiContainer = document.createElement('div');
-            confettiContainer.className = 'confetti-container';
-
-            // Crear confeti (50 partículas)
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-                confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
-                const size = 6 + Math.random() * 10;
-                confetti.style.width = `${size}px`;
-                confetti.style.height = `${size}px`;
-                confettiContainer.appendChild(confetti);
-            }
-
-            toast.appendChild(confettiContainer);
+        if (!response.ok) {
+            throw new Error('Error al obtener tráiler');
         }
 
-        document.body.appendChild(toast);
-
-        // Forzar reflow para activar la animación
-        void toast.offsetWidth;
-
-        // Mostrar toast
-        toast.classList.add('show');
-
-        // Ocultar y eliminar después de 3 segundos
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => {
-                toast.remove();
-            }, 500);
-        }, 2000);
+        const data = await response.json();
+        const trailer = data.results.find(video => video.type === 'Trailer');
+        return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
     }
 
+    // Guardar película
     async function saveMovie(status) {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (!currentUser || !currentUser.id) {
-            showToast('Debes iniciar sesión para guardar contenido');
+        if (!state.currentUser?.id) {
+            showToast('Debes iniciar sesión para guardar contenido', 'error');
             return;
         }
 
-        if (!currentMovie) {
-            showToast('No se ha seleccionado ninguna película');
+        if (!state.currentMovie) {
+            showToast('No se ha seleccionado ninguna película', 'error');
             return;
         }
 
-        // Extraer y convertir géneros y actores en arrays
-        const genreText = modalGenres.textContent.replace('Géneros:', '').trim();
-        const actorText = modalActors.textContent.replace('Actores principales:', '').trim();
-
-        const genreList = genreText ? genreText.split(',').map(g => g.trim()) : [];
-        const actorList = actorText ? actorText.split(',').map(a => a.trim()) : [];
+        // Extraer datos del modal
+        const genreText = modalElements.genres.textContent;
+        const actorText = modalElements.actors.textContent;
+        const directorText = modalElements.director.textContent;
 
         const movieData = {
-            title: currentMovie.title,
-            releaseYear: currentMovie.release_date ? parseInt(currentMovie.release_date.substring(0, 4)) : 0,
-            director: modalDirector.textContent.replace('Director:', '').trim() || 'Desconocido',
-            actors: actorList,
-            genre: genreList,
-            imageUrl: currentMovie.poster_path ? `https://image.tmdb.org/t/p/w300${currentMovie.poster_path}` : null,
+            title: state.currentMovie.title,
+            releaseYear: state.currentMovie.release_date
+                ? parseInt(state.currentMovie.release_date.substring(0, 4))
+                : 0,
+            director: directorText || 'Desconocido',
+            actors: actorText ? actorText.split(',').map(a => a.trim()) : [],
+            genre: genreText ? genreText.split(',').map(g => g.trim()) : [],
+            imageUrl: state.currentMovie.poster_path
+                ? `${config.posterBaseUrl}w300${state.currentMovie.poster_path}`
+                : null,
             status: status,
             isFavorite: false,
-            userId: currentUser.id
+            userId: state.currentUser.id
         };
 
-
-
         if (status === 'PLAYED') {
-            // Mostrar el modal de calificación
             showRatingModal(async (userRating, watchedDate) => {
-                // Completar los datos de la película con la calificación y la fecha
                 movieData.userRating = userRating;
                 movieData.watchedDate = watchedDate;
-
-                // Guardar la película después de completar el modal
                 await saveMovieToBackend(movieData);
             });
         } else {
-            // Guardar directamente si es wishlist
             await saveMovieToBackend(movieData);
-            closeModal()
+            closeModal();
         }
     }
 
+    // Guardar película en el backend
     async function saveMovieToBackend(movieData) {
         try {
-            const response = await fetch('http://localhost:8080/api/movies/add', {
+            const response = await fetch(config.backendUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(movieData)
             });
 
-            if (!response.ok) throw new Error(await response.text());
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
 
             showToast('¡Película guardada con éxito!', 'success');
         } catch (error) {
@@ -348,8 +296,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Mostrar modal de calificación
     function showRatingModal(onComplete) {
-        const ratingModal = document.querySelector('.rating-modal-container');
         const starRating = document.getElementById('star-rating');
         const saveButton = document.getElementById('save-rating');
         const cancelButton = document.getElementById('cancel-rating');
@@ -357,14 +305,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateInput = document.getElementById('watched-date');
         const resetDateButton = document.querySelector('.reset-date');
 
-        // Establecer fecha actual por defecto
+        // Configuración inicial
         dateInput.valueAsDate = new Date();
-
-        // Resetear valores
         let selectedRating = null;
         let hoverRating = 0;
 
-        // Generar 5 estrellas
+        // Generar estrellas
         starRating.innerHTML = '';
         for (let i = 1; i <= 5; i++) {
             const star = document.createElement('div');
@@ -391,36 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Mostrar u ocultar botón de reset
-            if (selectedRating !== null) {
-                resetRatingButton.classList.add('visible');
-            } else {
-                resetRatingButton.classList.remove('visible');
-            }
+            resetRatingButton.classList.toggle('visible', selectedRating !== null);
+            resetDateButton.classList.toggle('visible', !!dateInput.value);
         }
 
-        // Función para actualizar la visibilidad del botón de reset
-        function updateResetDateVisibility() {
-            if (dateInput.value) {
-                resetDateButton.classList.add('visible');
-            } else {
-                resetDateButton.classList.remove('visible');
-            }
-        }
-
-        // Escuchar cambios en el campo de fecha
-        dateInput.addEventListener('input', updateResetDateVisibility);
-
-        // Escuchar clic en el botón de reset
-        resetDateButton.addEventListener('click', () => {
-            dateInput.value = ''; // Vaciar el campo de fecha
-            updateResetDateVisibility(); // Actualizar la visibilidad
-        });
-
-        // Inicializar visibilidad al cargar
-        updateResetDateVisibility();
-
-        // Manejar eventos de las estrellas
+        // Eventos
         starRating.addEventListener('mousemove', (e) => {
             if (!e.target.classList.contains('star')) return;
 
@@ -452,46 +373,113 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStars();
         });
 
-        // Resetear rating
         resetRatingButton.addEventListener('click', () => {
             selectedRating = null;
             updateStars();
         });
 
-        // Resetear fecha
+        dateInput.addEventListener('input', () => {
+            resetDateButton.classList.toggle('visible', !!dateInput.value);
+        });
+
         resetDateButton.addEventListener('click', () => {
             dateInput.value = '';
+            resetDateButton.classList.remove('visible');
         });
 
-        // Mostrar el modal
-        ratingModal.classList.add('open');
+        // Mostrar modal
+        elements.ratingModal.classList.add('open');
 
-        // Función para cerrar el modal
+        // Cerrar modal
         function closeRatingModal() {
-            ratingModal.classList.remove('open');
+            elements.ratingModal.classList.remove('open');
         }
 
-        // Manejar el botón de guardar
+        // Guardar
         saveButton.onclick = () => {
-            const finalRating = selectedRating;
-            const finalDate = dateInput.value || null;
-
             closeRatingModal();
-            onComplete(finalRating, finalDate);
+            onComplete(selectedRating, dateInput.value || null);
         };
 
-        // Manejar el botón de cancelar
+        // Cancelar
         cancelButton.onclick = closeRatingModal;
 
-        // Permitir cerrar con ESC
+        // Cerrar con ESC
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeRatingModal();
-            }
+            if (e.key === 'Escape') closeRatingModal();
         });
 
-        // Inicializar vista
         updateStars();
     }
 
+    // Mostrar toast
+    function showToast(message, type = 'success') {
+        // Limpiar toasts anteriores
+        document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
+        // Crear toast
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        // Confeti para éxito
+        if (type !== 'error') {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti-container';
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
+                const size = 6 + Math.random() * 10;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confettiContainer.appendChild(confetti);
+            }
+
+            toast.appendChild(confettiContainer);
+        }
+
+        document.body.appendChild(toast);
+        void toast.offsetWidth; // Forzar reflow
+        toast.classList.add('show');
+
+        // Ocultar después de 2 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 500);
+        }, 2000);
+    }
+
+    // Mostrar/ocultar loader
+    function showLoader() {
+        elements.loader.classList.add('show');
+    }
+
+    function hideLoader() {
+        elements.loader.classList.remove('show');
+    }
+
+    // Abrir/cerrar modal
+    function openModal() {
+        elements.movieModal.classList.add('open');
+        elements.modalOverlay.classList.add('show');
+    }
+
+    function closeModal() {
+        elements.movieModal.classList.remove('open');
+        elements.modalOverlay.classList.remove('show');
+    }
+
+    // Obtener color de calificación
+    function getRatingColor(rating) {
+        return rating <= 3 ? 'red' :
+            rating <= 5 ? 'orange' :
+                rating <= 8 ? 'yellow' : 'green';
+    }
+
+    // Inicializar la aplicación
+    initEventListeners();
 });

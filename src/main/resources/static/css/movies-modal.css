@@ -63,6 +63,35 @@
     transition: all 0.3s;
 }
 
+.description-toggle {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 10px;
+    padding: 0;
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.description-toggle:hover {
+    color: var(--hover-brand-color);
+    transform: scale(1.05);
+}
+
+.modal-description {
+    display: none;
+    margin-top: 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+}
+
 .saveLog-modal {
     background-color: var(--brand-color);
     color: #141716;
