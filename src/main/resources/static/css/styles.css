@@ -110,7 +110,7 @@ main {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   text-align: left;
-  top: 130%;
+  top: 107%;
   left: 50%;
   transform: translateX(-50%) translateY(-10px); /* Posición inicial */
   opacity: 0; /* Oculto inicialmente */
