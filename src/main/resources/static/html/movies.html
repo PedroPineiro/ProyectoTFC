@@ -1,85 +1,112 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Movies</title>
-        <link rel="stylesheet" href="../css/styles.css">
-        <link rel="stylesheet" href="../css/movies-modal.css">
-        <link rel="stylesheet" href="../css/rating-movies-modal.css">
-        <link rel="stylesheet" href="../css/browser.css">
-        <link rel="stylesheet" href="../css/toast.css">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-        <script defer src="../js/auth.js"></script>
-        <script defer src="../js/movies.js"></script>
-        <script defer src="../js/settings.js"></script>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/movies-modal.css">
+    <link rel="stylesheet" href="../css/rating-movies-modal.css">
+    <link rel="stylesheet" href="../css/browser.css">
+    <link rel="stylesheet" href="../css/toast.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Kanit&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script defer src="../js/auth.js"></script>
+    <script defer src="../js/movies.js"></script>
+    <script defer src="../js/settings.js"></script>
+</head>
 
 <body>
-    <!-- Barra de navegacion -->
-    <header class="navbar">
-        <div class="header-container">
-            <div class="logo">
-                <a id="page-title" href="../index.html">Pandorasbox</a>
-            </div>
-            <nav class="navigation">
-                <a class="navLink" href="movies.html">Movies</a>
-                <a class="navLink" href="games.html">Games</a>
-                <a class="navLink" href="albums.html">Albums</a>
-                <div id="temporalDropdown">
-                    <a class="navLink profile-link" href="profile.html">Profile</a>
-                </div>
-                <a id="settings" href="settings.html"><i class="fas fa-cog"></i></a>
-            </nav>
+<!-- Barra de navegacion -->
+<header class="navbar">
+    <div class="header-container">
+        <div class="logo">
+            <a id="page-title" href="../index.html">Pandorasbox</a>
         </div>
-    </header>
-
-    <!-- Contenido principal -->
-    <main>
-        <h1>Buscar Películas <i class="fas fa-film"></i></h1>
-        <form id="searchForm">
-            <input type="text" id="searchInput" placeholder="Find a movie..." required>
-            <button class="searchButton" type="submit">Buscar</button>
-        </form>
-        <div id="results"></div>
-    </main>
-
-    <!-- Modal de calificacion -->
-    <div id="rating-modal" class="rating-modal-container">
-        <div class="rating-modal-overlay"></div>
-        <div class="rating-modal-content">
-            <h2>Calificar Película</h2>
-
-            <!-- Sección de Calificación -->
-            <div class="rating-section">
-                <label>Calificación:</label>
-                <div class="star-rating-wrapper">
-                    <div id="star-rating" class="star-rating-container">
-                        <!-- Las estrellas se generarán dinámicamente -->
-                    </div>
-                    <button class="reset-rating" title="Eliminar calificación">✕</button>
-                </div>
+        <nav class="navigation">
+            <a class="navLink" href="movies.html"><i class="fas fa-film"></i> Movies</a>
+            <a class="navLink" href="games.html"><i class="fas fa-gamepad"></i> Games</a>
+            <a class="navLink" href="albums.html"><i class="fas fa-music"></i> Albums</a>
+            <div id="temporalDropdown">
+                <a class="navLink profile-link" href="profile.html">Profile</a>
             </div>
+            <a id="settings" href="settings.html"><i class="fas fa-cog"></i></a>
+        </nav>
+    </div>
+</header>
 
-            <!-- Sección de Fecha -->
-            <div class="date-section">
-                <label for="watched-date">Fecha de visualización:</label>
-                <input type="date" id="watched-date" class="date-picker" value="">
-                <button class="reset-date" title="Eliminar Fecha">✕</button>
-            </div>
+<!-- Contenido principal -->
+<main>
+    <h1>Buscar Películas <i class="fas fa-film"></i></h1>
+    <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Find a movie..." required>
+        <button class="searchButton" type="submit">Buscar</button>
+    </form>
+    <div id="results" class="movies-grid"></div>
 
-            <!-- Botones -->
-            <div class="rating-buttons">
-                <button id="cancel-rating" class="btn-secondary">Cancelar</button>
-                <button id="save-rating" class="btn-primary">Guardar</button>
+    <!-- Modal de detalles de película (ahora en el HTML) -->
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal">🗙</button>
+            <img class="modal-poster" src="" alt="Movie poster">
+            <div class="modal-details">
+                <h2 class="modal-title"></h2>
+                <p class="modal-release-date"><strong>Fecha de estreno:</strong> <span class="value"></span></p>
+                <p class="modal-rating"><strong>Calificación:</strong> <span class="value"></span></p>
+                <button class="description-toggle"><strong>Mostrar descripción ▲</strong></button>
+                <p class="modal-description" style="display: none;"></p>
+                <p class="modal-genres"><strong>Géneros:</strong> <span class="value"></span></p>
+                <p class="modal-director"><strong>Director:</strong> <span class="value"></span></p>
+                <p class="modal-actors"><strong>Actores principales:</strong> <span class="value"></span></p>
+                <a class="modal-link tmdb-link" target="_blank">Ver más en TMDB</a>
+                <a class="modal-link trailer-link" target="_blank" style="display: none;">Ver tráiler</a>
+                <button class="save-button saveLog-modal">Marcar como vista</button>
+                <button class="save-button saveWishlist-modal">Añadir a wishlist</button>
             </div>
         </div>
     </div>
+    <div class="modal-overlay"></div>
 
-    <footer>
-        <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
-    </footer>
+    <!-- Loader -->
+    <div class="loader-overlay">
+        <div class="loader"></div>
+    </div>
+</main>
 
+<!-- Modal de calificación -->
+<div id="rating-modal" class="rating-modal-container">
+    <div class="rating-modal-overlay"></div>
+    <div class="rating-modal-content">
+        <h2>Calificar Película</h2>
+
+        <!-- Sección de Calificación -->
+        <div class="rating-section">
+            <label>Calificación:</label>
+            <div class="star-rating-wrapper">
+                <div id="star-rating" class="star-rating-container">
+                    <!-- Las estrellas se generarán dinámicamente -->
+                </div>
+                <button class="reset-rating" title="Eliminar calificación">✕</button>
+            </div>
+        </div>
+
+        <!-- Sección de Fecha -->
+        <div class="date-section">
+            <label for="watched-date">Fecha de visualización:</label>
+            <input type="date" id="watched-date" class="date-picker" value="">
+            <button class="reset-date" title="Eliminar Fecha">✕</button>
+        </div>
+
+        <!-- Botones -->
+        <div class="rating-buttons">
+            <button id="cancel-rating" class="btn-secondary">Cancelar</button>
+            <button id="save-rating" class="btn-primary">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
+</footer>
 </body>
 </html>
