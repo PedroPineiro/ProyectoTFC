@@ -40,55 +40,65 @@ main {
 
 #page-title {
   text-decoration: none;
-  color: white;
-  font-size: 28px;
+  color: var(--text-color);
+  font-size: 33px;
   font-weight: bold;
   transition: color 0.2s ease;
   padding-left: 15px;
 }
 
 #page-title:hover {
-  color: #1c1e1d;
+  color: var(--background-color);
 }
 
+.navigation {
+  display: flex;
+  align-items: center; /* Alinea verticalmente todos los hijos */
+}
 .navLink {
+  position: relative; /* Necesario para posicionar el ::after */
   text-decoration: none;
-  color: white;
-  font-size: 20px;
+  color: var(--text-color);
+  font-size: 22px;
   font-weight: bold;
-  margin: 0 25px 0 25px;
-  padding: 5px 0px; /* Aumenta el padding horizontal para crear un área más cuadrada */
-  transition: color 0.2s ease, box-shadow 0.2s ease;
-  position: relative;
+  margin: 0 20px;
+  padding: 10px 15px;
   display: inline-block;
-  line-height: 1; /* Asegura que el texto no afecte la altura del área interactiva */
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.4s ease;
 }
 
-/* Crea un pseudo-elemento para el área interactiva cuadrada */
-.navLink::before {
+.navLink::after {
   content: '';
   position: absolute;
-  top: 50%;
+  bottom: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% + 30px); /* Ajusta este valor para el tamaño del cuadrado */
-  height: calc(100% + 20px); /* Ajusta este valor para el tamaño del cuadrado */
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  width: 100%;
+  height: 3px;
+  background-color: var(--background-color);
+  transition: transform 0.3s ease;
+  border-radius: 2px;
 }
 
-/* Muestra el borde cuadrado al hacer hover */
-.navLink:hover::before {
-  opacity: 1;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+.navLink:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.navLink:hover {
+  color: var(--background-color);
+  transition: color 0.3s ease;
 }
 
 /* Profile sin estar logueado */
 #temporalDropdown{
   position: relative;
   display: inline-block;
-  padding: 10px; /* Aumenta el área interactiva */
+  margin-top: 5px;
 }
 
 /* Ocultar el contenido del dropdown por defecto */
@@ -105,12 +115,10 @@ main {
 .dropdown-content {
   display: block;
   position: absolute;
-  background-color: #0f0f0f;
-  min-width: 140px;
+  background-color: var(--background-color);
+  min-width: 150px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
-  text-align: left;
-  top: 107%;
   left: 50%;
   transform: translateX(-50%) translateY(-10px); /* Posición inicial */
   opacity: 0; /* Oculto inicialmente */
@@ -121,7 +129,8 @@ main {
 
 /* Estilo de los enlaces dentro del dropdown */
 .dropdown-content a {
-  color: white;
+  color: var(--text-color);
+  font-size: 18px;
   text-align: center;
   padding: 10px 15px;
   text-decoration: none;
@@ -131,12 +140,13 @@ main {
 
 .dropdown-content a:hover {
   background-color: var(--brand-color);
-  color: #141716;
+  color: var(--background-color);
 }
 
 #logoutBtn:hover {
   background-color: red;
-  color: #141716;
+  border-radius: 0 0 5px 5px;
+  color: var(--background-color);
 }
 
 /* Estilo del pico */
@@ -161,19 +171,16 @@ main {
   pointer-events: auto; /* Permite interacción */
 }
 
-.dropdown:hover::after {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 #settings i {
   font-size: 25px;
-  color: white;
+  color: var(--text-color);
   transition: color 0.3s ease, transform 0.3s ease;
+  margin-top: 2px;
+
 }
 
 #settings i:hover {
-  color: #141716;
+  color: var(--background-color);
   transform: rotate(-45deg); /* Gira el ícono 20 grados */
 }
 

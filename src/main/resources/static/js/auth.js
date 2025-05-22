@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 localStorage.removeItem('currentUser');
-                window.location.href = 'profile.html'; // Redirigir a profile.html
+                window.location.href= profileHref; // Redirigir a profile.html
             });
         }
     }
