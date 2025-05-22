@@ -85,22 +85,28 @@ public class MovieController {
         }
     }
 
-    // Obtener todas las películas de un usuario
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Movie>> getMoviesByUserAndStatus(@PathVariable Long userId, @RequestParam(required = false) String status) {
+    public ResponseEntity<List<Movie>> getMoviesByUserAndStatus(
+            @PathVariable Long userId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false, defaultValue = "title") String sortBy, // Parámetro de ordenación
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection) { // Dirección de ordenación
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
-            List<Movie> movies = movieService.getAllMoviesByUser(user.get());
+            Status searchStatus = null;
             if (status != null && !status.isEmpty()) {
-                Status searchStatus = Status.valueOf(status.toUpperCase());
-                movies = movies.stream()
-                        .filter(movie -> movie.getStatus() == searchStatus)
-                        .collect(Collectors.toList());
+                try {
+                    searchStatus = Status.valueOf(status.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().body(null); // O un mensaje de error más específico
+                }
             }
+            List<Movie> movies = movieService.getMoviesByUserAndStatusAndSort(user.get(), searchStatus, sortBy, sortDirection);
             return ResponseEntity.ok(movies);
         }
         return ResponseEntity.notFound().build();
     }
+
 
 
     @GetMapping("/my-movies")

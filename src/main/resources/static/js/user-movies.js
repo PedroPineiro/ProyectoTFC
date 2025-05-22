@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewedMoviesBtn = document.getElementById('viewed-movies-btn');
     const wishlistMoviesBtn = document.getElementById('wishlist-movies-btn');
     const sortBySelect = document.getElementById('sort-by');
+    const sortDirectionBtn = document.getElementById('sort-direction-btn'); // Correcto ahora que el ID es "sort-direction-btn"
     const moviesCount = document.getElementById('movies-count');
     const emptyState = document.getElementById('empty-state');
 
@@ -30,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allUserMovies = [];
     let currentFilter = 'PLAYED';
+    let currentSortBy = sortBySelect.value; // Inicializar con el valor por defecto
+    // Asegurarse de que el dataset se lea correctamente desde el elemento HTML
+    let currentSortDirection = sortDirectionBtn.dataset.direction || 'asc'; // 'asc' o 'desc'
 
     init();
 
@@ -39,28 +43,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        loadMovies(currentFilter);
+        // Pasa los parámetros de ordenación al cargar por primera vez
+        loadMovies(currentFilter, currentSortBy, currentSortDirection);
         setupEventListeners();
+        updateSortDirectionIcon(); // Actualizar el icono al inicio
     }
 
     function showToast(message, type = 'success') {
-        // Limpiar toasts anteriores
         document.querySelectorAll('.toast').forEach(toast => toast.remove());
-
-        // Crear elemento toast
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
-
         document.body.appendChild(toast);
-
-        // Forzar reflow para activar la animación
-        void toast.offsetWidth;
-
-        // Mostrar toast
+        void toast.offsetWidth; // Trigger reflow
         toast.classList.add('show');
-
-        // Ocultar y eliminar después de 3 segundos
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => {
@@ -80,16 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
         emptyState.style.display = 'block';
     }
 
-    function loadMovies(status) {
+    function loadMovies(status, sortBy, sortDirection) {
         showLoadingState();
 
-        fetch(`http://localhost:8080/api/movies/user/${user.id}?status=${status}`, {
+        // Construir la URL con los parámetros de ordenación
+        // Usa el endpoint /user/{userId} que es más flexible
+        const url = `http://localhost:8080/api/movies/user/${user.id}?status=${status}&sortBy=${sortBy}&sortDirection=${sortDirection}`;
+
+        fetch(url, {
             method: 'GET',
             credentials: 'include',
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Error al cargar las películas');
+                    // Si la respuesta no es OK, intenta leer el cuerpo para obtener un mensaje de error
+                    return response.json().then(err => { throw new Error(err.error || 'Error al cargar las películas'); });
                 }
                 return response.json();
             })
@@ -104,7 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error al cargar las películas:', error);
-                showEmptyState();
+                // Muestra un mensaje de error al usuario si la carga falla
+                showToast(`Error: ${error.message}`, 'error');
+                showEmptyState(); // Asegura que se muestre el estado vacío si hay un error
             })
             .finally(() => {
                 loader.classList.remove('show');
@@ -117,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Cargando películas...</p>
             </div>
         `;
+        emptyState.style.display = 'none'; // Asegúrate de ocultar el estado vacío
+        loader.classList.add('show'); // Muestra el loader
     }
 
     function showEmptyState() {
@@ -148,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="movie-title">${movie.title}</div>
                 <div class="movie-meta">
                     <span>${movie.releaseYear || 'N/A'}</span>
-                    <span><i class="fas fa-star"></i> ${movie.rating ? movie.rating.toFixed(1) : '?'}</span>
+                    <span><i class="fas fa-star"></i> ${movie.userRating ? movie.userRating.toFixed(1) : (movie.globalRating ? movie.globalRating.toFixed(1) : '?')}</span>
                 </div>
             </div>
         `;
@@ -203,9 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
             descriptionButton.textContent = isVisible ? 'Descripción: Abrir' : 'Descripción: Cerrar';
         });
 
+        // Mostrar userRating si existe, de lo contrario globalRating
         const modalRating = document.createElement('div');
-        modalRating.innerHTML = `<strong>Calificación:</strong> ${movie.rating ? `${movie.rating}/5` : 'No valorada'}`;
+        modalRating.innerHTML = `<strong>Calificación:</strong> ${movie.userRating ? `${movie.userRating.toFixed(1)}/5 (tu valoración)` : (movie.globalRating ? `${movie.globalRating.toFixed(1)}/10 (IMDB)` : 'No valorada')}`;
         modalRating.classList.add('star-rating');
+
 
         const modalWatchedDate = document.createElement('p');
         modalWatchedDate.innerHTML = `<strong>Fecha de visualización:</strong> ${movie.watchedDate || 'No disponible'}`;
@@ -236,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loader.classList.remove('show');
     }
+
     function toggleMovieStatus(movie) {
         const newStatus = movie.status === 'PLAYED' ? 'WISHLIST' : 'PLAYED';
 
@@ -246,18 +254,19 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Error al cambiar el estado de la película');
+                    return response.json().then(err => { throw new Error(err.error || 'Error al cambiar el estado de la película'); });
                 }
                 return response.json();
             })
             .then(updatedMovie => {
                 showToast('Estado actualizado con éxito', 'success');
-                loadMovies(currentFilter); // Recargar dinámicamente las películas
+                // IMPORTANTE: Recargar con los parámetros de ordenación y filtro actuales
+                loadMovies(currentFilter, currentSortBy, currentSortDirection);
                 closeModal(); // Cerrar el modal
             })
             .catch(error => {
                 console.error('Error al cambiar el estado:', error);
-                showToast('Error al cambiar el estado', 'error');
+                showToast('Error al cambiar el estado: ' + error.message, 'error');
             });
     }
 
@@ -267,15 +276,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Error al eliminar la película');
+                    return response.json().then(err => { throw new Error(err.error || 'Error al eliminar la película'); });
                 }
                 showToast('Película eliminada con éxito', 'success');
-                loadMovies(currentFilter); // Recargar dinámicamente las películas
+                // IMPORTANTE: Recargar con los parámetros de ordenación y filtro actuales
+                loadMovies(currentFilter, currentSortBy, currentSortDirection);
                 closeModal(); // Cerrar el modal
             })
             .catch(error => {
                 console.error('Error al eliminar la película:', error);
-                showToast('Error al eliminar la película', 'error');
+                showToast('Error al eliminar la película: ' + error.message, 'error');
             });
     }
 
@@ -283,25 +293,72 @@ document.addEventListener('DOMContentLoaded', () => {
         viewedMoviesBtn.addEventListener('click', () => {
             currentFilter = 'PLAYED';
             toggleActiveButton(viewedMoviesBtn, wishlistMoviesBtn);
-            loadMovies(currentFilter);
+            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con ordenación
         });
 
         wishlistMoviesBtn.addEventListener('click', () => {
             currentFilter = 'WISHLIST';
             toggleActiveButton(wishlistMoviesBtn, viewedMoviesBtn);
-            loadMovies(currentFilter);
+            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con ordenación
+        });
+
+        sortBySelect.addEventListener('change', () => {
+            currentSortBy = sortBySelect.value;
+            updateSortDirectionIcon(); // Actualiza el icono al cambiar el tipo de ordenación
+            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con nueva ordenación
+        });
+
+        sortDirectionBtn.addEventListener('click', () => {
+            currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            sortDirectionBtn.dataset.direction = currentSortDirection; // Actualizar el dataset
+            updateSortDirectionIcon(); // Actualizar el icono
+            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con nueva dirección
         });
 
         closeModalButton.addEventListener('click', closeModal);
         overlay.addEventListener('click', closeModal);
     }
 
+    function updateSortDirectionIcon() {
+        const icon = sortDirectionBtn.querySelector('i');
+        if (currentSortDirection === 'asc') {
+            switch (currentSortBy) {
+                case 'title':
+                case 'genre':
+                    icon.className = 'fas fa-sort-alpha-down';
+                    break;
+                case 'releaseYear':
+                    icon.className = 'fas fa-sort-numeric-down';
+                    break;
+                case 'userRating':
+                    icon.className = 'fas fa-sort-amount-down-alt';
+                    break;
+                default:
+                    icon.className = 'fas fa-sort-up';
+                    break;
+            }
+        } else { // 'desc'
+            switch (currentSortBy) {
+                case 'title':
+                case 'genre':
+                    icon.className = 'fas fa-sort-alpha-up';
+                    break;
+                case 'releaseYear':
+                    icon.className = 'fas fa-sort-numeric-up';
+                    break;
+                case 'userRating':
+                    icon.className = 'fas fa-sort-amount-up-alt';
+                    break;
+                default:
+                    icon.className = 'fas fa-sort-down';
+                    break;
+            }
+        }
+    }
+
     function toggleActiveButton(activeButton, inactiveButton) {
-        // Actualizar los estados de los botones
         activeButton.classList.add('active');
         inactiveButton.classList.remove('active');
-
-        // Actualizar el atributo data-active del contenedor
         const toggleContainer = document.querySelector('.toggle-view');
         if (activeButton.id === 'viewed-movies-btn') {
             toggleContainer.setAttribute('data-active', 'viewed');
