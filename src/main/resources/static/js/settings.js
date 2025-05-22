@@ -145,10 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.style.setProperty('--danger-color', isDarkMode ? '#ff6b6b' : '#ff4757');
         document.documentElement.style.setProperty('--warning-color', isDarkMode ? '#ffc107' : '#ffb800');
         document.documentElement.style.setProperty('--info-color', isDarkMode ? '#6b8cff' : '#4d7bff');
-
-        document.documentElement.style.setProperty('--brand-color', brandColor);
-        document.documentElement.style.setProperty('--background-brand-color', isDarkMode ? lightenColor(brandColor, -60) : lightenColor(brandColor, 60));
-        document.documentElement.style.setProperty('--hover-brand-color', lightenColor(brandColor, 30));
     }
 
     function lightenColor(hex, percent) {
