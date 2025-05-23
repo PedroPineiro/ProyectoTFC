@@ -113,14 +113,29 @@ document.addEventListener('DOMContentLoaded', () => {
             : "../assets/imgs/posterNotFound.jpg";
         movieImg.alt = movie.title;
 
-        const movieTitle = document.createElement('h3');
-        movieTitle.textContent = `${movie.title} (${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'})`;
+        // Creamos el overlay similar al de user-movies
+        const movieOverlay = document.createElement('div');
+        movieOverlay.classList.add('movie-overlay');
+
+        const movieTitle = document.createElement('div');
+        movieTitle.classList.add('movie-title');
+        movieTitle.textContent = movie.title;
+
+        const movieYear = document.createElement('div');
+        movieYear.classList.add('movie-year');
+        movieYear.textContent = movie.release_date ? movie.release_date.substring(0, 4) : 'N/A';
+
+        movieOverlay.appendChild(movieTitle);
+        movieOverlay.appendChild(movieYear);
+
+        movieDiv.appendChild(movieImg);
+        movieDiv.appendChild(movieOverlay);
 
         movieDiv.addEventListener('click', () => showMovieDetails(movie));
-        movieDiv.append(movieImg, movieTitle);
 
         return movieDiv;
     }
+
 
     // Mostrar detalles de la película
     async function showMovieDetails(movie) {
