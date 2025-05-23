@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -37,6 +38,12 @@ public class Movie {
     @Column(nullable = true) // Opcional por si no tiene imagen
     private String imageUrl;
 
+    @Column(name = "added_date", updatable = false)
+    private LocalDateTime addedDate = LocalDateTime.now(); // Se auto-guarda al crear
+
+    @Column(name = "last_modified_date")
+    private LocalDateTime lastModifiedDate; // Se actualiza al editar
+
     @Column(nullable = true) // Puede ser null si aún no ha sido calificada
     private Double userRating; // Valor de 0.0 a 10.0
 
@@ -57,7 +64,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
+    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, LocalDateTime addedDate, LocalDateTime lastModifiedDate, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
@@ -66,21 +73,8 @@ public class Movie {
         this.genre = genre;
         this.globalRating = globalRating;
         this.imageUrl = imageUrl;
-        this.userRating = userRating;
-        this.watchedDate = watchedDate;
-        this.status = status;
-        this.isFavorite = isFavorite;
-        this.user = user;
-    }
-
-    public Movie(String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
-        this.title = title;
-        this.releaseYear = releaseYear;
-        this.director = director;
-        this.actors = actors;
-        this.genre = genre;
-        this.globalRating = globalRating;
-        this.imageUrl = imageUrl;
+        this.addedDate = addedDate;
+        this.lastModifiedDate = lastModifiedDate;
         this.userRating = userRating;
         this.watchedDate = watchedDate;
         this.status = status;
@@ -150,6 +144,22 @@ public class Movie {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public LocalDateTime getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAddedDate(LocalDateTime addedDate) {
+        this.addedDate = addedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Status getStatus() {

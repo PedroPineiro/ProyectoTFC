@@ -8,6 +8,7 @@ import com.pedro.ProyectoTFC.repositories.MovieRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,10 @@ public class MovieService {
     }
 
     public Movie saveMovie(Movie movie) {
+        if (movie.getId() == null) {
+            movie.setAddedDate(LocalDateTime.now()); // Solo para nuevas películas
+        }
+        movie.setLastModifiedDate(LocalDateTime.now()); // Siempre se actualiza
         return movieRepository.save(movie);
     }
 
@@ -51,41 +56,20 @@ public class MovieService {
     }
 
     public List<Movie> getMoviesByUserAndStatusAndSort(User user, Status status, String sortBy, String sortDirection) {
-        Sort.Direction direction = Sort.Direction.ASC; // Por defecto ascendente
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
 
-        if (sortDirection != null && sortDirection.equalsIgnoreCase("desc")) {
-            direction = Sort.Direction.DESC;
-        }
-
-        Sort sort;
-        // ¡Importante! Los nombres de los campos deben coincidir exactamente con los atributos de tu entidad Movie
-        switch (sortBy) {
-            case "releaseYear":
-                sort = Sort.by(direction, "releaseYear");
-                break;
-            case "title":
-                sort = Sort.by(direction, "title");
-                break;
-            case "globalRating": // Asumiendo que Movie tiene un campo 'globalRating'
-                sort = Sort.by(direction, "globalRating");
-                break;
-            case "userRating": // Asumiendo que Movie tiene un campo 'userRating'
-                sort = Sort.by(direction, "userRating");
-                break;
-            case "genre":
-                sort = Sort.by(direction, "genre");
-                break;
-            default:
-                // Por defecto, ordenar por título si el campo de ordenación no es reconocido
-                sort = Sort.by(direction, "title");
-                break;
-        }
+        Sort sort = switch (sortBy) {
+            case "title" -> Sort.by(direction, "title");
+            case "releaseYear" -> Sort.by(direction, "releaseYear");
+            case "userRating" -> Sort.by(direction, "userRating");
+            case "addedDate" -> Sort.by(direction, "addedDate");
+            default -> Sort.by(direction, "addedDate"); // Por defecto ordenar por addedDate
+        };
 
         if (status != null) {
             return movieRepository.findByUserAndStatus(user, status, sort);
-        } else {
-            return movieRepository.findByUser(user, sort);
         }
+        return movieRepository.findByUser(user, sort);
     }
 
 

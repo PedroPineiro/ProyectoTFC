@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFilter = 'PLAYED';
     let currentSortBy = sortBySelect.value; // Inicializar con el valor por defecto
     // Asegurarse de que el dataset se lea correctamente desde el elemento HTML
-    let currentSortDirection = sortDirectionBtn.dataset.direction || 'asc'; // 'asc' o 'desc'
+    let currentSortDirection = sortDirectionBtn.dataset.direction || 'desc'; // 'asc' o 'desc'
 
     init();
 
@@ -78,36 +78,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadMovies(status, sortBy, sortDirection) {
         showLoadingState();
-
-        // Construir la URL con los parámetros de ordenación
-        // Usa el endpoint /user/{userId} que es más flexible
         const url = `http://localhost:8080/api/movies/user/${user.id}?status=${status}&sortBy=${sortBy}&sortDirection=${sortDirection}`;
 
-        fetch(url, {
-            method: 'GET',
-            credentials: 'include',
-        })
+        fetch(url)
             .then(response => {
                 if (!response.ok) {
-                    // Si la respuesta no es OK, intenta leer el cuerpo para obtener un mensaje de error
-                    return response.json().then(err => { throw new Error(err.error || 'Error al cargar las películas'); });
+                    return response.text().then(text => {
+                        throw new Error(text || 'Error al cargar las películas');
+                    });
                 }
                 return response.json();
             })
             .then(movies => {
                 allUserMovies = movies;
                 updateMoviesCount(movies.length);
-                if (movies.length === 0) {
-                    showEmptyState();
-                } else {
-                    displayMovies(movies);
-                }
+                displayMovies(movies);
             })
             .catch(error => {
-                console.error('Error al cargar las películas:', error);
-                // Muestra un mensaje de error al usuario si la carga falla
-                showToast(`Error: ${error.message}`, 'error');
-                showEmptyState(); // Asegura que se muestre el estado vacío si hay un error
+                console.error('Error:', error);
+                showToast(error.message, 'error');
+                showEmptyState();
             })
             .finally(() => {
                 loader.classList.remove('show');
@@ -325,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (currentSortBy) {
                 case 'title':
                 case 'genre':
-                    icon.className = 'fas fa-sort-alpha-down';
+                    icon.className = 'fas fa-sort-amount-down-alt';
                     break;
                 case 'releaseYear':
                     icon.className = 'fas fa-sort-numeric-down';
@@ -334,14 +324,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     icon.className = 'fas fa-sort-amount-down-alt';
                     break;
                 default:
-                    icon.className = 'fas fa-sort-up';
+                    icon.className = 'fas fa-sort-amount-down-alt';
                     break;
             }
         } else { // 'desc'
             switch (currentSortBy) {
                 case 'title':
                 case 'genre':
-                    icon.className = 'fas fa-sort-alpha-up';
+                    icon.className = 'fas fa-sort-amount-up-alt';
                     break;
                 case 'releaseYear':
                     icon.className = 'fas fa-sort-numeric-up';
@@ -350,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     icon.className = 'fas fa-sort-amount-up-alt';
                     break;
                 default:
-                    icon.className = 'fas fa-sort-down';
+                    icon.className = 'fas fa-sort-amount-up-alt';
                     break;
             }
         }

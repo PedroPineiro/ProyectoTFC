@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,7 +45,6 @@ public class MovieController {
                 return ResponseEntity.badRequest().body("Usuario no encontrado");
             }
 
-            // Verificar si la película ya existe para el usuario
             Optional<Movie> existingMovie = movieService.findMovieByDetailsAndUser(
                     movieDTO.getTitle(),
                     movieDTO.getReleaseYear(),
@@ -63,19 +64,16 @@ public class MovieController {
             movie.setGenre(movieDTO.getGenre());
             movie.setGlobalRating(movieDTO.getGlobalRating());
             movie.setImageUrl(movieDTO.getImageUrl());
+            movie.setAddedDate(LocalDateTime.now()); // Establece la fecha actual
+            movie.setLastModifiedDate(LocalDateTime.now());
             movie.setStatus(movieDTO.getStatus());
             movie.setFavorite(movieDTO.isFavorite());
             movie.setUser(user.get());
 
-            try{
-                if(movieDTO.getStatus() == Status.PLAYED){
-                    movie.setUserRating(movieDTO.getUserRating());
-                    movieService.isUserRatingValid(movieDTO.getUserRating());
-                    movie.setWatchedDate(movieDTO.getWatchedDate());
-                }
-            }
-            catch (Exception e){
-                return ResponseEntity.badRequest().body("UserRating no valido: " + e.getMessage());
+            if(movieDTO.getStatus() == Status.PLAYED){
+                movie.setUserRating(movieDTO.getUserRating());
+                movieService.isUserRatingValid(movieDTO.getUserRating());
+                movie.setWatchedDate(movieDTO.getWatchedDate());
             }
 
             Movie savedMovie = movieService.saveMovie(movie);
@@ -89,8 +87,16 @@ public class MovieController {
     public ResponseEntity<List<Movie>> getMoviesByUserAndStatus(
             @PathVariable Long userId,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false, defaultValue = "title") String sortBy, // Parámetro de ordenación
-            @RequestParam(required = false, defaultValue = "asc") String sortDirection) { // Dirección de ordenación
+            @RequestParam(required = false, defaultValue = "addedDate") String sortBy, // Cambiado a addedDate por defecto
+            @RequestParam(required = false, defaultValue = "desc") String sortDirection) { // Cambiado a desc para ver primero las recientes
+
+        // Lista de campos por los que se puede ordenar
+        List<String> validSortFields = Arrays.asList("addedDate", "title", "releaseYear", "userRating");
+
+        if (!validSortFields.contains(sortBy)) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
             Status searchStatus = null;
@@ -98,31 +104,13 @@ public class MovieController {
                 try {
                     searchStatus = Status.valueOf(status.toUpperCase());
                 } catch (IllegalArgumentException e) {
-                    return ResponseEntity.badRequest().body(null); // O un mensaje de error más específico
+                    return ResponseEntity.badRequest().body(null);
                 }
             }
             List<Movie> movies = movieService.getMoviesByUserAndStatusAndSort(user.get(), searchStatus, sortBy, sortDirection);
             return ResponseEntity.ok(movies);
         }
         return ResponseEntity.notFound().build();
-    }
-
-
-
-    @GetMapping("/my-movies")
-    public ResponseEntity<?> getCurrentUserMovies(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "No estás logueado"));
-        }
-
-        Optional<User> user = userService.findUserById(userId);
-        if (user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Usuario no encontrado"));
-        }
-
-        List<Movie> movies = movieService.getAllMoviesByUser(user.get());
-        return ResponseEntity.ok(movies);
     }
 
     // Aactualizar el status de la pelicula PLAYED o WISHLIST
