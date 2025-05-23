@@ -105,11 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showLoadingState() {
-        moviesContainer.innerHTML = `
-            <div class="loading-state">
-                <p>Cargando películas...</p>
-            </div>
-        `;
         emptyState.style.display = 'none'; // Asegúrate de ocultar el estado vacío
         loader.classList.add('show'); // Muestra el loader
     }
