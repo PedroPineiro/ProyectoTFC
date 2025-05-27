@@ -32,22 +32,14 @@ public class Movie {
     @Column(name = "genre")
     private List<String> genre;
 
-    @Column(nullable = true) // Puede ser null si aún no ha sido calificada
     private Double globalRating;
 
-    @Column(nullable = true) // Opcional por si no tiene imagen
     private String imageUrl;
 
-    @Column(name = "added_date", updatable = false)
     private LocalDateTime addedDate = LocalDateTime.now(); // Se auto-guarda al crear
 
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate; // Se actualiza al editar
-
-    @Column(nullable = true) // Puede ser null si aún no ha sido calificada
     private Double userRating; // Valor de 0.0 a 10.0
 
-    @Column(nullable = true) // Opcional por si no tiene fecha de visualización
     private LocalDate watchedDate;
 
     @Enumerated(EnumType.STRING)
@@ -64,7 +56,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, LocalDateTime addedDate, LocalDateTime lastModifiedDate, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
+    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, LocalDateTime addedDate, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
@@ -74,7 +66,6 @@ public class Movie {
         this.globalRating = globalRating;
         this.imageUrl = imageUrl;
         this.addedDate = addedDate;
-        this.lastModifiedDate = lastModifiedDate;
         this.userRating = userRating;
         this.watchedDate = watchedDate;
         this.status = status;
@@ -152,14 +143,6 @@ public class Movie {
 
     public void setAddedDate(LocalDateTime addedDate) {
         this.addedDate = addedDate;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Status getStatus() {

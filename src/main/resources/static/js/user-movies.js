@@ -241,11 +241,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toggleMovieStatus(movie) {
         const newStatus = movie.status === 'PLAYED' ? 'WISHLIST' : 'PLAYED';
+        const now = new Date().toISOString(); // Fecha y hora actual en formato ISO
 
         fetch(`http://localhost:8080/api/movies/${movie.id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: newStatus })
+            body: JSON.stringify({
+                status: newStatus,
+                addedDate: now
+            })
         })
             .then(response => {
                 if (!response.ok) {
@@ -255,16 +259,14 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(updatedMovie => {
                 showToast('Estado actualizado con éxito', 'success');
-                // IMPORTANTE: Recargar con los parámetros de ordenación y filtro actuales
                 loadMovies(currentFilter, currentSortBy, currentSortDirection);
-                closeModal(); // Cerrar el modal
+                closeModal();
             })
             .catch(error => {
                 console.error('Error al cambiar el estado:', error);
                 showToast('Error al cambiar el estado: ' + error.message, 'error');
             });
     }
-
     function deleteMovie(movieId) {
         fetch(`http://localhost:8080/api/movies/${movieId}`, {
             method: 'DELETE'

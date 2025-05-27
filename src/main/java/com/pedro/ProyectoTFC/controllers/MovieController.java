@@ -65,7 +65,6 @@ public class MovieController {
             movie.setGlobalRating(movieDTO.getGlobalRating());
             movie.setImageUrl(movieDTO.getImageUrl());
             movie.setAddedDate(LocalDateTime.now()); // Establece la fecha actual
-            movie.setLastModifiedDate(LocalDateTime.now());
             movie.setStatus(movieDTO.getStatus());
             movie.setFavorite(movieDTO.isFavorite());
             movie.setUser(user.get());
@@ -113,7 +112,7 @@ public class MovieController {
         return ResponseEntity.notFound().build();
     }
 
-    // Aactualizar el status de la pelicula PLAYED o WISHLIST
+    // Actualizar el status de la película y poner la fecha actual en addedDate
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateMovieStatus(@PathVariable Long id, @RequestBody Map<String, String> request) {
         try {
@@ -121,16 +120,20 @@ public class MovieController {
             Optional<Movie> movieOptional = movieService.findMovieById(id);
 
             if (movieOptional.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Película no encontrada");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "Película no encontrada"));
             }
 
             Movie movie = movieOptional.get();
             movie.setStatus(Status.valueOf(newStatus.toUpperCase()));
+            movie.setAddedDate(LocalDateTime.now()); // Siempre la fecha actual
+
             movieService.saveMovie(movie);
 
             return ResponseEntity.ok(movie);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al actualizar el estado: " + e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Error al actualizar el estado: " + e.getMessage()));
         }
     }
 

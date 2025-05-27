@@ -15,7 +15,6 @@ public class MovieDTO {
     private Double globalRating;
     private String imageUrl;
     private LocalDateTime addedDate;
-    private LocalDateTime lastModifiedDate;
     private double userRating;
     private LocalDate watchedDate;
     private Status status;
@@ -39,8 +38,6 @@ public class MovieDTO {
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public LocalDateTime getAddedDate() { return addedDate; }
     public void setAddedDate(LocalDateTime addedDate) { this.addedDate = addedDate; }
-    public LocalDateTime getLastModifiedDate() { return lastModifiedDate; }
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) { this.lastModifiedDate = lastModifiedDate; }
     public double getUserRating() { return userRating; }
     public void setUserRating(double userRating) { this.userRating = userRating; }
     public LocalDate getWatchedDate() { return watchedDate; }

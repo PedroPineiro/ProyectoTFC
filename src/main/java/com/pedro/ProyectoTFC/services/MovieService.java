@@ -44,7 +44,7 @@ public class MovieService {
         if (movie.getId() == null) {
             movie.setAddedDate(LocalDateTime.now()); // Solo para nuevas películas
         }
-        movie.setLastModifiedDate(LocalDateTime.now()); // Siempre se actualiza
+        movie.setAddedDate(LocalDateTime.now()); // Siempre se actualiza
         return movieRepository.save(movie);
     }
 
