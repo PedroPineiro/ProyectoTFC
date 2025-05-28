@@ -126,6 +126,53 @@ header {
     background-color: var(--background-brand-color);
 }
 
+.password-container input{
+    padding-right: 90px;
+}
+
+.password-requirements {
+    list-style: none;
+    padding: 0 0 0 30px;
+    margin: 10px 0 15px 0;
+    font-size: 14px;
+    color: #b0b0b0;
+    text-align: left;
+}
+
+.password-requirements li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 5px;
+}
+
+.password-requirements li:before {
+    content: "✗";
+    position: absolute;
+    left: 0;
+    color: #ff6b6b;
+}
+
+.password-requirements li.valid:before {
+    content: "✓";
+    color: var(--brand-color);
+}
+
+.password-requirements li.valid {
+    color: var(--brand-color);
+}
+
+.input-group #togglePassword {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--brand-color);
+    margin-left: 15px;
+    padding: 0 10px;
+    font-size: 18px;
+    outline: none;
+}
+
+
 /* Animaciones */
 @keyframes fadeIn {
     from {

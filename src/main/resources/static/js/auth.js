@@ -5,10 +5,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const authActionBtn = document.getElementById('authActionBtn');
     const toggleAuthMode = document.getElementById('toggleAuthMode');
     const usernameInput = document.getElementById('authUsername');
-    const passwordInput = document.getElementById('authPassword');
     const emailInput = document.getElementById('authEmail');
     const emailIcon = emailInput?.previousElementSibling; // Ícono del email
     const temporalDropdown = document.getElementById('temporalDropdown');
+
+    const passwordInput = document.getElementById('authPassword');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const passwordRequirements = document.getElementById('passwordRequirements');
+
+    // Mostrar/ocultar contraseña
+    if (togglePasswordBtn) {
+        togglePasswordBtn.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePasswordBtn.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+    }
+
+    // Validación en tiempo real de la contraseña
+    if (passwordInput) {
+        passwordInput.addEventListener('input', validatePassword);
+    }
+
+
 
     let isLoginMode = true; // Estado inicial: modo "Iniciar Sesión"
 
@@ -23,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emailIcon) emailIcon.style.display = 'none';
         if (usernameInput) usernameInput.value = '';
         if (passwordInput) passwordInput.value = '';
+        if (passwordRequirements) passwordRequirements.style.display = 'none';
         if (emailInput) emailInput.value = '';
     }
 
@@ -36,7 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emailIcon) emailIcon.style.display = 'block';
         if (usernameInput) usernameInput.value = '';
         if (passwordInput) passwordInput.value = '';
+        if (passwordRequirements) passwordRequirements.style.display = 'block';
         if (emailInput) emailInput.value = '';
+    }
+
+    // Función de validación de contraseña
+    function validatePassword() {
+        if (!isLoginMode) {
+            const password = passwordInput.value;
+
+            // Validar longitud
+            document.getElementById('reqLength').classList.toggle('valid', password.length >= 8);
+            // Validar números
+            document.getElementById('reqNumber').classList.toggle('valid', /\d/.test(password));
+
+            // Validar caracteres especiales
+            document.getElementById('reqSpecial').classList.toggle('valid', /[@$!%*?&._]/.test(password));
+        }
     }
 
     // Alternar entre login y registro
@@ -77,11 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
-    function isValidEmail(email) {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailRegex.test(email);
-    }
-
     // Manejar el envío del formulario
     async function handleFormSubmit() {
         const usernameOrEmail = usernameInput?.value.trim();
@@ -93,9 +124,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (!isLoginMode && !isValidEmail(email)) {
-            showToast('El formato de email no es válido', 'error');
-            return;
+        if (!isLoginMode) {
+            // Validación de contraseña en frontend antes de enviar
+            const isPasswordValid = (
+                password.length >= 8 &&
+                /\d/.test(password) &&
+                /[@$!%*?&._]/.test(password)
+            );
+
+            if (!isPasswordValid) {
+                showToast('La contraseña no cumple con los requisitos', 'error');
+                return;
+            }
         }
 
         const endpoint = isLoginMode

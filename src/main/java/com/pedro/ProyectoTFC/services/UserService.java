@@ -55,4 +55,25 @@ public class UserService {
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
     }
+
+    public String getPasswordError(String password) {
+        if (password == null || password.isBlank()) {
+            return "La contraseña es obligatoria.";
+        }
+        if (password.length() < 8) {
+            return "La contraseña debe tener al menos 8 caracteres.";
+        }
+        if (!password.matches(".*\\d.*")) {
+            return "La contraseña debe contener al menos un número.";
+        }
+        if (!password.matches(".*[@$!%*?&._].*")) {
+            return "La contraseña debe contener al menos un carácter especial (@$!%*?&._).";
+        }
+        return null; // Sin errores
+    }
+
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[\\w+.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+        return email.matches(emailRegex);
+    }
 }

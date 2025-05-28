@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.FieldError;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,11 +27,18 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
+        String passwordError = userService.getPasswordError(user.getPassword());
+        if (!userService.isValidEmail(user.getEmail())) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Formato de email no válido"));
+        }
+        if (passwordError != null) {
+            return ResponseEntity.badRequest().body(Map.of("error", passwordError));
+        }
         try {
             User registeredUser = userService.registerUser(user);
             return ResponseEntity.ok(registeredUser);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -77,6 +86,4 @@ public class AuthController {
         }
         return ResponseEntity.ok(user);
     }
-
-
 }

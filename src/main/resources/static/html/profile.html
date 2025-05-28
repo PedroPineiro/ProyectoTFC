@@ -38,25 +38,33 @@
     <div class="modal-overlay"></div>
 
     <!-- Modal centrado sin fondo oscuro -->
-    <div id="authModal">
-        <div class="modal-content">
-            <h2 id="authTitle">Registro</h2>
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" id="authUsername" placeholder="Usuario" required>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="authPassword" placeholder="Contraseña" required>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="authEmail" placeholder="Email" required>
-            </div>
-            <button id="authActionBtn">Registrarse</button>
-            <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
+<div id="authModal">
+    <div class="modal-content">
+        <h2 id="authTitle">Registro</h2>
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="authEmail" placeholder="Email" required>
         </div>
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="authUsername" placeholder="Usuario" required>
+        </div>
+        <div class="input-group password-container">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="authPassword" placeholder="Contraseña" required>
+            <button type="button" id="togglePassword" aria-label="Mostrar contraseña">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+        <ul id="passwordRequirements" class="password-requirements">
+            <li id="reqLength">Al menos 8 caracteres</li>
+            <li id="reqNumber">Al menos un número</li>
+            <li id="reqSpecial">Al menos un carácter especial (@$!%*?&._)</li>
+        </ul>
+        <button id="authActionBtn">Registrarse</button>
+        <button id="toggleAuthMode">¿Ya tienes cuenta? Inicia sesión</button>
     </div>
+</div>
 
     <main>
         <!-- Información del usuario -->
