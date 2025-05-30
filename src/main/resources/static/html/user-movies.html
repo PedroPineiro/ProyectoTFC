@@ -72,7 +72,6 @@
             </div>
         </div>
         <div id="movie-list" class="grid-container">
-            <!-- Las películas se cargarán aquí -->
         </div>
         <div id="empty-state" class="empty-state">
             <i class="fas fa-film fa-3x"></i>
@@ -82,25 +81,41 @@
         </div>
     </section>
 
-    <!-- Modal para detalles de película -->
     <div id="movie-modal" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-body">
-                <!-- Contenido dinámico -->
+            <button class="close-modal">🗙</button>
+            <img id="modal-image" class="modal-poster" src="" alt="Póster de la película">
+
+            <div class="modal-details">
+                <h2 id="modal-title" class="modal-title"></h2>
+
+                <p class="modal-release-date"><strong>Año:</strong> <span id="modal-year" class="value"></span></p>
+                <p class="modal-director"><strong>Director:</strong> <span id="modal-director" class="value"></span></p>
+                <p class="modal-actors"><strong>Actores:</strong> <span id="modal-actors" class="value"></span></p>
+                <p class="modal-genres"><strong>Género:</strong> <span id="modal-genre" class="value"></span></p>
+
+                <button id="description-button" class="description-toggle">
+                    <strong>Mostrar descripción ▲</strong>
+                </button>
+                <p id="modal-description" class="modal-description" style="display: none;"></p>
+
+                <div id="modal-rating" class="modal-rating star-rating"></div>
+                <p class="modal-watched-date"><strong>Fecha de visualización:</strong> <span id="modal-watched-date" class="value"></span></p>
+
+                <a id="modal-tmdb-link" class="modal-link tmdb-link" target="_blank" style="display: none;">Ver más en TMDB</a>
+                <a id="modal-trailer-link" class="modal-link trailer-link" target="_blank" style="display: none;">Ver tráiler</a>
+
+                <button id="toggle-status-button" class="btn-primary"></button>
+                <button id="delete-button" class="btn-danger">Eliminar Película</button>
             </div>
         </div>
     </div>
+    <div class="modal-overlay"></div>
 </main>
 
 <footer>
     <div class="footer-content">
         <p>&copy; 2025 Pandorasbox. Todos los derechos reservados.</p>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-        </div>
     </div>
 </footer>
 </body>

@@ -27,7 +27,7 @@
 
 .hero p {
   font-size: 20px;
-  color: var(--text-color);
+  color: var(--background-color);
   margin-top: 10px;
 }
 

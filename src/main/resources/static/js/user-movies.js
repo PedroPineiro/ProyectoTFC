@@ -4,26 +4,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewedMoviesBtn = document.getElementById('viewed-movies-btn');
     const wishlistMoviesBtn = document.getElementById('wishlist-movies-btn');
     const sortBySelect = document.getElementById('sort-by');
-    const sortDirectionBtn = document.getElementById('sort-direction-btn'); // Correcto ahora que el ID es "sort-direction-btn"
+    const sortDirectionBtn = document.getElementById('sort-direction-btn');
     const moviesCount = document.getElementById('movies-count');
     const emptyState = document.getElementById('empty-state');
 
-    const modal = document.createElement('div');
-    modal.classList.add('modal');
-    const overlay = document.createElement('div');
-    overlay.classList.add('modal-overlay');
-    document.body.appendChild(modal);
-    document.body.appendChild(overlay);
+    // Referenciar el modal y sus elementos existentes en el HTML
+    const modal = document.getElementById('movie-modal');
+    const closeModalButton = modal.querySelector('.close-modal');
+    const modalOverlay = document.querySelector('.modal-overlay');
 
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
-    modal.appendChild(modalContent);
+    // Referencias a los elementos de contenido dentro del modal
+    const modalImage = document.getElementById('modal-image'); // Nuevo: Referencia a la imagen
+    const modalTitle = document.getElementById('modal-title');
+    const modalYear = document.getElementById('modal-year');
+    const modalDirector = document.getElementById('modal-director');
+    const modalActors = document.getElementById('modal-actors');
+    const modalGenre = document.getElementById('modal-genre');
+    const descriptionButton = document.getElementById('description-button');
+    const modalDescription = document.getElementById('modal-description');
+    const modalRating = document.getElementById('modal-rating');
+    const modalWatchedDate = document.getElementById('modal-watched-date');
+    const toggleStatusButton = document.getElementById('toggle-status-button');
+    const deleteButton = document.getElementById('delete-button');
 
-    const closeModalButton = document.createElement('button');
-    closeModalButton.innerHTML = '&times;';
-    closeModalButton.classList.add('close-modal');
-    modalContent.appendChild(closeModalButton);
-
+    // Loader
     const loader = document.createElement('div');
     loader.classList.add('loader-overlay');
     loader.innerHTML = '<div class="loader"></div>';
@@ -31,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allUserMovies = [];
     let currentFilter = 'PLAYED';
-    let currentSortBy = sortBySelect.value; // Inicializar con el valor por defecto
-    // Asegurarse de que el dataset se lea correctamente desde el elemento HTML
-    let currentSortDirection = sortDirectionBtn.dataset.direction || 'desc'; // 'asc' o 'desc'
+    let currentSortBy = sortBySelect.value;
+    let currentSortDirection = sortDirectionBtn.dataset.direction || 'desc';
+    let currentMovieInModal = null; // Store the movie object currently in the modal
 
     init();
 
@@ -43,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Pasa los parámetros de ordenación al cargar por primera vez
         loadMovies(currentFilter, currentSortBy, currentSortDirection);
         setupEventListeners();
-        updateSortDirectionIcon(); // Actualizar el icono al inicio
+        updateSortDirectionIcon();
+        toggleActiveButton(viewedMoviesBtn, wishlistMoviesBtn);
     }
 
     function showToast(message, type = 'success') {
@@ -55,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
         document.body.appendChild(toast);
-        void toast.offsetWidth; // Trigger reflow
+        void toast.offsetWidth;
         toast.classList.add('show');
         setTimeout(() => {
             toast.classList.remove('show');
@@ -79,8 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadMovies(status, sortBy, sortDirection) {
         showLoadingState();
 
-        // Construir la URL con los parámetros de ordenación
-        // Usa el endpoint /user/{userId} que es más flexible
         const url = `http://localhost:8080/api/movies/user/${user.id}?status=${status}&sortBy=${sortBy}&sortDirection=${sortDirection}`;
 
         fetch(url, {
@@ -89,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => {
                 if (!response.ok) {
-                    // Si la respuesta no es OK, intenta leer el cuerpo para obtener un mensaje de error
                     return response.json().then(err => { throw new Error(err.error || 'Error al cargar las películas'); });
                 }
                 return response.json();
@@ -105,9 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error al cargar las películas:', error);
-                // Muestra un mensaje de error al usuario si la carga falla
                 showToast(`Error: ${error.message}`, 'error');
-                showEmptyState(); // Asegura que se muestre el estado vacío si hay un error
+                showEmptyState();
             })
             .finally(() => {
                 loader.classList.remove('show');
@@ -115,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showLoadingState() {
-        emptyState.style.display = 'none'; // Asegúrate de ocultar el estado vacío
-        loader.classList.add('show'); // Muestra el loader
+        emptyState.style.display = 'none';
+        loader.classList.add('show');
     }
 
     function showEmptyState() {
@@ -159,91 +159,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showMovieDetails(movie) {
         loader.classList.add('show');
+        currentMovieInModal = movie; // Store the current movie object
 
-        modalContent.innerHTML = '';
-        modalContent.appendChild(closeModalButton);
-
-        const modalDetails = document.createElement('div');
-        modalDetails.classList.add('modal-details');
-
-        // Columna izquierda
-        const leftColumn = document.createElement('div');
-        leftColumn.classList.add('modal-column');
-        const modalTitle = document.createElement('h2');
-        modalTitle.textContent = movie.title;
-
-        const modalYear = document.createElement('p');
-        modalYear.innerHTML = `<strong>Año:</strong> ${movie.releaseYear || 'N/A'}`;
-
-        const modalDirector = document.createElement('p');
-        modalDirector.innerHTML = `<strong>Director:</strong> ${movie.director || 'Desconocido'}`;
-
-        const modalActors = document.createElement('p');
-        modalActors.innerHTML = `<strong>Actores:</strong> ${movie.actors || 'No disponible'}`;
-
-        const modalGenre = document.createElement('p');
-        modalGenre.innerHTML = `<strong>Género:</strong> ${movie.genre || 'Desconocido'}`;
-
-        leftColumn.append(modalTitle, modalYear, modalDirector, modalActors, modalGenre);
-
-        // Columna derecha
-        const rightColumn = document.createElement('div');
-        rightColumn.classList.add('modal-column');
-
-        const descriptionButton = document.createElement('button');
+        // Reiniciar estado del botón de descripción y texto
         descriptionButton.textContent = 'Descripción: Abrir';
-        descriptionButton.classList.add('btn-secondary');
-        const modalDescription = document.createElement('p');
-        modalDescription.textContent = movie.description || 'Sin descripción disponible.';
         modalDescription.style.display = 'none';
 
-        descriptionButton.addEventListener('click', () => {
-            const isVisible = modalDescription.style.display === 'block';
-            modalDescription.style.display = isVisible ? 'none' : 'block';
-            descriptionButton.textContent = isVisible ? 'Descripción: Abrir' : 'Descripción: Cerrar';
-        });
+        // Rellenar los elementos del modal con los datos de la película
+        modalImage.src = movie.imageUrl || '../assets/imgs/posterNotFound.jpg'; // Set image source
+        modalImage.alt = movie.title; // Set image alt text
+        modalTitle.textContent = movie.title;
+        modalYear.textContent = movie.releaseYear || 'N/A';
+        modalDirector.textContent = movie.director || 'Desconocido';
+        modalActors.textContent = movie.actors || 'No disponible';
+        modalGenre.textContent = movie.genre || 'Desconocido';
+        modalDescription.textContent = movie.description || 'Sin descripción disponible.';
 
-        // Mostrar userRating si existe, de lo contrario globalRating
-        const modalRating = document.createElement('div');
         modalRating.innerHTML = `<strong>Calificación:</strong> ${movie.userRating ? `${movie.userRating.toFixed(1)}/5 (tu valoración)` : (movie.globalRating ? `${movie.globalRating.toFixed(1)}/10 (IMDB)` : 'No valorada')}`;
-        modalRating.classList.add('star-rating');
+        modalWatchedDate.textContent = movie.watchedDate || 'No disponible';
 
-
-        const modalWatchedDate = document.createElement('p');
-        modalWatchedDate.innerHTML = `<strong>Fecha de visualización:</strong> ${movie.watchedDate || 'No disponible'}`;
-
-        rightColumn.append(descriptionButton, modalDescription, modalRating, modalWatchedDate);
-
-        // Botones debajo de las columnas
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.classList.add('modal-buttons');
-
-        const toggleStatusButton = document.createElement('button');
+        // Actualizar el texto del botón de estado
         toggleStatusButton.textContent = movie.status === 'PLAYED' ? 'Mover a Wishlist' : 'Marcar como Vista';
-        toggleStatusButton.classList.add('btn-primary');
-        toggleStatusButton.addEventListener('click', () => toggleMovieStatus(movie));
 
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Eliminar Película';
-        deleteButton.classList.add('btn-danger');
-        deleteButton.addEventListener('click', () => deleteMovie(movie.id));
-
-        buttonsContainer.append(toggleStatusButton, deleteButton);
-
-        modalDetails.append(leftColumn, rightColumn);
-        modalContent.append(modalDetails, buttonsContainer);
-
-        overlay.classList.add('show');
+        modalOverlay.classList.add('show');
         modal.classList.add('open');
 
         loader.classList.remove('show');
     }
 
-    function toggleMovieStatus(movie) {
-        const newStatus = movie.status === 'PLAYED' ? 'WISHLIST' : 'PLAYED';
-        const now = new Date().toISOString(); // Fecha y hora actual en formato ISO
+    function toggleMovieStatus() {
+        if (!currentMovieInModal) return; // Ensure a movie is loaded
 
-        fetch(`http://localhost:8080/api/movies/${movie.id}/status`, {
+        const newStatus = currentMovieInModal.status === 'PLAYED' ? 'WISHLIST' : 'PLAYED';
+        const now = new Date().toISOString();
+
+        fetch(`http://localhost:8080/api/movies/${currentMovieInModal.id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -267,8 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Error al cambiar el estado: ' + error.message, 'error');
             });
     }
-    function deleteMovie(movieId) {
-        fetch(`http://localhost:8080/api/movies/${movieId}`, {
+
+    function deleteMovie() {
+        if (!currentMovieInModal) return; // Ensure a movie is loaded
+
+        fetch(`http://localhost:8080/api/movies/${currentMovieInModal.id}`, {
             method: 'DELETE'
         })
             .then(response => {
@@ -276,9 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     return response.json().then(err => { throw new Error(err.error || 'Error al eliminar la película'); });
                 }
                 showToast('Película eliminada con éxito', 'success');
-                // IMPORTANTE: Recargar con los parámetros de ordenación y filtro actuales
                 loadMovies(currentFilter, currentSortBy, currentSortDirection);
-                closeModal(); // Cerrar el modal
+                closeModal();
             })
             .catch(error => {
                 console.error('Error al eliminar la película:', error);
@@ -290,30 +242,40 @@ document.addEventListener('DOMContentLoaded', () => {
         viewedMoviesBtn.addEventListener('click', () => {
             currentFilter = 'PLAYED';
             toggleActiveButton(viewedMoviesBtn, wishlistMoviesBtn);
-            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con ordenación
+            loadMovies(currentFilter, currentSortBy, currentSortDirection);
         });
 
         wishlistMoviesBtn.addEventListener('click', () => {
             currentFilter = 'WISHLIST';
             toggleActiveButton(wishlistMoviesBtn, viewedMoviesBtn);
-            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con ordenación
+            loadMovies(currentFilter, currentSortBy, currentSortDirection);
         });
 
         sortBySelect.addEventListener('change', () => {
             currentSortBy = sortBySelect.value;
-            updateSortDirectionIcon(); // Actualiza el icono al cambiar el tipo de ordenación
-            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con nueva ordenación
+            updateSortDirectionIcon();
+            loadMovies(currentFilter, currentSortBy, currentSortDirection);
         });
 
         sortDirectionBtn.addEventListener('click', () => {
             currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
-            sortDirectionBtn.dataset.direction = currentSortDirection; // Actualizar el dataset
-            updateSortDirectionIcon(); // Actualizar el icono
-            loadMovies(currentFilter, currentSortBy, currentSortDirection); // Recargar con nueva dirección
+            sortDirectionBtn.dataset.direction = currentSortDirection;
+            updateSortDirectionIcon();
+            loadMovies(currentFilter, currentSortBy, currentSortDirection);
         });
 
         closeModalButton.addEventListener('click', closeModal);
-        overlay.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', closeModal);
+
+        // Event listeners for modal action buttons, attached ONCE
+        descriptionButton.addEventListener('click', () => {
+            const isVisible = modalDescription.style.display === 'block';
+            modalDescription.style.display = isVisible ? 'none' : 'block';
+            descriptionButton.textContent = isVisible ? 'Descripción: Abrir' : 'Descripción: Cerrar';
+        });
+
+        toggleStatusButton.addEventListener('click', toggleMovieStatus);
+        deleteButton.addEventListener('click', deleteMovie);
     }
 
     function updateSortDirectionIcon() {
@@ -322,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (currentSortBy) {
                 case 'title':
                 case 'genre':
-                    icon.className = 'fas fa-sort-amount-down-alt';
+                    icon.className = 'fas fa-sort-alpha-down';
                     break;
                 case 'releaseYear':
                     icon.className = 'fas fa-sort-numeric-down';
@@ -338,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (currentSortBy) {
                 case 'title':
                 case 'genre':
-                    icon.className = 'fas fa-sort-amount-up-alt';
+                    icon.className = 'fas fa-sort-alpha-up';
                     break;
                 case 'releaseYear':
                     icon.className = 'fas fa-sort-numeric-up';
@@ -366,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeModal() {
         modal.classList.remove('open');
-        overlay.classList.remove('show');
+        modalOverlay.classList.remove('show');
+        currentMovieInModal = null; // Clear the stored movie
     }
 });
