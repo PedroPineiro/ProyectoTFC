@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalGenre = document.getElementById('modal-genre');
     const descriptionButton = document.getElementById('description-button');
     const modalDescription = document.getElementById('modal-description');
-    const modalRating = document.getElementById('modal-rating');
+
+    const modalGlobalRating = document.getElementById('modal-global-rating');
+    const modalUserRating = document.getElementById('modal-user-rating');
     const modalWatchedDate = document.getElementById('modal-watched-date');
     const toggleStatusButton = document.getElementById('toggle-status-button');
     const deleteButton = document.getElementById('delete-button');
@@ -33,11 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loader.innerHTML = '<div class="loader"></div>';
     document.body.appendChild(loader);
 
-    let allUserMovies = [];
     let currentFilter = 'PLAYED';
     let currentSortBy = sortBySelect.value;
     let currentSortDirection = sortDirectionBtn.dataset.direction || 'desc';
-    let currentMovieInModal = null; // Store the movie object currently in the modal
+    let currentMovieInModal = null;
 
     init();
 
@@ -148,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="movie-title">${movie.title}</div>
                 <div class="movie-meta">
                     <span>${movie.releaseYear || 'N/A'}</span>
-                    <span><i class="fas fa-star"></i> ${movie.userRating ? movie.userRating.toFixed(1) : (movie.globalRating ? movie.globalRating.toFixed(1) : '?')}</span>
+                    <span><i class="fas fa-star"></i> ${movie.userRating || '-'}</span>
                 </div>
             </div>
         `;
@@ -159,23 +160,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showMovieDetails(movie) {
         loader.classList.add('show');
-        currentMovieInModal = movie; // Store the current movie object
+        currentMovieInModal = movie;
 
         // Reiniciar estado del botón de descripción y texto
-        descriptionButton.textContent = 'Descripción: Abrir';
+        descriptionButton.textContent = 'Mostrar descripción ▲';
         modalDescription.style.display = 'none';
 
         // Rellenar los elementos del modal con los datos de la película
-        modalImage.src = movie.imageUrl || '../assets/imgs/posterNotFound.jpg'; // Set image source
-        modalImage.alt = movie.title; // Set image alt text
+        modalImage.src = movie.imageUrl || '../assets/imgs/posterNotFound.jpg';
+        modalImage.alt = movie.title;
         modalTitle.textContent = movie.title;
         modalYear.textContent = movie.releaseYear || 'N/A';
         modalDirector.textContent = movie.director || 'Desconocido';
-        modalActors.textContent = movie.actors || 'No disponible';
-        modalGenre.textContent = movie.genre || 'Desconocido';
+        modalActors.textContent = movie.actors?.length ? movie.actors.join(', ') : 'Desconocidos';
+        modalGenre.textContent = movie.genre?.length ? movie.genre.join(', ') : 'Desconocido';
         modalDescription.textContent = movie.description || 'Sin descripción disponible.';
 
-        modalRating.innerHTML = `<strong>Calificación:</strong> ${movie.userRating ? `${movie.userRating.toFixed(1)}/5 (tu valoración)` : (movie.globalRating ? `${movie.globalRating.toFixed(1)}/10 (IMDB)` : 'No valorada')}`;
+        modalUserRating.textContent = movie.userRating || 'No valorada';
+        modalGlobalRating.textContent = movie.globalRating || 'No valorada';
         modalWatchedDate.textContent = movie.watchedDate || 'No disponible';
 
         // Actualizar el texto del botón de estado
@@ -271,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
         descriptionButton.addEventListener('click', () => {
             const isVisible = modalDescription.style.display === 'block';
             modalDescription.style.display = isVisible ? 'none' : 'block';
-            descriptionButton.textContent = isVisible ? 'Descripción: Abrir' : 'Descripción: Cerrar';
+            descriptionButton.textContent = isVisible ? 'Mostrar descripción ▲' : 'Ocultar descripción ▼';
         });
 
         toggleStatusButton.addEventListener('click', toggleMovieStatus);

@@ -34,11 +34,11 @@ public class Movie {
 
     private Double globalRating;
 
+    private Double userRating; // Valor de 0.0 a 10.0
+
     private String imageUrl;
 
     private LocalDateTime addedDate = LocalDateTime.now(); // Se auto-guarda al crear
-
-    private Double userRating; // Valor de 0.0 a 10.0
 
     private LocalDate watchedDate;
 

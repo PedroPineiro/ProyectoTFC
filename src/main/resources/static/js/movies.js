@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         poster: document.querySelector('.modal-poster'),
         title: document.querySelector('.modal-title'),
         releaseDate: document.querySelector('.modal-release-date .value'),
-        rating: document.querySelector('.modal-rating .value'),
+        globalRating: document.querySelector('.modal-rating .value'),
         description: document.querySelector('.modal-description'),
         genres: document.querySelector('.modal-genres .value'),
         director: document.querySelector('.modal-director .value'),
@@ -155,11 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Calificación con color
             if (movie.vote_average) {
-                modalElements.rating.textContent = movie.vote_average.toFixed(1);
-                modalElements.rating.style.color = getRatingColor(movie.vote_average);
+                modalElements.globalRating.textContent = movie.vote_average.toFixed(1);
+                modalElements.globalRating.style.color = getRatingColor(movie.vote_average);
             } else {
-                modalElements.rating.textContent = 'No disponible';
-                modalElements.rating.style.color = '';
+                modalElements.globalRating.textContent = 'No disponible';
+                modalElements.globalRating.style.color = '';
             }
 
             // Obtener datos adicionales
