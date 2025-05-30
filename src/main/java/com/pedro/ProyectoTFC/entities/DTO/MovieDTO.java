@@ -29,9 +29,9 @@ public class MovieDTO {
     public String getDirector() { return director; }
     public void setDirector(String director) { this.director = director; }
     public List<String> getGenre() { return genre; }
+    public void setGenre(List<String> genre) { this.genre = genre; }
     public List<String> getActors() { return actors; }
     public void setActors(List<String> actors) { this.actors = actors; }
-    public void setGenre(List<String> genre) { this.genre = genre; }
     public Double getGlobalRating() { return globalRating; }
     public void setGlobalRating(Double globalRating) { this.globalRating = globalRating; }
     public String getImageUrl() { return imageUrl; }

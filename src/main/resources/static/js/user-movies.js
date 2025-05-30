@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalOverlay = document.querySelector('.modal-overlay');
 
     // Referencias a los elementos de contenido dentro del modal
-    const modalImage = document.getElementById('modal-image'); // Nuevo: Referencia a la imagen
+    const modalImage = document.getElementById('modal-image');
     const modalTitle = document.getElementById('modal-title');
     const modalYear = document.getElementById('modal-year');
     const modalDirector = document.getElementById('modal-director');
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalGenre = document.getElementById('modal-genre');
     const descriptionButton = document.getElementById('description-button');
     const modalDescription = document.getElementById('modal-description');
-
     const modalGlobalRating = document.getElementById('modal-global-rating');
     const modalUserRating = document.getElementById('modal-user-rating');
     const modalWatchedDate = document.getElementById('modal-watched-date');

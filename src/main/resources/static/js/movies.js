@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         poster: document.querySelector('.modal-poster'),
         title: document.querySelector('.modal-title'),
         releaseDate: document.querySelector('.modal-release-date .value'),
-        globalRating: document.querySelector('.modal-rating .value'),
+        globalRating: document.querySelector('.modal-global-rating .value'),
         description: document.querySelector('.modal-description'),
         genres: document.querySelector('.modal-genres .value'),
         director: document.querySelector('.modal-director .value'),
@@ -271,9 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
             director: directorText || 'Desconocido',
             actors: actorText ? actorText.split(',').map(a => a.trim()) : [],
             genre: genreText ? genreText.split(',').map(g => g.trim()) : [],
-            imageUrl: state.currentMovie.poster_path
-                ? `${config.posterBaseUrl}w300${state.currentMovie.poster_path}`
-                : null,
+            globalRating: state.currentMovie.vote_average ? parseFloat(state.currentMovie.vote_average.toFixed(1)) : null,
+            imageUrl: state.currentMovie.poster_path ? `${config.posterBaseUrl}w300${state.currentMovie.poster_path}` : null,
             status: status,
             isFavorite: false,
             userId: state.currentUser.id

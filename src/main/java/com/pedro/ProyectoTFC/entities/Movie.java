@@ -34,7 +34,7 @@ public class Movie {
 
     private Double globalRating;
 
-    private Double userRating; // Valor de 0.0 a 10.0
+    private Double userRating;
 
     private String imageUrl;
 
