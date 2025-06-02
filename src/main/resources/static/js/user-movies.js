@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalDirector = document.getElementById('modal-director');
     const modalActors = document.getElementById('modal-actors');
     const modalGenre = document.getElementById('modal-genre');
+    const modalDuration = document.getElementById('modal-duration');
     const descriptionButton = document.getElementById('description-button');
     const modalDescription = document.getElementById('modal-description');
     const modalGlobalRating = document.getElementById('modal-global-rating');
@@ -173,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalDirector.textContent = movie.director || 'Desconocido';
         modalActors.textContent = movie.actors?.length ? movie.actors.join(', ') : 'Desconocidos';
         modalGenre.textContent = movie.genre?.length ? movie.genre.join(', ') : 'Desconocido';
+        modalDuration.textContent = movie.duration ? `${movie.duration} min` : 'Desconocida';
         modalDescription.textContent = movie.description || 'Sin descripción disponible.';
 
         modalUserRating.textContent = movie.userRating || 'No valorada';
@@ -293,6 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'userRating':
                     icon.className = 'fas fa-sort-amount-down-alt';
                     break;
+                case 'duration':
+                    icon.className = 'fas fa-sort-numeric-down';
+                    break;
                 default:
                     icon.className = 'fas fa-sort-amount-down-alt';
                     break;
@@ -308,6 +313,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'userRating':
                     icon.className = 'fas fa-sort-amount-up-alt';
+                    break;
+                case 'duration':
+                    icon.className = 'fas fa-sort-numeric-down';
                     break;
                 default:
                     icon.className = 'fas fa-sort-amount-up-alt';

@@ -64,7 +64,8 @@ public class MovieController {
             movie.setGenre(movieDTO.getGenre());
             movie.setGlobalRating(movieDTO.getGlobalRating());
             movie.setImageUrl(movieDTO.getImageUrl());
-            movie.setAddedDate(LocalDateTime.now()); // Establece la fecha actual
+            movie.setDuration(movieDTO.getDuration());
+            movie.setAddedDate(LocalDateTime.now());
             movie.setStatus(movieDTO.getStatus());
             movie.setFavorite(movieDTO.isFavorite());
             movie.setUser(user.get());
@@ -90,7 +91,7 @@ public class MovieController {
             @RequestParam(required = false, defaultValue = "desc") String sortDirection) { // Cambiado a desc para ver primero las recientes
 
         // Lista de campos por los que se puede ordenar
-        List<String> validSortFields = Arrays.asList("addedDate", "title", "releaseYear", "userRating");
+        List<String> validSortFields = Arrays.asList("addedDate", "title", "releaseYear", "userRating", "duration");
 
         if (!validSortFields.contains(sortBy)) {
             return ResponseEntity.badRequest().body(null);

@@ -36,6 +36,8 @@ public class Movie {
 
     private Double userRating;
 
+    private Integer duration;
+
     private String imageUrl;
 
     private LocalDateTime addedDate = LocalDateTime.now(); // Se auto-guarda al crear
@@ -56,7 +58,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, String imageUrl, LocalDateTime addedDate, Double userRating, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
+    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, Double userRating, Integer duration, String imageUrl, LocalDateTime addedDate, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
@@ -64,9 +66,10 @@ public class Movie {
         this.actors = actors;
         this.genre = genre;
         this.globalRating = globalRating;
+        this.userRating = userRating;
+        this.duration = duration;
         this.imageUrl = imageUrl;
         this.addedDate = addedDate;
-        this.userRating = userRating;
         this.watchedDate = watchedDate;
         this.status = status;
         this.isFavorite = isFavorite;
@@ -143,6 +146,14 @@ public class Movie {
 
     public void setAddedDate(LocalDateTime addedDate) {
         this.addedDate = addedDate;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
     public Status getStatus() {

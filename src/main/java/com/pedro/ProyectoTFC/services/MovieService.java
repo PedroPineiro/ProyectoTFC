@@ -63,6 +63,7 @@ public class MovieService {
             case "releaseYear" -> Sort.by(direction, "releaseYear");
             case "userRating" -> Sort.by(direction, "userRating");
             case "addedDate" -> Sort.by(direction, "addedDate");
+            case "duration" -> Sort.by(direction, "duration");
             default -> Sort.by(direction, "addedDate"); // Por defecto ordenar por addedDate
         };
 
@@ -71,7 +72,6 @@ public class MovieService {
         }
         return movieRepository.findByUser(user, sort);
     }
-
 
     public boolean isUserRatingValid(Double userRating) {
         return userRating >= 0 && userRating <= 5 && (userRating * 10) % 5 == 0;

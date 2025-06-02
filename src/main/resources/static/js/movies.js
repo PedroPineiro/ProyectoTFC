@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         genres: document.querySelector('.modal-genres .value'),
         director: document.querySelector('.modal-director .value'),
         actors: document.querySelector('.modal-actors .value'),
+        duration: document.querySelector('.modal-duration .value'),
         tmdbLink: document.querySelector('.tmdb-link'),
         trailerLink: document.querySelector('.trailer-link'),
         saveLogButton: document.querySelector('.saveLog-modal'),
@@ -138,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Mostrar detalles de la película
+// Mostrar detalles de la película
     async function showMovieDetails(movie) {
         state.currentMovie = movie;
         showLoader();
@@ -163,11 +165,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Obtener datos adicionales
-            const [genres, credits, trailerUrl] = await Promise.all([
+            const [genres, credits, trailerUrl, movieDetails] = await Promise.all([
                 getMovieGenres(movie.genre_ids),
                 getMovieCredits(movie.id),
-                getTrailer(movie.id)
+                getTrailer(movie.id),
+                fetch(`${config.apiBaseUrl}/movie/${movie.id}?api_key=${config.apiKey}`).then(res => res.json())
             ]);
+
+            // Duración de la película
+            modalElements.duration.textContent = movieDetails.runtime ? `${movieDetails.runtime} min` : `Desconocida`;
 
             // Actualizar modal con datos adicionales
             modalElements.genres.textContent = genres.length ? genres.join(', ') : 'No disponible';
@@ -262,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const genreText = modalElements.genres.textContent;
         const actorText = modalElements.actors.textContent;
         const directorText = modalElements.director.textContent;
+        const durationText = modalElements.duration.textContent;
 
         const movieData = {
             title: state.currentMovie.title,
@@ -271,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             director: directorText || 'Desconocido',
             actors: actorText ? actorText.split(',').map(a => a.trim()) : [],
             genre: genreText ? genreText.split(',').map(g => g.trim()) : [],
+            duration: durationText !== 'Desconocida' ? parseInt(durationText) : 0,
             globalRating: state.currentMovie.vote_average ? parseFloat(state.currentMovie.vote_average.toFixed(1)) : null,
             imageUrl: state.currentMovie.poster_path ? `${config.posterBaseUrl}w300${state.currentMovie.poster_path}` : null,
             status: status,
