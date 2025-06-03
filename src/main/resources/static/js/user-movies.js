@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     icon.className = 'fas fa-sort-amount-up-alt';
                     break;
                 case 'duration':
-                    icon.className = 'fas fa-sort-numeric-down';
+                    icon.className = 'fas fa-sort-numeric-up';
                     break;
                 default:
                     icon.className = 'fas fa-sort-amount-up-alt';
