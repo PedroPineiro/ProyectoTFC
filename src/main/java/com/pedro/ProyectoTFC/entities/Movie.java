@@ -38,6 +38,9 @@ public class Movie {
 
     private Integer duration;
 
+    @Column(length = 2000)
+    private String description;
+
     private String imageUrl;
 
     private LocalDateTime addedDate = LocalDateTime.now(); // Se auto-guarda al crear
@@ -58,7 +61,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, Double userRating, Integer duration, String imageUrl, LocalDateTime addedDate, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
+    public Movie(Long id, String title, int releaseYear, String director, List<String> actors, List<String> genre, Double globalRating, Double userRating, Integer duration, String description, String imageUrl, LocalDateTime addedDate, LocalDate watchedDate, Status status, boolean isFavorite, User user) {
         this.id = id;
         this.title = title;
         this.releaseYear = releaseYear;
@@ -68,6 +71,7 @@ public class Movie {
         this.globalRating = globalRating;
         this.userRating = userRating;
         this.duration = duration;
+        this.description = description;
         this.imageUrl = imageUrl;
         this.addedDate = addedDate;
         this.watchedDate = watchedDate;
@@ -150,6 +154,14 @@ public class Movie {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setDuration(Integer duration) {

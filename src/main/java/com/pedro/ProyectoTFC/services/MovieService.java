@@ -59,10 +59,11 @@ public class MovieService {
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
 
         Sort sort = switch (sortBy) {
+            case "addedDate" -> Sort.by(direction, "addedDate");
             case "title" -> Sort.by(direction, "title");
             case "releaseYear" -> Sort.by(direction, "releaseYear");
             case "userRating" -> Sort.by(direction, "userRating");
-            case "addedDate" -> Sort.by(direction, "addedDate");
+            case "globalRating" -> Sort.by(direction, "globalRating");
             case "duration" -> Sort.by(direction, "duration");
             default -> Sort.by(direction, "addedDate"); // Por defecto ordenar por addedDate
         };

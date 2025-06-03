@@ -295,6 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'userRating':
                     icon.className = 'fas fa-sort-amount-down-alt';
                     break;
+                case 'globalRating':
+                    icon.className = 'fas fa-sort-amount-down-alt';
+                    break;
                 case 'duration':
                     icon.className = 'fas fa-sort-numeric-down';
                     break;
@@ -313,6 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'userRating':
                     icon.className = 'fas fa-sort-amount-up-alt';
+                    break;
+                case 'globalRating':
+                    icon.className = 'fas fa-sort-amount-down-alt';
                     break;
                 case 'duration':
                     icon.className = 'fas fa-sort-numeric-up';

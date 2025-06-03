@@ -139,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Mostrar detalles de la película
-// Mostrar detalles de la película
     async function showMovieDetails(movie) {
         state.currentMovie = movie;
         showLoader();
@@ -269,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const actorText = modalElements.actors.textContent;
         const directorText = modalElements.director.textContent;
         const durationText = modalElements.duration.textContent;
+        const descriptionText = modalElements.description.textContent;
 
         const movieData = {
             title: state.currentMovie.title,
@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             director: directorText || 'Desconocido',
             actors: actorText ? actorText.split(',').map(a => a.trim()) : [],
             genre: genreText ? genreText.split(',').map(g => g.trim()) : [],
+            description: descriptionText || null,
             duration: durationText !== 'Desconocida' ? parseInt(durationText) : 0,
             globalRating: state.currentMovie.vote_average ? parseFloat(state.currentMovie.vote_average.toFixed(1)) : null,
             imageUrl: state.currentMovie.poster_path ? `${config.posterBaseUrl}w300${state.currentMovie.poster_path}` : null,
